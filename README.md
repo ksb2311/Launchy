@@ -1,16 +1,23 @@
-# flutter_launcher
+# Flutter Launcher
 
-A new Flutter project.
+An android launcher based on [Flutter](https://flutter.dev/)
 
-## Getting Started
+# Getting Started
 
-This project is a starting point for a Flutter application.
+## Requirement
+* Flutter framework
+* Android Studio / SDK
+* VS code or Android Studio as IDE
+* Android only device
 
-A few resources to get you started if this is your first Flutter project:
+## Build
+* clone or download zip
+```
+git clone https://github.com/ksb2311/flutter_launcher.git
+```
+* Open in vscode (preferred) as folder or in android studio
+* Build the project
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+## Releases
+* Coming Soon
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
