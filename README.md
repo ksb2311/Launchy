@@ -15,7 +15,11 @@ An android launcher based on [Flutter](https://flutter.dev/)
 ```
 git clone https://github.com/ksb2311/flutter_launcher.git
 ```
-* Open in vscode (preferred) as folder or in android studio
+* Go to directory
+```
+cd flutter_launcher
+``` 
+* Open folder in vscode or in android studio
 * Build the project
 
 ## Releases
