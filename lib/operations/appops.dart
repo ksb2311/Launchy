@@ -18,6 +18,8 @@ class AppOps {
         includeSystemApps: true,
         onlyAppsWithLaunchIntent: true,
       );
+      apps.sort(
+          (a, b) => a.appName.toLowerCase().compareTo(b.appName.toLowerCase()));
       searchAppList.addAll(apps);
     } catch (e) {
       log('error');
@@ -41,6 +43,7 @@ class AppOps {
     for (Application application in apps) {
       if (application.appName.toLowerCase().contains(value.toLowerCase())) {
         docklistitems.add(application);
+        break;
       }
     }
   }

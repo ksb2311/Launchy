@@ -1,181 +1,566 @@
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_launcher/operations/appops.dart';
+import 'package:flutter_launcher/page/settings/settings.dart';
 import 'package:intl/intl.dart';
 
-class Homepage extends StatefulWidget {
-  const Homepage({Key? key}) : super(key: key);
+class HomePage extends StatefulWidget {
+  final Function(String) onThemeChanged;
+
+  const HomePage({Key? key, required this.onThemeChanged}) : super(key: key);
 
   @override
-  State<Homepage> createState() => _HomepageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _HomepageState extends State<Homepage> {
+class _HomePageState extends State<HomePage> {
+  // List<Application> listApps = AppOps().searchAppList;
+  final appops = AppOps();
+  List<Application> dockIconList = [];
+  List<Application> preAppList = [];
+
+  Color themeTextColor = Colors.black;
+  Color themeBackground = Colors.white;
+
+  final _textEditingController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    loadApps();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _textEditingController.clear();
+  }
+
+// creating list of installed apps
+  Future<void> loadApps() async {
+    List<Application> apps = await DeviceApps.getInstalledApplications(
+        includeAppIcons: true,
+        includeSystemApps: true,
+        onlyAppsWithLaunchIntent: true);
+
+    apps.sort(
+        (a, b) => a.appName.toLowerCase().compareTo(b.appName.toLowerCase()));
+
+    setState(() {
+      appops.searchAppList = apps;
+    });
+  }
+
+// Gettinng first letter of appname
+  String getFirstLetter(String appName) {
+    return appName[0].toUpperCase();
+  }
+
   @override
   Widget build(BuildContext context) {
-    final AppOps appops = AppOps();
-    List<Application> dockIconList = [];
-
-    const themeColor = Colors.white;
-
+    themeTextColor = Theme.of(context).textTheme.bodyLarge!.color!;
+    themeBackground = Theme.of(context).scaffoldBackgroundColor;
+    final ThemeData currentTheme = Theme.of(context);
     return Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Container(
-          color: Colors.black,
+      backgroundColor: themeBackground,
+      body: Container(
+        // color: Colors.black,
+        child: GestureDetector(
+          onLongPress: () {
+            showModalBottomSheet(
+              context: context,
+              backgroundColor: Colors.transparent,
+              isScrollControlled: true,
+              builder: (BuildContext context) {
+                return Container(
+                  decoration: BoxDecoration(
+                    color: currentTheme.brightness == Brightness.dark
+                        ? Colors.grey[800]
+                        : Colors.grey[100],
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SettingsPage(
+                                      onThemeChanged: widget.onThemeChanged)),
+                            );
+                          },
+                          child: ListTile(
+                            leading: const Icon(Icons.settings_outlined),
+                            title: Text(
+                              "Launchy Settings",
+                              style: TextStyle(color: themeTextColor),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            );
+          },
           child: PageView(
-            physics: const ClampingScrollPhysics(),
-            scrollDirection: Axis.horizontal,
-            children: [
-              // HomePage
-              Container(
-                  margin: const EdgeInsets.all(20),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        margin: const EdgeInsetsDirectional.only(
-                            top: 80, start: 20, end: 20, bottom: 20),
-                        child: StreamBuilder(
-                            stream: Stream.periodic(const Duration(seconds: 1))
-                                .asBroadcastStream(),
-                            builder: (context, snapshot) {
+              physics: const ClampingScrollPhysics(),
+              scrollDirection: Axis.horizontal,
+              children: [
+                Container(
+                    margin: const EdgeInsets.all(20),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          margin: const EdgeInsetsDirectional.only(
+                              top: 80, start: 20, end: 20, bottom: 20),
+                          child: StreamBuilder(
+                              stream:
+                                  Stream.periodic(const Duration(seconds: 1))
+                                      .asBroadcastStream(),
+                              builder: (context, snapshot) {
+                                return Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Text(
+                                          // DateFormat('MM/dd/yyyy hh:mm:ss')
+                                          DateFormat('hh')
+                                              .format(DateTime.now()),
+                                          style: TextStyle(
+                                            color: themeTextColor,
+                                            fontSize: 50,
+                                          ),
+                                        ),
+                                        Text(
+                                          // DateFormat('MM/dd/yyyy hh:mm:ss')
+                                          DateFormat(':mm a')
+                                              .format(DateTime.now()),
+                                          style: TextStyle(
+                                              color: themeTextColor,
+                                              fontSize: 50,
+                                              fontWeight: FontWeight.w200),
+                                        ),
+                                      ],
+                                    ),
+                                    Text(
+                                      // DateFormat('MM/dd/yyyy hh:mm:ss')
+                                      DateFormat('E dd  MMM  yyyy')
+                                          .format(DateTime.now()),
+                                      style: TextStyle(
+                                        color: themeTextColor,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              }),
+                        ),
+                        // dock home page
+                        Container(
+                          height: 80,
+                          margin: const EdgeInsets.all(30),
+                          // decoration: const BoxDecoration(
+                          //     color: themeTextColor60,
+                          //     borderRadius:
+                          //         BorderRadius.all(Radius.circular(20))),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: List<Widget>.generate(
+                                dockIconList.length <= 4
+                                    ? dockIconList.length
+                                    : 4, (index) {
+                              return dockIconList.isNotEmpty &&
+                                      dockIconList.length <= 4
+                                  ? GestureDetector(
+                                      onLongPress: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          isScrollControlled: true,
+                                          builder: (BuildContext context) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    currentTheme.brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.grey[800]
+                                                        : Colors.grey[100],
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight: Radius.circular(20),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(16),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        final AndroidIntent
+                                                            intent =
+                                                            AndroidIntent(
+                                                          action:
+                                                              'action_application_details_settings',
+                                                          data:
+                                                              'package:${dockIconList[index].packageName}',
+                                                        );
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                        await intent.launch();
+                                                      },
+                                                      child: ListTile(
+                                                        leading: const Icon(
+                                                            Icons.info_outline),
+                                                        title: Text(
+                                                          "App Info",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  themeTextColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        setState(() {
+                                                          dockIconList
+                                                              .removeAt(index);
+                                                        });
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: ListTile(
+                                                        leading: const Icon(Icons
+                                                            .remove_circle_outline),
+                                                        title: Text(
+                                                          "Remove",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  themeTextColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const Divider(
+                                                      color: Colors.grey,
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  SettingsPage(
+                                                                      onThemeChanged:
+                                                                          widget
+                                                                              .onThemeChanged)),
+                                                        );
+                                                      },
+                                                      child: ListTile(
+                                                        leading: const Icon(Icons
+                                                            .settings_outlined),
+                                                        title: Text(
+                                                          "Launchy Settings",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  themeTextColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      onTap: () {
+                                        appops.openApps(dockIconList[index]);
+                                      },
+                                      child: Image.memory(
+                                        (dockIconList[index]
+                                                as ApplicationWithIcon)
+                                            .icon,
+                                        width: 48,
+                                      ),
+                                    )
+                                  : Icon(
+                                      Icons.add,
+                                      color: themeTextColor,
+                                    );
+                            }),
+                          ),
+                        ),
+                      ],
+                    )),
+                GestureDetector(
+                  onTap: (() => FocusScope.of(context).unfocus()),
+                  child: Container(
+                    margin: const EdgeInsets.only(
+                        top: 50, left: 10, right: 10, bottom: 10),
+                    child: Column(
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Expanded(
+                          child: ListView.separated(
+                            cacheExtent: 9999,
+                            itemCount: appops.searchAppList.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              final appls = appops.searchAppList[index];
+                              String currentLetter =
+                                  getFirstLetter(appls.appName);
+
+                              // Check if the separator should be displayed
+                              bool shouldDisplaySeparator = index == 0 ||
+                                  currentLetter !=
+                                      getFirstLetter(appops
+                                          .searchAppList[index - 1].appName);
                               return Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    children: [
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    if (shouldDisplaySeparator)
                                       Text(
-                                        // DateFormat('MM/dd/yyyy hh:mm:ss')
-                                        DateFormat('hh').format(DateTime.now()),
-                                        style: const TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 50,
+                                        currentLetter,
+                                        style: TextStyle(color: themeTextColor),
+                                      ),
+                                    GestureDetector(
+                                      onTap: () {
+                                        appops.openApps(appls);
+                                      },
+                                      onLongPress: () {
+                                        showModalBottomSheet(
+                                          context: context,
+                                          backgroundColor: Colors.transparent,
+                                          isScrollControlled: true,
+                                          builder: (BuildContext context) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    currentTheme.brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.grey[800]
+                                                        : Colors.grey[100],
+                                                borderRadius:
+                                                    const BorderRadius.only(
+                                                  topLeft: Radius.circular(20),
+                                                  topRight: Radius.circular(20),
+                                                ),
+                                              ),
+                                              child: Padding(
+                                                padding:
+                                                    const EdgeInsets.all(16),
+                                                child: Column(
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    Row(
+                                                      children: [
+                                                        Image.memory(
+                                                          (appls as ApplicationWithIcon)
+                                                              .icon,
+                                                          width: 42,
+                                                          height: 42,
+                                                          // cacheHeight: 42,
+                                                        ),
+                                                        const SizedBox(
+                                                          width: 10,
+                                                        ),
+                                                        Text(appls.appName),
+                                                      ],
+                                                    ),
+                                                    const SizedBox(height: 16),
+                                                    GestureDetector(
+                                                      onTap: () {
+                                                        if (dockIconList
+                                                                .length !=
+                                                            4) {
+                                                          setState(() {
+                                                            appops.addAppToDock(
+                                                                appls.appName);
+                                                            dockIconList = appops
+                                                                .docklistitems;
+                                                          });
+                                                        }
+                                                        debugPrint(dockIconList
+                                                            .toString());
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: ListTile(
+                                                        leading: const Icon(Icons
+                                                            .add_circle_outline),
+                                                        title: Text(
+                                                          dockIconList.length !=
+                                                                  4
+                                                              ? "Add to Dock"
+                                                              : "Dock is Full",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  themeTextColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        final AndroidIntent
+                                                            intent =
+                                                            AndroidIntent(
+                                                          action:
+                                                              'action_application_details_settings',
+                                                          data:
+                                                              'package:${appls.packageName}',
+                                                        );
+
+                                                        await intent.launch();
+                                                      },
+                                                      child: ListTile(
+                                                        leading: const Icon(
+                                                            Icons.info_outline),
+                                                        title: Text(
+                                                          "App Info",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  themeTextColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        await DeviceApps
+                                                            .uninstallApp(appls
+                                                                .packageName);
+                                                      },
+                                                      child: ListTile(
+                                                        leading: const Icon(Icons
+                                                            .remove_circle_outline),
+                                                        title: Text(
+                                                          "Uninstall",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  themeTextColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    const Divider(
+                                                      color: Colors.grey,
+                                                    ),
+                                                    GestureDetector(
+                                                      onTap: () async {
+                                                        Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  SettingsPage(
+                                                                      onThemeChanged:
+                                                                          widget
+                                                                              .onThemeChanged)),
+                                                        );
+                                                      },
+                                                      child: ListTile(
+                                                        leading: const Icon(Icons
+                                                            .settings_outlined),
+                                                        title: Text(
+                                                          "Launchy Settings",
+                                                          style: TextStyle(
+                                                              color:
+                                                                  themeTextColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        );
+                                      },
+                                      child: ListTile(
+                                        leading: Image.memory(
+                                          (appls as ApplicationWithIcon).icon,
+                                          width: 42,
+                                        ),
+                                        title: Text(
+                                          appls.appName,
+                                          style:
+                                              TextStyle(color: themeTextColor),
                                         ),
                                       ),
-                                      Text(
-                                        // DateFormat('MM/dd/yyyy hh:mm:ss')
-                                        DateFormat(':mm a')
-                                            .format(DateTime.now()),
-                                        style: const TextStyle(
-                                            color: Colors.white,
-                                            fontSize: 50,
-                                            fontWeight: FontWeight.w200),
-                                      ),
-                                    ],
-                                  ),
-                                  Text(
-                                    // DateFormat('MM/dd/yyyy hh:mm:ss')
-                                    DateFormat('E dd  MMM  yyyy')
-                                        .format(DateTime.now()),
-                                    style: const TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
                                     ),
-                                  ),
-                                ],
-                              );
-                            }),
-                      ),
-                      Container(
-                        height: 80,
-                        margin: const EdgeInsets.all(30),
-                        decoration: const BoxDecoration(
-                            color: Colors.white,
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(20))),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                          children: [
-                            dockIconList.isNotEmpty
-                                ? Image.memory(
-                                    (dockIconList[0] as ApplicationWithIcon)
-                                        .icon,
-                                    width: 42,
-                                  )
-                                : IconButton(
-                                    onPressed: () {
-                                      appops.addAppToDock('camera');
-                                      dockIconList = appops.docklistitems;
-                                    },
-                                    icon: const Icon(
-                                      Icons.cabin,
-                                      color: Colors.black,
-                                    )),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.black,
-                                )),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.black,
-                                )),
-                            IconButton(
-                                onPressed: () {},
-                                icon: const Icon(
-                                  Icons.add,
-                                  color: Colors.black,
-                                )),
-                          ],
+                                  ]);
+                            },
+                            separatorBuilder:
+                                (BuildContext context, int index) {
+                              // if (index == 0) {
+                              //   print(getFirstLetter(
+                              //       appops.searchAppList[index].appName));
+                              //   return Text(
+                              //     getFirstLetter(
+                              //         appops.searchAppList[index].appName),
+                              //     style: TextStyle(color: themeTextColor),
+                              //   );
+                              // } else {
+                              //   String currentLetter = getFirstLetter(
+                              //       appops.searchAppList[index].appName);
+                              //   String previousLetter = getFirstLetter(
+                              //       appops.searchAppList[index - 1].appName);
+                              //   if (currentLetter != previousLetter) {
+                              //     return Text(
+                              //       currentLetter,
+                              //       style: const TextStyle(color: themeTextColor),
+                              //     );
+                              //   } else {
+                              return const SizedBox
+                                  .shrink(); // Return an empty separator when the letter doesn't change
+                              // }
+                              // }
+                            },
+                          ),
                         ),
-                      ),
-                    ],
-                  )),
-              Container(
-                margin: const EdgeInsets.all(10),
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: ListView.builder(
-                        // itemCount: appops.searchAppList.length,
-                        // itemBuilder: (BuildContext context, int index) {
-                        //   final appls = appops.searchAppList[index];
-                        //   return ListTile(
-                        //     leading: Image.memory(
-                        //       (appls as ApplicationWithIcon).icon,
-                        //       width: 42,
-                        //     ),
-                        //     title: Text(
-                        //       appls.appName,
-                        //       style: const TextStyle(color: themeColor),
-                        //     ),
-                        //   );
-                        // },
-                        itemCount: appops.searchAppList.length,
-                        itemBuilder: (BuildContext context, int index) {
-                          return ListTile(
-                            title: Text(
-                              "hkjhlkh",
-                              style: TextStyle(color: themeColor),
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    TextField(
-                        // ignore: prefer_const_constructors
-                        decoration: InputDecoration(
-                            enabledBorder: const OutlineInputBorder(
-                                borderSide:
-                                    BorderSide(color: themeColor, width: 2)),
-                            // labelText: 'Password',
+                        TextField(
+                          style: TextStyle(color: themeTextColor),
+                          decoration: InputDecoration(
+                            focusColor: themeTextColor,
                             hintText: "Search",
-                            hintStyle: const TextStyle(color: themeColor)),
-                        onChanged: (String value) {
-                          setState(() {
-                            appops.searchApp(value);
-                          });
-                        }),
-                  ],
+                            hintStyle: TextStyle(color: themeTextColor),
+                            filled: true,
+                            fillColor:
+                                currentTheme.brightness == Brightness.dark
+                                    ? Colors.grey[800]
+                                    : Colors.grey[100],
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30.0),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                          onChanged: (String value) {
+                            setState(() {
+                              appops.searchApp(value);
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ));
+              ]),
+        ),
+      ),
+    );
   }
 }
