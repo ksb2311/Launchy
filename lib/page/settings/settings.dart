@@ -2,7 +2,15 @@ import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
   final Function(String) onThemeChanged;
-  const SettingsPage({Key? key, required this.onThemeChanged})
+  final ValueChanged<bool> onShowIconsChanged;
+  final bool showIcons;
+  final String setTheme;
+  const SettingsPage(
+      {Key? key,
+      required this.onThemeChanged,
+      required this.onShowIconsChanged,
+      required this.showIcons,
+      required this.setTheme})
       : super(key: key);
 
   @override
@@ -10,9 +18,20 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  String _selectedTheme = 'System Default';
+  late String _selectedTheme;
   double _iconSize = 24;
-  bool _showIcons = true;
+  late bool showIcons;
+  late String setTheme;
+
+  Color themeTextColor = Colors.black;
+  Color themeBackground = Colors.white;
+
+  @override
+  void initState() {
+    super.initState();
+    showIcons = widget.showIcons;
+    _selectedTheme = widget.setTheme;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +47,10 @@ class _SettingsPageState extends State<SettingsPage> {
     // }
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Settings')),
+      appBar: AppBar(
+        title: const Text('Settings'),
+        shadowColor: Colors.transparent,
+      ),
       body: ListView(
         children: [
           ListTile(
@@ -80,11 +102,13 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             title: const Text('Show Icons'),
             trailing: Switch(
-              value: _showIcons,
+              value: showIcons!,
               onChanged: (bool value) {
                 setState(() {
-                  _showIcons = value;
+                  showIcons = value;
                 });
+                widget.onShowIconsChanged(value);
+                debugPrint("widget.onShowIconsChanged ${value} $showIcons");
               },
             ),
           ),

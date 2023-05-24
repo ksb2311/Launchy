@@ -18,12 +18,14 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   String _selectedTheme = 'System Default';
+  bool shouldShowIcons = true;
   var brightness =
       SchedulerBinding.instance.platformDispatcher.platformBrightness;
 
   @override
   Widget build(BuildContext context) {
     ThemeData lightTheme = ThemeData(
+      useMaterial3: true,
       brightness: Brightness.light,
       primarySwatch: Colors.blue,
       scaffoldBackgroundColor: Colors.white,
@@ -33,6 +35,7 @@ class _MyAppState extends State<MyApp> {
     );
 
     ThemeData darkTheme = ThemeData(
+      useMaterial3: true,
       brightness: Brightness.dark,
       primarySwatch: Colors.blue,
       scaffoldBackgroundColor: Colors.black,
@@ -62,6 +65,8 @@ class _MyAppState extends State<MyApp> {
         // darkTheme: darkTheme,
         themeMode: ThemeMode.system,
         home: HomePage(
+          setTheme: _selectedTheme,
+          setIcon: shouldShowIcons,
           onThemeChanged: (String theme) {
             setState(() {
               _selectedTheme = theme;

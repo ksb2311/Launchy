@@ -7,8 +7,14 @@ import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   final Function(String) onThemeChanged;
-
-  const HomePage({Key? key, required this.onThemeChanged}) : super(key: key);
+  final String setTheme;
+  final bool setIcon;
+  const HomePage(
+      {Key? key,
+      required this.onThemeChanged,
+      required this.setTheme,
+      required this.setIcon})
+      : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -25,10 +31,13 @@ class _HomePageState extends State<HomePage> {
 
   final _textEditingController = TextEditingController();
 
+  late bool shouldShowIcons;
+
   @override
   void initState() {
     super.initState();
     loadApps();
+    shouldShowIcons = widget.setIcon;
   }
 
   @override
@@ -62,6 +71,15 @@ class _HomePageState extends State<HomePage> {
     themeTextColor = Theme.of(context).textTheme.bodyLarge!.color!;
     themeBackground = Theme.of(context).scaffoldBackgroundColor;
     final ThemeData currentTheme = Theme.of(context);
+
+    DateTime now = DateTime.now();
+    int hours = now.hour;
+    int minutes = now.minute;
+    int seconds = now.second;
+
+    int totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
+    double progress = totalSeconds / 86400;
+
     return Scaffold(
       backgroundColor: themeBackground,
       body: Container(
@@ -90,10 +108,16 @@ class _HomePageState extends State<HomePage> {
                       children: [
                         GestureDetector(
                           onTap: () async {
+                            Navigator.pop(context);
                             Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) => SettingsPage(
+                                      showIcons: shouldShowIcons,
+                                      setTheme: widget.setTheme,
+                                      onShowIconsChanged: (bool value) {
+                                        shouldShowIcons = value;
+                                      },
                                       onThemeChanged: widget.onThemeChanged)),
                             );
                           },
@@ -158,13 +182,33 @@ class _HomePageState extends State<HomePage> {
                                     ),
                                     Text(
                                       // DateFormat('MM/dd/yyyy hh:mm:ss')
-                                      DateFormat('E dd  MMM  yyyy')
+                                      DateFormat('E dd MMM yyyy')
                                           .format(DateTime.now()),
                                       style: TextStyle(
                                         color: themeTextColor,
                                         fontSize: 20,
                                       ),
                                     ),
+                                    const SizedBox(
+                                      height: 20,
+                                    ),
+                                    Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                              'Day Progress ${(progress / 1 * 100).floor()} %'),
+                                          const SizedBox(
+                                            height: 10,
+                                          ),
+                                          LinearProgressIndicator(
+                                            value: progress,
+                                            backgroundColor: Colors.grey,
+                                            valueColor:
+                                                AlwaysStoppedAnimation<Color>(
+                                                    themeTextColor),
+                                          ),
+                                        ])
                                   ],
                                 );
                               }),
@@ -262,11 +306,23 @@ class _HomePageState extends State<HomePage> {
                                                     ),
                                                     GestureDetector(
                                                       onTap: () async {
+                                                        Navigator.pop(context);
                                                         Navigator.push(
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) =>
                                                                   SettingsPage(
+                                                                      showIcons:
+                                                                          shouldShowIcons,
+                                                                      setTheme:
+                                                                          widget
+                                                                              .setTheme,
+                                                                      onShowIconsChanged:
+                                                                          (bool
+                                                                              value) {
+                                                                        shouldShowIcons =
+                                                                            value;
+                                                                      },
                                                                       onThemeChanged:
                                                                           widget
                                                                               .onThemeChanged)),
@@ -298,8 +354,7 @@ class _HomePageState extends State<HomePage> {
                                                 as ApplicationWithIcon)
                                             .icon,
                                         width: 48,
-                                      ),
-                                    )
+                                      ))
                                   : Icon(
                                       Icons.add,
                                       color: themeTextColor,
@@ -337,7 +392,10 @@ class _HomePageState extends State<HomePage> {
                                     if (shouldDisplaySeparator)
                                       Text(
                                         currentLetter,
-                                        style: TextStyle(color: themeTextColor),
+                                        style: TextStyle(
+                                            color: themeTextColor,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     GestureDetector(
                                       onTap: () {
@@ -369,20 +427,40 @@ class _HomePageState extends State<HomePage> {
                                                   mainAxisSize:
                                                       MainAxisSize.min,
                                                   children: [
-                                                    Row(
-                                                      children: [
-                                                        Image.memory(
-                                                          (appls as ApplicationWithIcon)
-                                                              .icon,
-                                                          width: 42,
-                                                          height: 42,
-                                                          // cacheHeight: 42,
-                                                        ),
-                                                        const SizedBox(
-                                                          width: 10,
-                                                        ),
-                                                        Text(appls.appName),
-                                                      ],
+                                                    Container(
+                                                      padding:
+                                                          const EdgeInsets.all(
+                                                              10),
+                                                      decoration: BoxDecoration(
+                                                          color: currentTheme
+                                                                      .brightness ==
+                                                                  Brightness
+                                                                      .dark
+                                                              ? Colors.grey[900]
+                                                              : Colors
+                                                                  .grey[200],
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      30)),
+                                                      child: Row(
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Image.memory(
+                                                            (appls as ApplicationWithIcon)
+                                                                .icon,
+                                                            width: 42,
+                                                            height: 42,
+                                                            // cacheHeight: 42,
+                                                          ),
+                                                          const SizedBox(
+                                                            width: 10,
+                                                          ),
+                                                          Text(appls.appName),
+                                                        ],
+                                                      ),
                                                     ),
                                                     const SizedBox(height: 16),
                                                     GestureDetector(
@@ -457,32 +535,41 @@ class _HomePageState extends State<HomePage> {
                                                         ),
                                                       ),
                                                     ),
-                                                    const Divider(
-                                                      color: Colors.grey,
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) =>
-                                                                  SettingsPage(
-                                                                      onThemeChanged:
-                                                                          widget
-                                                                              .onThemeChanged)),
-                                                        );
-                                                      },
-                                                      child: ListTile(
-                                                        leading: const Icon(Icons
-                                                            .settings_outlined),
-                                                        title: Text(
-                                                          "Launchy Settings",
-                                                          style: TextStyle(
-                                                              color:
-                                                                  themeTextColor),
-                                                        ),
-                                                      ),
-                                                    ),
+                                                    // const Divider(
+                                                    //   color: Colors.grey,
+                                                    // ),
+                                                    // GestureDetector(
+                                                    //   onTap: () async {
+                                                    //     Navigator.pop(context);
+                                                    //     Navigator.push(
+                                                    //       context,
+                                                    //       MaterialPageRoute(
+                                                    //           builder: (context) =>
+                                                    //               SettingsPage(
+                                                    //                   showIcons:
+                                                    //                       shouldShowIcons,
+                                                    //                   onShowIconsChanged:
+                                                    //                       (bool
+                                                    //                           value) {
+                                                    //                     shouldShowIcons =
+                                                    //                         value;
+                                                    //                   },
+                                                    //                   onThemeChanged:
+                                                    //                       widget
+                                                    //                           .onThemeChanged)),
+                                                    //     );
+                                                    //   },
+                                                    //   child: ListTile(
+                                                    //     leading: const Icon(Icons
+                                                    //         .settings_outlined),
+                                                    //     title: Text(
+                                                    //       "Launchy Settings",
+                                                    //       style: TextStyle(
+                                                    //           color:
+                                                    //               themeTextColor),
+                                                    //     ),
+                                                    //   ),
+                                                    // ),
                                                   ],
                                                 ),
                                               ),
@@ -490,17 +577,26 @@ class _HomePageState extends State<HomePage> {
                                           },
                                         );
                                       },
-                                      child: ListTile(
-                                        leading: Image.memory(
-                                          (appls as ApplicationWithIcon).icon,
-                                          width: 42,
-                                        ),
-                                        title: Text(
-                                          appls.appName,
-                                          style:
-                                              TextStyle(color: themeTextColor),
-                                        ),
-                                      ),
+                                      child: shouldShowIcons
+                                          ? ListTile(
+                                              leading: Image.memory(
+                                                (appls as ApplicationWithIcon)
+                                                    .icon,
+                                                width: 42,
+                                              ),
+                                              title: Text(
+                                                appls.appName,
+                                                style: TextStyle(
+                                                    color: themeTextColor),
+                                              ),
+                                            )
+                                          : ListTile(
+                                              title: Text(
+                                                appls.appName,
+                                                style: TextStyle(
+                                                    color: themeTextColor),
+                                              ),
+                                            ),
                                     ),
                                   ]);
                             },
@@ -542,7 +638,7 @@ class _HomePageState extends State<HomePage> {
                             fillColor:
                                 currentTheme.brightness == Brightness.dark
                                     ? Colors.grey[800]
-                                    : Colors.grey[100],
+                                    : Colors.grey[200],
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30.0),
                               borderSide: BorderSide.none,
