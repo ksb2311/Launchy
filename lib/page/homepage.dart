@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_launcher/operations/appops.dart';
 import 'package:flutter_launcher/page/settings/settings.dart';
 import 'package:intl/intl.dart';
+import 'package:rive/rive.dart';
 
 class HomePage extends StatefulWidget {
   final Function(String) onThemeChanged;
@@ -65,6 +66,8 @@ class _HomePageState extends State<HomePage> {
   String getFirstLetter(String appName) {
     return appName[0].toUpperCase();
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -208,7 +211,13 @@ class _HomePageState extends State<HomePage> {
                                                 AlwaysStoppedAnimation<Color>(
                                                     themeTextColor),
                                           ),
-                                        ])
+                                        ]),
+                                    // const SizedBox(
+                                    //   height: 100,
+                                    //   width: 100,
+                                    //   child: RiveAnimation.asset(
+                                    //       'assets/notification.riv'),
+                                    // )
                                   ],
                                 );
                               }),
@@ -393,9 +402,9 @@ class _HomePageState extends State<HomePage> {
                                       Text(
                                         currentLetter,
                                         style: TextStyle(
-                                            color: themeTextColor,
-                                            fontSize: 20,
-                                            fontWeight: FontWeight.bold),
+                                          color: themeTextColor,
+                                          fontSize: 15,
+                                        ),
                                       ),
                                     GestureDetector(
                                       onTap: () {

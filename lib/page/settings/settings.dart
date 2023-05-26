@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:android_intent_plus/android_intent.dart';
 import 'package:flutter/material.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -31,6 +34,21 @@ class _SettingsPageState extends State<SettingsPage> {
     super.initState();
     showIcons = widget.showIcons;
     _selectedTheme = widget.setTheme;
+  }
+
+  Future<void> openDefaultLauncher(BuildContext context) async {
+    if (Platform.isAndroid) {
+      AndroidIntent intent = const AndroidIntent(
+        action: 'android.intent.action.MAIN',
+        category: 'android.intent.category.HOME',
+      );
+      await intent.launch();
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('This feature is only available on Android devices')),
+      );
+    }
   }
 
   @override
@@ -102,7 +120,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             title: const Text('Show Icons'),
             trailing: Switch(
-              value: showIcons!,
+              value: showIcons,
               onChanged: (bool value) {
                 setState(() {
                   showIcons = value;
@@ -122,6 +140,7 @@ class _SettingsPageState extends State<SettingsPage> {
             title: const Text('Set as Default'),
             onTap: () {
               // Navigate to Set as Default settings page
+              openDefaultLauncher(context);
             },
           ),
           ListTile(
