@@ -1,7 +1,6 @@
 // ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_constructors_in_immutables, prefer_final_fields
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_launcher/operations/appops.dart';
 import 'package:flutter_launcher/page/homepage.dart';
 
 void main() {
@@ -19,6 +18,7 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   String _selectedTheme = 'System Default';
   bool shouldShowIcons = true;
+  int dIconSize = 48;
   var brightness =
       SchedulerBinding.instance.platformDispatcher.platformBrightness;
 
@@ -65,6 +65,7 @@ class _MyAppState extends State<MyApp> {
         // darkTheme: darkTheme,
         themeMode: ThemeMode.system,
         home: HomePage(
+          dIconSize: dIconSize,
           setTheme: _selectedTheme,
           setIcon: shouldShowIcons,
           onThemeChanged: (String theme) {
