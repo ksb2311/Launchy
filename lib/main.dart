@@ -18,6 +18,9 @@ class _MyAppState extends State<MyApp> {
   // This widget is the root of your application.
   String _selectedTheme = 'System Default';
   bool shouldShowIcons = true;
+  bool shouldShowClock = true;
+  bool shouldShowDate = true;
+  bool shouldShowDayProgress = true;
   int dIconSize = 48;
   var brightness =
       SchedulerBinding.instance.platformDispatcher.platformBrightness;
@@ -68,6 +71,9 @@ class _MyAppState extends State<MyApp> {
           dIconSize: dIconSize,
           setTheme: _selectedTheme,
           setIcon: shouldShowIcons,
+          setClock: shouldShowClock,
+          setDate: shouldShowDate,
+          setDayProgress: shouldShowDayProgress,
           onThemeChanged: (String theme) {
             setState(() {
               _selectedTheme = theme;
