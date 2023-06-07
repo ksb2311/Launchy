@@ -6,10 +6,12 @@ INJECTED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\m
 INJECTED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\main\AndroidManifest.xml:1:1-28:12
 MERGED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\main\AndroidManifest.xml:1:1-28:12
 MERGED from [:shared_preferences_android] E:\Random Projects\flutter proj\flutter_launcher\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
+MERGED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-32:12
 MERGED from [:android_intent_plus] E:\Random Projects\flutter proj\flutter_launcher\build\android_intent_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [:device_apps] E:\Random Projects\flutter proj\flutter_launcher\build\device_apps\intermediates\merged_manifest\debug\AndroidManifest.xml:2:1-7:12
 MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\ksb\.gradle\caches\transforms-3\3d3b8028a12cf785becf39773a139f0d\transformed\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:17:1-23:12
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\ksb\.gradle\caches\transforms-3\6493250f1d04f8d4a93eb55e84aa9cad\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:17:1-33:12
+MERGED from [androidx.media:media:1.1.0] C:\Users\ksb\.gradle\caches\transforms-3\be1b9693030c6e78bfc45212aec2d021\transformed\media-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\ksb\.gradle\caches\transforms-3\71486853f469b4701bfdcd6268d899d0\transformed\fragment-1.1.0\AndroidManifest.xml:17:1-24:12
 MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\ksb\.gradle\caches\transforms-3\1aad70c0a993f1dc89a09a14beac3f8a\transformed\viewpager-1.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.loader:loader:1.0.0] C:\Users\ksb\.gradle\caches\transforms-3\1c1ec7614d1b234b65ea54fe4a827a43\transformed\loader-1.0.0\AndroidManifest.xml:17:1-22:12
@@ -21,8 +23,8 @@ MERGED from [androidx.savedstate:savedstate:1.0.0] C:\Users\ksb\.gradle\caches\t
 MERGED from [androidx.lifecycle:lifecycle-livedata:2.0.0] C:\Users\ksb\.gradle\caches\transforms-3\0c1a12c4234075254b1bfa8d6a5e21cd\transformed\lifecycle-livedata-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\ksb\.gradle\caches\transforms-3\69045dcd7d2b1afab2cfe5135bc04cee\transformed\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\ksb\.gradle\caches\transforms-3\48d5efb54ff1c0a35d8f71346f595fa6\transformed\jetified-tracing-1.0.0\AndroidManifest.xml:17:1-24:12
-MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\ksb\.gradle\caches\transforms-3\dc2f99c35c8c132cf8a739409fc661df\transformed\core-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ksb\.gradle\caches\transforms-3\5a8525f5e7b2225b964189262a27663a\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:17:1-27:12
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\ksb\.gradle\caches\transforms-3\dc2f99c35c8c132cf8a739409fc661df\transformed\core-runtime-2.0.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] C:\Users\ksb\.gradle\caches\transforms-3\06c8e389ea65c282cba7228a7f1cfb78\transformed\lifecycle-viewmodel-2.1.0\AndroidManifest.xml:17:1-22:12
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\ksb\.gradle\caches\transforms-3\90c93aef549fbc31f676b16dfc46c7c4\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:17:1-24:12
 INJECTED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\debug\AndroidManifest.xml:1:1-7:12
@@ -44,6 +46,8 @@ INJECTED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\d
 		ADDED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\main\AndroidManifest.xml:1:11-69
 application
 ADDED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\main\AndroidManifest.xml:2:3-25:17
+MERGED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:13:5-30:19
+MERGED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:13:5-30:19
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\ksb\.gradle\caches\transforms-3\6493250f1d04f8d4a93eb55e84aa9cad\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:24:5-31:19
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\ksb\.gradle\caches\transforms-3\6493250f1d04f8d4a93eb55e84aa9cad\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:24:5-31:19
 MERGED from [androidx.core:core:1.6.0] C:\Users\ksb\.gradle\caches\transforms-3\365b1395ab1f255cecb8d7fb36e09f3a\transformed\core-1.6.0\AndroidManifest.xml:24:5-89
@@ -122,6 +126,8 @@ INJECTED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\m
 INJECTED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\main\AndroidManifest.xml
 MERGED from [:shared_preferences_android] E:\Random Projects\flutter proj\flutter_launcher\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:shared_preferences_android] E:\Random Projects\flutter proj\flutter_launcher\build\shared_preferences_android\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
+MERGED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:android_intent_plus] E:\Random Projects\flutter proj\flutter_launcher\build\android_intent_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:android_intent_plus] E:\Random Projects\flutter proj\flutter_launcher\build\android_intent_plus\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
 MERGED from [:device_apps] E:\Random Projects\flutter proj\flutter_launcher\build\device_apps\intermediates\merged_manifest\debug\AndroidManifest.xml:5:5-44
@@ -130,6 +136,8 @@ MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\ksb\.gradle\cach
 MERGED from [androidx.window:window-java:1.0.0-beta04] C:\Users\ksb\.gradle\caches\transforms-3\3d3b8028a12cf785becf39773a139f0d\transformed\jetified-window-java-1.0.0-beta04\AndroidManifest.xml:19:5-21:41
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\ksb\.gradle\caches\transforms-3\6493250f1d04f8d4a93eb55e84aa9cad\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.window:window:1.0.0-beta04] C:\Users\ksb\.gradle\caches\transforms-3\6493250f1d04f8d4a93eb55e84aa9cad\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.media:media:1.1.0] C:\Users\ksb\.gradle\caches\transforms-3\be1b9693030c6e78bfc45212aec2d021\transformed\media-1.1.0\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.media:media:1.1.0] C:\Users\ksb\.gradle\caches\transforms-3\be1b9693030c6e78bfc45212aec2d021\transformed\media-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\ksb\.gradle\caches\transforms-3\71486853f469b4701bfdcd6268d899d0\transformed\fragment-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.fragment:fragment:1.1.0] C:\Users\ksb\.gradle\caches\transforms-3\71486853f469b4701bfdcd6268d899d0\transformed\fragment-1.1.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.viewpager:viewpager:1.0.0] C:\Users\ksb\.gradle\caches\transforms-3\1aad70c0a993f1dc89a09a14beac3f8a\transformed\viewpager-1.0.0\AndroidManifest.xml:20:5-44
@@ -152,10 +160,10 @@ MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\ksb\.gra
 MERGED from [androidx.lifecycle:lifecycle-livedata-core:2.0.0] C:\Users\ksb\.gradle\caches\transforms-3\69045dcd7d2b1afab2cfe5135bc04cee\transformed\lifecycle-livedata-core-2.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\ksb\.gradle\caches\transforms-3\48d5efb54ff1c0a35d8f71346f595fa6\transformed\jetified-tracing-1.0.0\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.tracing:tracing:1.0.0] C:\Users\ksb\.gradle\caches\transforms-3\48d5efb54ff1c0a35d8f71346f595fa6\transformed\jetified-tracing-1.0.0\AndroidManifest.xml:20:5-22:41
-MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\ksb\.gradle\caches\transforms-3\dc2f99c35c8c132cf8a739409fc661df\transformed\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
-MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\ksb\.gradle\caches\transforms-3\dc2f99c35c8c132cf8a739409fc661df\transformed\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ksb\.gradle\caches\transforms-3\5a8525f5e7b2225b964189262a27663a\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
 MERGED from [androidx.versionedparcelable:versionedparcelable:1.1.1] C:\Users\ksb\.gradle\caches\transforms-3\5a8525f5e7b2225b964189262a27663a\transformed\versionedparcelable-1.1.1\AndroidManifest.xml:20:5-22:41
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\ksb\.gradle\caches\transforms-3\dc2f99c35c8c132cf8a739409fc661df\transformed\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
+MERGED from [androidx.arch.core:core-runtime:2.0.0] C:\Users\ksb\.gradle\caches\transforms-3\dc2f99c35c8c132cf8a739409fc661df\transformed\core-runtime-2.0.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] C:\Users\ksb\.gradle\caches\transforms-3\06c8e389ea65c282cba7228a7f1cfb78\transformed\lifecycle-viewmodel-2.1.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.lifecycle:lifecycle-viewmodel:2.1.0] C:\Users\ksb\.gradle\caches\transforms-3\06c8e389ea65c282cba7228a7f1cfb78\transformed\lifecycle-viewmodel-2.1.0\AndroidManifest.xml:20:5-44
 MERGED from [androidx.annotation:annotation-experimental:1.1.0] C:\Users\ksb\.gradle\caches\transforms-3\90c93aef549fbc31f676b16dfc46c7c4\transformed\jetified-annotation-experimental-1.1.0\AndroidManifest.xml:20:5-22:41
@@ -172,6 +180,62 @@ uses-permission#android.permission.INTERNET
 ADDED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\debug\AndroidManifest.xml:6:5-66
 	android:name
 		ADDED from E:\Random Projects\flutter proj\flutter_launcher\android\app\src\debug\AndroidManifest.xml:6:22-64
+uses-permission#android.permission.RECEIVE_BOOT_COMPLETED
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:7:5-81
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:7:22-78
+uses-permission#android.permission.VIBRATE
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:8:5-66
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:8:22-63
+uses-permission#android.permission.USE_FULL_SCREEN_INTENT
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:9:5-81
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:9:22-78
+uses-permission#android.permission.SCHEDULE_EXACT_ALARM
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:10:5-79
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:10:22-76
+uses-permission#android.permission.POST_NOTIFICATIONS
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:11:5-77
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:11:22-74
+receiver#com.dexterous.flutterlocalnotifications.ActionBroadcastReceiver
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:14:9-16:40
+	android:exported
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:16:13-37
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:15:13-91
+receiver#com.dexterous.flutterlocalnotifications.ScheduledNotificationReceiver
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:17:9-19:40
+	android:exported
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:19:13-37
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:18:13-97
+receiver#com.dexterous.flutterlocalnotifications.ScheduledNotificationBootReceiver
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:20:9-29:20
+	android:exported
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:22:13-37
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:21:13-101
+intent-filter#action:name:android.intent.action.BOOT_COMPLETED+action:name:android.intent.action.MY_PACKAGE_REPLACED+action:name:android.intent.action.QUICKBOOT_POWERON+action:name:com.htc.intent.action.QUICKBOOT_POWERON
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:23:13-28:29
+action#android.intent.action.BOOT_COMPLETED
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:24:17-79
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:24:25-76
+action#android.intent.action.MY_PACKAGE_REPLACED
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:25:17-84
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:25:25-81
+action#android.intent.action.QUICKBOOT_POWERON
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:26:17-82
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:26:25-79
+action#com.htc.intent.action.QUICKBOOT_POWERON
+ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:27:17-82
+	android:name
+		ADDED from [:flutter_local_notifications] E:\Random Projects\flutter proj\flutter_launcher\build\flutter_local_notifications\intermediates\merged_manifest\debug\AndroidManifest.xml:27:25-79
 uses-library#androidx.window.extensions
 ADDED from [androidx.window:window:1.0.0-beta04] C:\Users\ksb\.gradle\caches\transforms-3\6493250f1d04f8d4a93eb55e84aa9cad\transformed\jetified-window-1.0.0-beta04\AndroidManifest.xml:25:9-27:40
 	android:required

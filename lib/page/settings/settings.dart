@@ -216,10 +216,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                     ),
                                   ),
                                   ListTile(
-                                    title: Text('Icon Size $dIconSize'),
-                                    onTap: () {
-                                      // Navigate to Widgets settings page
-                                    },
+                                    title: Text('Home Icon Size $dIconSize'),
+                                    // onTap: () {
+                                    //   // Navigate to Widgets settings page
+                                    // },
                                   ),
                                   SliderTheme(
                                     data: SliderTheme.of(context).copyWith(

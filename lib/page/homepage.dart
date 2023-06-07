@@ -86,6 +86,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  void _clearText() {
+    _textEditingController.clear();
+  }
+
 // Gettinng first letter of appname
   String getFirstLetter(String appName) {
     return appName[0].toUpperCase();
@@ -130,6 +134,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       GestureDetector(
+                        onVerticalDragDown: (details) {},
                         onTap: () async {
                           Navigator.pop(context);
                           Navigator.push(
@@ -214,7 +219,7 @@ class _HomePageState extends State<HomePage> {
                                                   .format(DateTime.now()),
                                               style: TextStyle(
                                                 color: themeTextColor,
-                                                fontSize: 50,
+                                                fontSize: 30,
                                               ),
                                             ),
                                             Text(
@@ -223,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                                                   .format(DateTime.now()),
                                               style: TextStyle(
                                                   color: themeTextColor,
-                                                  fontSize: 50,
+                                                  fontSize: 30,
                                                   fontWeight: FontWeight.w200),
                                             ),
                                           ],
@@ -236,7 +241,7 @@ class _HomePageState extends State<HomePage> {
                                               .format(DateTime.now()),
                                           style: TextStyle(
                                             color: themeTextColor,
-                                            fontSize: 20,
+                                            fontSize: 15,
                                           ),
                                         )
                                       : const SizedBox(),
@@ -475,13 +480,15 @@ class _HomePageState extends State<HomePage> {
                           child: Row(
                         children: [
                           SizedBox(
-                            width: MediaQuery.sizeOf(context).width - 50,
+                            // width: MediaQuery.sizeOf(context).width - 60,
+                            width: MediaQuery.sizeOf(context).width - 20,
                             child: Scrollbar(
-                              thumbVisibility: true,
                               controller: _scrollController,
-                              // scrollDirection: Axis.horizontal,
-                              scrollbarOrientation: ScrollbarOrientation.right,
                               interactive: true,
+                              // thumbVisibility: true,
+                              radius: const Radius.circular(10),
+                              // trackVisibility: true,
+                              thickness: 10,
                               child: ListView.separated(
                                 cacheExtent: 9999,
                                 controller: _scrollController,
@@ -584,8 +591,11 @@ class _HomePageState extends State<HomePage> {
                                                         GestureDetector(
                                                           onTap: () {
                                                             if (dockIconList
-                                                                    .length !=
-                                                                4) {
+                                                                        .length !=
+                                                                    4 &&
+                                                                !dockIconList
+                                                                    .contains(
+                                                                        appls)) {
                                                               setState(() {
                                                                 appops.addAppToDock(
                                                                     appls
@@ -761,36 +771,46 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                          Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: List.generate(
-                              alphabets.length,
-                              (index) => GestureDetector(
-                                onTap: () {
-                                  setState(() {
-                                    _currentIndex = index;
-                                  });
-                                  _scrollToItemStartingWith(
-                                      alphabets[_currentIndex]);
-                                },
-                                child: Padding(
-                                  padding:
-                                      const EdgeInsets.only(left: 10, right: 5),
-                                  child: Text(
-                                    alphabets[index],
-                                    style: TextStyle(
-                                      fontWeight: _currentIndex == index
-                                          ? FontWeight.bold
-                                          : FontWeight.normal,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
+                          // Column(
+                          //   mainAxisAlignment: MainAxisAlignment.center,
+                          //   children: List.generate(
+                          //     alphabets.length,
+                          //     (index) => GestureDetector(
+                          //       onTap: () {
+                          //         setState(() {
+                          //           _currentIndex = index;
+                          //         });
+                          //         _scrollToItemStartingWith(
+                          //             alphabets[_currentIndex]);
+                          //       },
+                          //       child: Container(
+                          //         // margin: const EdgeInsets.all(2),
+                          //         padding: const EdgeInsets.only(
+                          //             left: 10, right: 10),
+                          //         decoration: BoxDecoration(
+                          //             color: _currentIndex == index
+                          //                 ? Colors.white
+                          //                 : Colors.transparent,
+                          //             borderRadius: BorderRadius.circular(20)),
+                          //         child: Text(
+                          //           alphabets[index],
+                          //           style: TextStyle(
+                          //             color: _currentIndex == index
+                          //                 ? Colors.blue
+                          //                 : Colors.white,
+                          //             fontWeight: _currentIndex == index
+                          //                 ? FontWeight.bold
+                          //                 : FontWeight.normal,
+                          //           ),
+                          //         ),
+                          //       ),
+                          //     ),
+                          //   ),
+                          // ),
                         ],
                       )),
                       TextField(
+                        controller: _textEditingController,
                         onSubmitted: (value) {
                           appops.openApps(appops.searchAppList[0]);
                         },
@@ -809,6 +829,18 @@ class _HomePageState extends State<HomePage> {
                             borderRadius: BorderRadius.circular(30.0),
                             borderSide: BorderSide.none,
                           ),
+                          suffixIcon: _textEditingController.text != ''
+                              ? IconButton(
+                                  icon: const Icon(Icons.clear),
+                                  onPressed: () {
+                                    _clearText();
+                                    setState(() {
+                                      appops.searchApp('');
+                                    });
+                                  },
+                                )
+                              : const Text(''),
+                          prefixIcon: const Icon(Icons.search),
                         ),
                         onChanged: (String value) {
                           setState(() {
@@ -823,20 +855,5 @@ class _HomePageState extends State<HomePage> {
             ]),
       ),
     );
-  }
-
-  void _scrollToItemStartingWith(String alphabet) {
-    for (int i = 0; i < appops.searchAppList.length; i++) {
-      if (appops.searchAppList[i].appName.startsWith(alphabet)) {
-        _scrollController.animateTo(
-          i * _itemExtent,
-          duration: const Duration(milliseconds: 500),
-          curve: Curves.easeInOut,
-        );
-        // print(alphabet.characters);
-        // print('alphabet.characters');
-        break;
-      }
-    }
   }
 }
