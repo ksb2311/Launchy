@@ -1,4 +1,5 @@
 import 'package:android_intent_plus/android_intent.dart';
+import 'package:battery_plus/battery_plus.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_launcher/operations/appops.dart';
@@ -38,22 +39,29 @@ class _HomePageState extends State<HomePage> {
   Color themeTextColor = Colors.black;
   Color themeBackground = Colors.white;
 
+// search textfield controller
   final _textEditingController = TextEditingController();
 
+// settings parametere
   late bool shouldShowIcons;
   late bool shouldShowClock;
   late bool shouldShowDate;
   late bool shouldShowDayProgress;
   late int dIconSize;
 
+// scroll controller
   final ScrollController _scrollController = ScrollController();
 
   final List<String> alphabets = List.generate(
       26, (index) => String.fromCharCode('A'.codeUnitAt(0) + index));
 
-  final double _itemExtent = 100;
+  // final double _itemExtent = 100;
 
-  int _currentIndex = 0;
+  // int _currentIndex = 0;
+
+// battery parameters
+  var battery = Battery();
+  int bLevel = 0;
 
   @override
   void initState() {
@@ -64,6 +72,7 @@ class _HomePageState extends State<HomePage> {
     shouldShowDate = widget.setDate;
     shouldShowDayProgress = widget.setDayProgress;
     dIconSize = widget.dIconSize;
+    getBatteryPercentage();
   }
 
   @override
@@ -87,6 +96,7 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+// clears input text serach textfield
   void _clearText() {
     _textEditingController.clear();
   }
@@ -94,6 +104,12 @@ class _HomePageState extends State<HomePage> {
 // Gettinng first letter of appname
   String getFirstLetter(String appName) {
     return appName[0].toUpperCase();
+  }
+
+  void getBatteryPercentage() async {
+    final batteryLevel = await battery.batteryLevel;
+    bLevel = batteryLevel;
+    setState(() {});
   }
 
   @override
@@ -113,6 +129,25 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: themeBackground,
       body: GestureDetector(
+        onVerticalDragUpdate: (details) {
+          // Check if the user swiped up
+          if (details.delta.dy < 0) {
+            // User swiped up
+            appops.searchApp('phone');
+            appops.openApps(appops.searchAppList[0]);
+            loadApps();
+          }
+        },
+        onHorizontalDragUpdate: (details) {
+          // Check if the user swiped right
+          if (details.delta.dx > 0) {
+            // User swiped right
+            print('swipe right');
+            appops.searchApp('camera');
+            appops.openApps(appops.searchAppList[0]);
+            loadApps();
+          }
+        },
         onLongPress: () {
           showModalBottomSheet(
             context: context,
@@ -135,7 +170,6 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       GestureDetector(
-                        onVerticalDragDown: (details) {},
                         onTap: () async {
                           Navigator.pop(context);
                           Navigator.push(
@@ -211,6 +245,38 @@ class _HomePageState extends State<HomePage> {
                               return Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
+                                  // Row(
+                                  //   crossAxisAlignment: CrossAxisAlignment.end,
+                                  //   children: [
+                                  //     bLevel == 100
+                                  //         ? const Icon(
+                                  //             Icons.battery_std_rounded)
+                                  //         : bLevel >= 90
+                                  //             ? const Icon(
+                                  //                 Icons.battery_6_bar_rounded)
+                                  //             : bLevel >= 70
+                                  //                 ? const Icon(Icons
+                                  //                     .battery_5_bar_rounded)
+                                  //                 : bLevel >= 50
+                                  //                     ? const Icon(Icons
+                                  //                         .battery_4_bar_rounded)
+                                  //                     : bLevel >= 30
+                                  //                         ? const Icon(Icons
+                                  //                             .battery_3_bar_rounded)
+                                  //                         : bLevel >= 20
+                                  //                             ? const Icon(Icons
+                                  //                                 .battery_2_bar_rounded)
+                                  //                             : bLevel >= 10
+                                  //                                 ? const Icon(Icons
+                                  //                                     .battery_1_bar_rounded)
+                                  //                                 : const Icon(Icons
+                                  //                                     .battery_0_bar_rounded),
+                                  //     Text(
+                                  //       " $bLevel",
+                                  //       style: TextStyle(color: themeTextColor),
+                                  //     ),
+                                  //   ],
+                                  // ),
                                   shouldShowClock
                                       ? Row(
                                           children: [
@@ -268,6 +334,7 @@ class _HomePageState extends State<HomePage> {
                                               ),
                                             ])
                                       : const SizedBox(),
+
                                   // const SizedBox(
                                   //   height: 100,
                                   //   width: 100,
