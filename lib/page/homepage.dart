@@ -131,23 +131,30 @@ class _HomePageState extends State<HomePage> {
       body: GestureDetector(
         onVerticalDragUpdate: (details) {
           // Check if the user swiped up
-          if (details.delta.dy < 0) {
+          // if (details.delta.dy < 0) {
+          //   // User swiped up
+          //   appops.searchApp('phone');
+          //   appops.openApps(appops.searchAppList[0]);
+          //   loadApps();
+          // }
+          if (details.delta.dy > 0) {
             // User swiped up
             appops.searchApp('phone');
             appops.openApps(appops.searchAppList[0]);
             loadApps();
           }
         },
-        onHorizontalDragUpdate: (details) {
-          // Check if the user swiped right
-          if (details.delta.dx > 0) {
-            // User swiped right
-            print('swipe right');
-            appops.searchApp('camera');
-            appops.openApps(appops.searchAppList[0]);
-            loadApps();
-          }
-        },
+
+        // onHorizontalDragUpdate: (details) {
+        //   // Check if the user swiped right
+        //   if (details.delta.dx > 0) {
+        //     // User swiped right
+        //     print('swipe right');
+        //     appops.searchApp('camera');
+        //     appops.openApps(appops.searchAppList[0]);
+        //     loadApps();
+        //   }
+        // },
         onLongPress: () {
           showModalBottomSheet(
             context: context,
