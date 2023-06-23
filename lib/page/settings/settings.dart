@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:io';
 
 import 'package:android_intent_plus/android_intent.dart';
@@ -10,11 +9,13 @@ class SettingsPage extends StatefulWidget {
   final ValueChanged<bool> onShowClockChanged;
   final ValueChanged<bool> onShowDateChanged;
   final ValueChanged<bool> onShowDayProgressChanged;
+  final ValueChanged<bool> onShowTodoChanged;
   final ValueChanged<int> onDIconSizeChanged;
   final bool showIcons;
   final bool showClock;
   final bool showDate;
   final bool showDayProgress;
+  final bool showTodo;
   final String setTheme;
   final int dIconSize;
   const SettingsPage(
@@ -30,7 +31,9 @@ class SettingsPage extends StatefulWidget {
       required this.showDayProgress,
       required this.onShowClockChanged,
       required this.onShowDateChanged,
-      required this.onShowDayProgressChanged})
+      required this.onShowDayProgressChanged,
+      required this.onShowTodoChanged,
+      required this.showTodo})
       : super(key: key);
 
   @override
@@ -44,6 +47,7 @@ class _SettingsPageState extends State<SettingsPage> {
   late bool showClock;
   late bool showDate;
   late bool showDayProgress;
+  late bool showTodo;
   late String setTheme;
   late int dIconSize;
 
@@ -60,6 +64,7 @@ class _SettingsPageState extends State<SettingsPage> {
     showClock = widget.showClock;
     showDate = widget.showDate;
     showDayProgress = widget.showDayProgress;
+    showTodo = widget.showTodo;
     _selectedTheme = widget.setTheme;
     dIconSize = widget.dIconSize;
     _value = dIconSizeList.indexOf(dIconSize).toDouble() + 1;
@@ -349,6 +354,18 @@ class _SettingsPageState extends State<SettingsPage> {
                                           });
                                           widget
                                               .onShowDayProgressChanged(value);
+                                        },
+                                      ),
+                                    ),
+                                    ListTile(
+                                      title: const Text('Tasks'),
+                                      trailing: Switch(
+                                        value: showTodo,
+                                        onChanged: (bool value) {
+                                          setState(() {
+                                            showTodo = value;
+                                          });
+                                          widget.onShowTodoChanged(value);
                                         },
                                       ),
                                     ),

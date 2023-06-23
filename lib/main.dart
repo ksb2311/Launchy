@@ -1,9 +1,9 @@
-// ignore_for_file: avoid_unnecessary_containers, prefer_const_constructors, prefer_const_constructors_in_immutables, prefer_final_fields
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_launcher/page/homepage.dart';
+import 'package:flutter_launcher/themes.dart';
 
-void main() {
+void main() async {
   runApp(const MyApp());
 }
 
@@ -15,57 +15,36 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  // This widget is the root of your application.
   String _selectedTheme = 'System Default';
   bool shouldShowIcons = true;
   bool shouldShowClock = true;
   bool shouldShowDate = true;
   bool shouldShowDayProgress = true;
+  bool shouldShowTodo = true;
   int dIconSize = 48;
   var brightness =
       SchedulerBinding.instance.platformDispatcher.platformBrightness;
 
   @override
   Widget build(BuildContext context) {
-    ThemeData lightTheme = ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.light,
-      primarySwatch: Colors.blue,
-      scaffoldBackgroundColor: Colors.white,
-      textTheme: TextTheme(
-        bodyLarge: TextStyle(color: Colors.black),
-      ),
-    );
-
-    ThemeData darkTheme = ThemeData(
-      useMaterial3: true,
-      brightness: Brightness.dark,
-      primarySwatch: Colors.blue,
-      scaffoldBackgroundColor: Colors.black,
-      textTheme: TextTheme(
-        bodyLarge: TextStyle(color: Colors.white),
-      ),
-    );
-
     ThemeData getThemeData(String theme) {
       switch (theme) {
         case 'Light':
-          return lightTheme;
+          return defaultTheme;
         case 'Dark':
-          return darkTheme;
+          return ThemeData.dark();
         default:
           bool isDarkMode = brightness == Brightness.dark;
           if (!isDarkMode) {
-            return lightTheme;
+            return defaultTheme;
           } else {
-            return darkTheme;
+            return ThemeData.dark();
           }
       }
     }
 
     return MaterialApp(
         theme: getThemeData(_selectedTheme),
-        // darkTheme: darkTheme,
         themeMode: ThemeMode.system,
         home: HomePage(
           dIconSize: dIconSize,
@@ -74,6 +53,7 @@ class _MyAppState extends State<MyApp> {
           setClock: shouldShowClock,
           setDate: shouldShowDate,
           setDayProgress: shouldShowDayProgress,
+          setTodo: shouldShowTodo,
           onThemeChanged: (String theme) {
             setState(() {
               _selectedTheme = theme;

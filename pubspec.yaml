@@ -24,6 +24,7 @@ dependencies:
   azlistview: ^2.0.0
   android_intent_plus: ^2.0.0
   battery_plus: ^4.0.1
+  url_launcher: ^6.1.11
 
 dev_dependencies:
   flutter_test:

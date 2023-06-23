@@ -1,15 +1,5 @@
 import 'package:flutter/material.dart';
 
-class Todo {
-  final String name;
-  bool checked;
-
-  Todo({
-    required this.name,
-    this.checked = false,
-  });
-}
-
 class TodoList extends StatefulWidget {
   const TodoList({Key? key}) : super(key: key);
 
@@ -18,75 +8,106 @@ class TodoList extends StatefulWidget {
 }
 
 class _TodoListState extends State<TodoList> {
-  final List<Todo> _todos = [];
-  final TextEditingController _textController = TextEditingController();
+  List<TodoItem> todoItems = [];
 
-  void _addTodo() {
+  final TextEditingController _textEditingController = TextEditingController();
+
+  @override
+  void dispose() {
+    _textEditingController.dispose();
+    super.dispose();
+  }
+
+  void addTodoItem(String todoText) {
     setState(() {
-      final name = _textController.text;
-      if (name.isNotEmpty) {
-        _todos.add(Todo(name: name));
-        _textController.clear();
-      }
+      todoItems.add(TodoItem(text: todoText, completed: false));
+      _textEditingController.clear();
     });
   }
 
-  void _removeTodo(int index) {
+  void deleteTodoItem(int index) {
     setState(() {
-      _todos.removeAt(index);
+      todoItems.removeAt(index);
     });
-  }
-
-  void _handleTodoChange(int index, bool checked) {
-    setState(() {
-      _todos[index].checked = checked;
-    });
-  }
-
-  Widget _buildTodoItem(BuildContext context, int index) {
-    final todo = _todos[index];
-    return Dismissible(
-      key: Key(todo.name),
-      onDismissed: (_) => _removeTodo(index),
-      child: CheckboxListTile(
-        title: Text(todo.name),
-        value: todo.checked,
-        onChanged: (checked) => _handleTodoChange(index, checked ?? false),
-      ),
-    );
-  }
-
-  Widget _buildAddTodoButton() {
-    return FloatingActionButton(
-      onPressed: _addTodo,
-      tooltip: 'Add todo',
-      child: Icon(Icons.add),
-    );
   }
 
   @override
   Widget build(BuildContext context) {
+    final ThemeData currentTheme = Theme.of(context);
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Todo List'),
+      resizeToAvoidBottomInset: false,
+      // appBar: AppBar(
+      //   title: const Text('Todo List'),
+      // ),
+      body: Container(
+        decoration: BoxDecoration(
+            color: currentTheme.brightness == Brightness.dark
+                ? Colors.grey[800]
+                : Colors.grey[100],
+            borderRadius: BorderRadius.circular(20)),
+        padding: const EdgeInsets.all(10),
+        child: Column(
+          children: [
+            TextField(
+              controller: _textEditingController,
+              decoration: const InputDecoration(
+                // border: OutlineInputBorder(),
+                labelText: 'Add Task',
+              ),
+              onSubmitted: (value) {
+                addTodoItem(value);
+              },
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: todoItems.length,
+                itemBuilder: (context, index) {
+                  return Dismissible(
+                    key: Key(todoItems[index].text),
+                    onDismissed: (direction) {
+                      deleteTodoItem(index);
+                    },
+                    background: Container(
+                      color: Colors.red,
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 20),
+                    ),
+                    secondaryBackground: Container(
+                      color: Colors.red,
+                      child: const Icon(
+                        Icons.delete,
+                        color: Colors.white,
+                      ),
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20),
+                    ),
+                    child: CheckboxListTile(
+                      title: Text(todoItems[index].text),
+                      value: todoItems[index].completed,
+                      onChanged: (newValue) {
+                        setState(() {
+                          todoItems[index].completed = newValue!;
+                        });
+                      },
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
-      body: ListView.builder(
-        itemCount: _todos.length,
-        itemBuilder: _buildTodoItem,
-      ),
-      floatingActionButton: _buildAddTodoButton(),
     );
   }
 }
 
-class TodoApp extends StatelessWidget {
-  const TodoApp({Key? key}) : super(key: key);
+class TodoItem {
+  String text;
+  bool completed;
 
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Todo App',
-      home: TodoList(),
-    );
-  }
+  TodoItem({required this.text, required this.completed});
 }
