@@ -2,8 +2,6 @@
 
 An android launcher based on [Flutter](https://flutter.dev/)
 
-# Getting Started
-
 ## Requirement
 * Flutter framework
 * Android Studio / SDK

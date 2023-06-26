@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_launcher/operations/appops.dart';
 import 'package:flutter_launcher/page/settings/settings.dart';
-import 'package:flutter_launcher/page/widgets/todo.dart';
+import 'package:flutter_launcher/widgets/todo.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 

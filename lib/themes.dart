@@ -2,9 +2,12 @@ import 'package:flutter/material.dart';
 
 final ThemeData defaultTheme = _buildDefaultTheme();
 
+final ThemeData darkTheme = _buildDarkTheme();
+
 ThemeData _buildDefaultTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
+    useMaterial3: true,
     colorScheme: base.colorScheme.copyWith(
       primary: Colors.blue,
       secondary: Colors.blue,
@@ -25,6 +28,33 @@ ThemeData _buildDefaultTheme() {
       ),
     ),
     scaffoldBackgroundColor: Colors.white,
+  );
+}
+
+ThemeData _buildDarkTheme() {
+  final ThemeData base = ThemeData.dark();
+  return base.copyWith(
+    useMaterial3: true,
+    colorScheme: base.colorScheme.copyWith(
+      primary: Colors.tealAccent,
+      secondary: Colors.tealAccent,
+      error: Colors.red,
+      background: Colors.black,
+    ),
+    textTheme: _buildDefaultTextTheme(base.textTheme),
+    primaryTextTheme: _buildDefaultTextTheme(base.primaryTextTheme),
+    appBarTheme: const AppBarTheme(
+      backgroundColor: Colors.black,
+      foregroundColor: Colors.white,
+      elevation: 1,
+      centerTitle: true,
+      titleTextStyle: TextStyle(
+        color: Colors.white,
+        fontWeight: FontWeight.bold,
+        fontSize: 20.0,
+      ),
+    ),
+    scaffoldBackgroundColor: Colors.black,
   );
 }
 

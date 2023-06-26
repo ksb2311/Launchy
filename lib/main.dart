@@ -32,13 +32,13 @@ class _MyAppState extends State<MyApp> {
         case 'Light':
           return defaultTheme;
         case 'Dark':
-          return ThemeData.dark();
+          return darkTheme;
         default:
           bool isDarkMode = brightness == Brightness.dark;
           if (!isDarkMode) {
             return defaultTheme;
           } else {
-            return ThemeData.dark();
+            return darkTheme;
           }
       }
     }
