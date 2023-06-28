@@ -4,6 +4,13 @@ final ThemeData defaultTheme = _buildDefaultTheme();
 
 final ThemeData darkTheme = _buildDarkTheme();
 
+Color themeTextColor = Colors.black;
+Color themeBackground = Colors.white;
+const Color drawerBackgroundLight = Colors.white;
+const Color drawerBackgroundDark = Colors.grey;
+
+
+
 ThemeData _buildDefaultTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(

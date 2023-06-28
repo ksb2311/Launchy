@@ -7,7 +7,7 @@ import 'package:flutter_launcher/operations/appops.dart';
 import 'package:flutter_launcher/page/settings/settings.dart';
 import 'package:flutter_launcher/widgets/todo.dart';
 import 'package:intl/intl.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:flutter_launcher/themes.dart';
 
 class HomePage extends StatefulWidget {
   final Function(String) onThemeChanged;
@@ -39,9 +39,6 @@ class _HomePageState extends State<HomePage> {
   final appops = AppOps();
   List<Application> dockIconList = [];
   List<Application> preAppList = [];
-
-  Color themeTextColor = Colors.black;
-  Color themeBackground = Colors.white;
 
 // search textfield controller
   final _textEditingController = TextEditingController();
@@ -155,25 +152,431 @@ class _HomePageState extends State<HomePage> {
           resizeToAvoidBottomInset: false,
           backgroundColor: themeBackground,
           body: GestureDetector(
-            onVerticalDragUpdate: (details) async {
+            onVerticalDragEnd: (details) async {
               // Check if the user swiped up
-              if (details.delta.dy > 0) {
+              if (details.primaryVelocity! > 0) {
                 // User swiped Down
                 // StatusBarManager.expandNotificationsPanel();
                 _showNotificationPanel();
               }
-              if (details.delta.dy < 0) {
+              if (details.primaryVelocity! < 0) {
                 // User swiped up
                 // appops.searchApp('phone');
                 // appops.openApps(appops.searchAppList[0]);
                 // loadApps();
-                Uri phoneNumber = Uri.parse('tel:');
 
-                if (await canLaunchUrl(phoneNumber)) {
-                  await launchUrl(phoneNumber);
-                } else {
-                  throw 'Could not launch phone app';
-                }
+                // Uri phoneNumber = Uri.parse('tel:');
+
+                // if (await canLaunchUrl(phoneNumber)) {
+                //   await launchUrl(phoneNumber);
+                // } else {
+                //   throw 'Could not launch phone app';
+                // }
+
+                showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    // backgroundColor: Colors.transparent,
+                    builder: (context) {
+                      return GestureDetector(
+                        onTap: (() => FocusScope.of(context).unfocus()),
+                        child: Container(
+                          // color: currentTheme.brightness == Brightness.dark
+                          //     ? drawerBackgroundDark
+                          //     : drawerBackgroundLight,
+                          margin: const EdgeInsets.only(
+                              top: 30, left: 10, right: 10, bottom: 10),
+                          child: StatefulBuilder(
+                            builder: (BuildContext context, setState) {
+                              return DraggableScrollableSheet(
+                                  initialChildSize: 1.0,
+                                  minChildSize: 0.99,
+                                  maxChildSize: 1.0,
+                                  expand: false,
+                                  builder: (context, scrollController) {
+                                    return Column(
+                                      // ignore: prefer_const_literals_to_create_immutables
+                                      children: [
+                                        Expanded(
+                                            child: Row(
+                                          children: [
+                                            SizedBox(
+                                              // width: MediaQuery.sizeOf(context).width - 60,
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width -
+                                                  20,
+                                              child: Scrollbar(
+                                                controller: scrollController,
+                                                interactive: true,
+                                                // thumbVisibility: true,
+                                                radius:
+                                                    const Radius.circular(10),
+                                                // trackVisibility: true,
+                                                thickness: 10,
+                                                child: ListView.separated(
+                                                  cacheExtent: 9999,
+                                                  controller: scrollController,
+                                                  itemCount: appops
+                                                      .searchAppList.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    final appls = appops
+                                                        .searchAppList[index];
+                                                    String currentLetter =
+                                                        getFirstLetter(
+                                                            appls.appName);
+
+                                                    // Check if the separator should be displayed
+                                                    bool
+                                                        shouldDisplaySeparator =
+                                                        index == 0 ||
+                                                            currentLetter !=
+                                                                getFirstLetter(appops
+                                                                    .searchAppList[
+                                                                        index -
+                                                                            1]
+                                                                    .appName);
+                                                    return Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        children: [
+                                                          if (shouldDisplaySeparator)
+                                                            Text(
+                                                              currentLetter,
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      themeTextColor,
+                                                                  fontSize: 18),
+                                                            ),
+                                                          GestureDetector(
+                                                            onTap: () {
+                                                              appops.openApps(
+                                                                  appls);
+                                                            },
+                                                            onLongPress: () {
+                                                              showModalBottomSheet(
+                                                                context:
+                                                                    context,
+                                                                backgroundColor:
+                                                                    Colors
+                                                                        .transparent,
+                                                                isScrollControlled:
+                                                                    true,
+                                                                builder:
+                                                                    (BuildContext
+                                                                        context) {
+                                                                  return Container(
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: currentTheme.brightness ==
+                                                                              Brightness
+                                                                                  .dark
+                                                                          ? Colors.grey[
+                                                                              800]
+                                                                          : Colors
+                                                                              .grey[100],
+                                                                      borderRadius:
+                                                                          const BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(20),
+                                                                        topRight:
+                                                                            Radius.circular(20),
+                                                                      ),
+                                                                    ),
+                                                                    child:
+                                                                        Padding(
+                                                                      padding:
+                                                                          const EdgeInsets.all(
+                                                                              16),
+                                                                      child:
+                                                                          Column(
+                                                                        mainAxisSize:
+                                                                            MainAxisSize.min,
+                                                                        children: [
+                                                                          Container(
+                                                                            padding:
+                                                                                const EdgeInsets.all(10),
+                                                                            decoration:
+                                                                                BoxDecoration(color: currentTheme.brightness == Brightness.dark ? Colors.grey[900] : Colors.grey[200], borderRadius: BorderRadius.circular(30)),
+                                                                            child:
+                                                                                Row(
+                                                                              mainAxisAlignment: MainAxisAlignment.center,
+                                                                              children: [
+                                                                                Image.memory(
+                                                                                  (appls as ApplicationWithIcon).icon,
+                                                                                  width: 42,
+                                                                                  height: 42,
+                                                                                  // cacheHeight: 42,
+                                                                                ),
+                                                                                const SizedBox(
+                                                                                  width: 10,
+                                                                                ),
+                                                                                Text(appls.appName),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                          const SizedBox(
+                                                                              height: 16),
+                                                                          GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              if (dockIconList.length != 4 && !dockIconList.contains(appls)) {
+                                                                                setState(() {
+                                                                                  appops.addAppToDock(appls.appName);
+                                                                                  dockIconList = appops.docklistitems;
+                                                                                });
+                                                                              }
+                                                                              debugPrint(dockIconList.toString());
+                                                                              Navigator.of(context).pop();
+                                                                            },
+                                                                            child:
+                                                                                ListTile(
+                                                                              leading: const Icon(Icons.add_circle_outline),
+                                                                              title: Text(
+                                                                                dockIconList.length != 4 ? "Add to Dock" : "Dock is Full",
+                                                                                style: TextStyle(color: themeTextColor),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          GestureDetector(
+                                                                            onTap:
+                                                                                () async {
+                                                                              Navigator.of(context).pop();
+                                                                              final AndroidIntent intent = AndroidIntent(
+                                                                                action: 'action_application_details_settings',
+                                                                                data: 'package:${appls.packageName}',
+                                                                              );
+
+                                                                              await intent.launch();
+                                                                            },
+                                                                            child:
+                                                                                ListTile(
+                                                                              leading: const Icon(Icons.info_outline),
+                                                                              title: Text(
+                                                                                "App Info",
+                                                                                style: TextStyle(color: themeTextColor),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          GestureDetector(
+                                                                            onTap:
+                                                                                () async {
+                                                                              Navigator.of(context).pop();
+                                                                              await DeviceApps.uninstallApp(appls.packageName);
+                                                                            },
+                                                                            child:
+                                                                                ListTile(
+                                                                              leading: const Icon(Icons.remove_circle_outline),
+                                                                              title: Text(
+                                                                                "Uninstall",
+                                                                                style: TextStyle(color: themeTextColor),
+                                                                              ),
+                                                                            ),
+                                                                          ),
+                                                                          // const Divider(
+                                                                          //   color: Colors.grey,
+                                                                          // ),
+                                                                          // GestureDetector(
+                                                                          //   onTap: () async {
+                                                                          //     Navigator.pop(context);
+                                                                          //     Navigator.push(
+                                                                          //       context,
+                                                                          //       MaterialPageRoute(
+                                                                          //           builder: (context) =>
+                                                                          //               SettingsPage(
+                                                                          //                   showIcons:
+                                                                          //                       shouldShowIcons,
+                                                                          //                   onShowIconsChanged:
+                                                                          //                       (bool
+                                                                          //                           value) {
+                                                                          //                     shouldShowIcons =
+                                                                          //                         value;
+                                                                          //                   },
+                                                                          //                   onThemeChanged:
+                                                                          //                       widget
+                                                                          //                           .onThemeChanged)),
+                                                                          //     );
+                                                                          //   },
+                                                                          //   child: ListTile(
+                                                                          //     leading: const Icon(Icons
+                                                                          //         .settings_outlined),
+                                                                          //     title: Text(
+                                                                          //       "Launchy Settings",
+                                                                          //       style: TextStyle(
+                                                                          //           color:
+                                                                          //               themeTextColor),
+                                                                          //     ),
+                                                                          //   ),
+                                                                          // ),
+                                                                        ],
+                                                                      ),
+                                                                    ),
+                                                                  );
+                                                                },
+                                                              );
+                                                            },
+                                                            child:
+                                                                shouldShowIcons
+                                                                    ? ListTile(
+                                                                        leading:
+                                                                            Image.memory(
+                                                                          (appls as ApplicationWithIcon)
+                                                                              .icon,
+                                                                          width:
+                                                                              42,
+                                                                        ),
+                                                                        title:
+                                                                            Text(
+                                                                          appls
+                                                                              .appName,
+                                                                          style:
+                                                                              TextStyle(color: themeTextColor),
+                                                                        ),
+                                                                      )
+                                                                    : ListTile(
+                                                                        title:
+                                                                            Text(
+                                                                          appls
+                                                                              .appName,
+                                                                          style:
+                                                                              TextStyle(color: themeTextColor),
+                                                                        ),
+                                                                      ),
+                                                          ),
+                                                        ]);
+                                                  },
+                                                  separatorBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    // if (index == 0) {
+                                                    //   print(getFirstLetter(
+                                                    //       appops.searchAppList[index].appName));
+                                                    //   return Text(
+                                                    //     getFirstLetter(
+                                                    //         appops.searchAppList[index].appName),
+                                                    //     style: TextStyle(color: themeTextColor),
+                                                    //   );
+                                                    // } else {
+                                                    //   String currentLetter = getFirstLetter(
+                                                    //       appops.searchAppList[index].appName);
+                                                    //   String previousLetter = getFirstLetter(
+                                                    //       appops.searchAppList[index - 1].appName);
+                                                    //   if (currentLetter != previousLetter) {
+                                                    //     return Text(
+                                                    //       currentLetter,
+                                                    //       style: const TextStyle(color: themeTextColor),
+                                                    //     );
+                                                    //   } else {
+                                                    return const SizedBox
+                                                        .shrink(); // Return an empty separator when the letter doesn't change
+                                                    // }
+                                                    // }
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            // Column(
+                                            //   mainAxisAlignment: MainAxisAlignment.center,
+                                            //   children: List.generate(
+                                            //     alphabets.length,
+                                            //     (index) => GestureDetector(
+                                            //       onTap: () {
+                                            //         setState(() {
+                                            //           _currentIndex = index;
+                                            //         });
+                                            //         _scrollToItemStartingWith(
+                                            //             alphabets[_currentIndex]);
+                                            //       },
+                                            //       child: Container(
+                                            //         // margin: const EdgeInsets.all(2),
+                                            //         padding: const EdgeInsets.only(
+                                            //             left: 10, right: 10),
+                                            //         decoration: BoxDecoration(
+                                            //             color: _currentIndex == index
+                                            //                 ? Colors.white
+                                            //                 : Colors.transparent,
+                                            //             borderRadius: BorderRadius.circular(20)),
+                                            //         child: Text(
+                                            //           alphabets[index],
+                                            //           style: TextStyle(
+                                            //             color: _currentIndex == index
+                                            //                 ? Colors.blue
+                                            //                 : Colors.white,
+                                            //             fontWeight: _currentIndex == index
+                                            //                 ? FontWeight.bold
+                                            //                 : FontWeight.normal,
+                                            //           ),
+                                            //         ),
+                                            //       ),
+                                            //     ),
+                                            //   ),
+                                            // ),
+                                          ],
+                                        )),
+                                        TextField(
+                                          controller: _textEditingController,
+                                          onSubmitted: (value) {
+                                            appops.openApps(
+                                                appops.searchAppList[0]);
+                                          },
+                                          style:
+                                              TextStyle(color: themeTextColor),
+                                          decoration: InputDecoration(
+                                            contentPadding:
+                                                const EdgeInsets.only(
+                                                    top: 15,
+                                                    bottom: 15,
+                                                    left: 20,
+                                                    right: 20),
+                                            focusColor: themeTextColor,
+                                            hintText: "Search",
+                                            hintStyle: TextStyle(
+                                                color: themeTextColor),
+                                            filled: true,
+                                            fillColor:
+                                                currentTheme.brightness ==
+                                                        Brightness.dark
+                                                    ? Colors.grey[900]
+                                                    : Colors.grey[200],
+                                            border: OutlineInputBorder(
+                                              borderRadius:
+                                                  BorderRadius.circular(30.0),
+                                              borderSide: BorderSide.none,
+                                            ),
+                                            suffixIcon: _textEditingController
+                                                        .text !=
+                                                    ''
+                                                ? IconButton(
+                                                    icon:
+                                                        const Icon(Icons.clear),
+                                                    onPressed: () {
+                                                      _clearText();
+                                                      setState(() {
+                                                        appops.searchApp('');
+                                                      });
+                                                    },
+                                                  )
+                                                : const Text(''),
+                                            prefixIcon:
+                                                const Icon(Icons.search),
+                                          ),
+                                          onChanged: (String value) {
+                                            setState(() {
+                                              appops.searchApp(value);
+                                            });
+                                          },
+                                        ),
+                                      ],
+                                    );
+                                  });
+                            },
+                          ),
+                        ),
+                      );
+                    });
               }
             },
 
@@ -609,411 +1012,6 @@ class _HomePageState extends State<HomePage> {
                             ),
                           ],
                         )),
-                    GestureDetector(
-                      onTap: (() => FocusScope.of(context).unfocus()),
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                            top: 50, left: 10, right: 10, bottom: 10),
-                        child: Column(
-                          // ignore: prefer_const_literals_to_create_immutables
-                          children: [
-                            Expanded(
-                                child: Row(
-                              children: [
-                                SizedBox(
-                                  // width: MediaQuery.sizeOf(context).width - 60,
-                                  width: MediaQuery.sizeOf(context).width - 20,
-                                  child: Scrollbar(
-                                    controller: _scrollController,
-                                    interactive: true,
-                                    // thumbVisibility: true,
-                                    radius: const Radius.circular(10),
-                                    // trackVisibility: true,
-                                    thickness: 10,
-                                    child: ListView.separated(
-                                      cacheExtent: 9999,
-                                      controller: _scrollController,
-                                      itemCount: appops.searchAppList.length,
-                                      itemBuilder:
-                                          (BuildContext context, int index) {
-                                        final appls =
-                                            appops.searchAppList[index];
-                                        String currentLetter =
-                                            getFirstLetter(appls.appName);
-
-                                        // Check if the separator should be displayed
-                                        bool shouldDisplaySeparator = index ==
-                                                0 ||
-                                            currentLetter !=
-                                                getFirstLetter(appops
-                                                    .searchAppList[index - 1]
-                                                    .appName);
-                                        return Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              if (shouldDisplaySeparator)
-                                                Text(
-                                                  currentLetter,
-                                                  style: TextStyle(
-                                                      color: themeTextColor,
-                                                      fontSize: 18),
-                                                ),
-                                              GestureDetector(
-                                                onTap: () {
-                                                  appops.openApps(appls);
-                                                },
-                                                onLongPress: () {
-                                                  showModalBottomSheet(
-                                                    context: context,
-                                                    backgroundColor:
-                                                        Colors.transparent,
-                                                    isScrollControlled: true,
-                                                    builder:
-                                                        (BuildContext context) {
-                                                      return Container(
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: currentTheme
-                                                                      .brightness ==
-                                                                  Brightness
-                                                                      .dark
-                                                              ? Colors.grey[800]
-                                                              : Colors
-                                                                  .grey[100],
-                                                          borderRadius:
-                                                              const BorderRadius
-                                                                  .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    20),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    20),
-                                                          ),
-                                                        ),
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets
-                                                                  .all(16),
-                                                          child: Column(
-                                                            mainAxisSize:
-                                                                MainAxisSize
-                                                                    .min,
-                                                            children: [
-                                                              Container(
-                                                                padding:
-                                                                    const EdgeInsets
-                                                                        .all(10),
-                                                                decoration: BoxDecoration(
-                                                                    color: currentTheme.brightness ==
-                                                                            Brightness
-                                                                                .dark
-                                                                        ? Colors.grey[
-                                                                            900]
-                                                                        : Colors.grey[
-                                                                            200],
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            30)),
-                                                                child: Row(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .center,
-                                                                  children: [
-                                                                    Image
-                                                                        .memory(
-                                                                      (appls as ApplicationWithIcon)
-                                                                          .icon,
-                                                                      width: 42,
-                                                                      height:
-                                                                          42,
-                                                                      // cacheHeight: 42,
-                                                                    ),
-                                                                    const SizedBox(
-                                                                      width: 10,
-                                                                    ),
-                                                                    Text(appls
-                                                                        .appName),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                              const SizedBox(
-                                                                  height: 16),
-                                                              GestureDetector(
-                                                                onTap: () {
-                                                                  if (dockIconList
-                                                                              .length !=
-                                                                          4 &&
-                                                                      !dockIconList
-                                                                          .contains(
-                                                                              appls)) {
-                                                                    setState(
-                                                                        () {
-                                                                      appops.addAppToDock(
-                                                                          appls
-                                                                              .appName);
-                                                                      dockIconList =
-                                                                          appops
-                                                                              .docklistitems;
-                                                                    });
-                                                                  }
-                                                                  debugPrint(
-                                                                      dockIconList
-                                                                          .toString());
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                },
-                                                                child: ListTile(
-                                                                  leading:
-                                                                      const Icon(
-                                                                          Icons
-                                                                              .add_circle_outline),
-                                                                  title: Text(
-                                                                    dockIconList.length !=
-                                                                            4
-                                                                        ? "Add to Dock"
-                                                                        : "Dock is Full",
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                            themeTextColor),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              GestureDetector(
-                                                                onTap:
-                                                                    () async {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  final AndroidIntent
-                                                                      intent =
-                                                                      AndroidIntent(
-                                                                    action:
-                                                                        'action_application_details_settings',
-                                                                    data:
-                                                                        'package:${appls.packageName}',
-                                                                  );
-
-                                                                  await intent
-                                                                      .launch();
-                                                                },
-                                                                child: ListTile(
-                                                                  leading:
-                                                                      const Icon(
-                                                                          Icons
-                                                                              .info_outline),
-                                                                  title: Text(
-                                                                    "App Info",
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                            themeTextColor),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              GestureDetector(
-                                                                onTap:
-                                                                    () async {
-                                                                  Navigator.of(
-                                                                          context)
-                                                                      .pop();
-                                                                  await DeviceApps
-                                                                      .uninstallApp(
-                                                                          appls
-                                                                              .packageName);
-                                                                },
-                                                                child: ListTile(
-                                                                  leading:
-                                                                      const Icon(
-                                                                          Icons
-                                                                              .remove_circle_outline),
-                                                                  title: Text(
-                                                                    "Uninstall",
-                                                                    style: TextStyle(
-                                                                        color:
-                                                                            themeTextColor),
-                                                                  ),
-                                                                ),
-                                                              ),
-                                                              // const Divider(
-                                                              //   color: Colors.grey,
-                                                              // ),
-                                                              // GestureDetector(
-                                                              //   onTap: () async {
-                                                              //     Navigator.pop(context);
-                                                              //     Navigator.push(
-                                                              //       context,
-                                                              //       MaterialPageRoute(
-                                                              //           builder: (context) =>
-                                                              //               SettingsPage(
-                                                              //                   showIcons:
-                                                              //                       shouldShowIcons,
-                                                              //                   onShowIconsChanged:
-                                                              //                       (bool
-                                                              //                           value) {
-                                                              //                     shouldShowIcons =
-                                                              //                         value;
-                                                              //                   },
-                                                              //                   onThemeChanged:
-                                                              //                       widget
-                                                              //                           .onThemeChanged)),
-                                                              //     );
-                                                              //   },
-                                                              //   child: ListTile(
-                                                              //     leading: const Icon(Icons
-                                                              //         .settings_outlined),
-                                                              //     title: Text(
-                                                              //       "Launchy Settings",
-                                                              //       style: TextStyle(
-                                                              //           color:
-                                                              //               themeTextColor),
-                                                              //     ),
-                                                              //   ),
-                                                              // ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                  );
-                                                },
-                                                child: shouldShowIcons
-                                                    ? ListTile(
-                                                        leading: Image.memory(
-                                                          (appls as ApplicationWithIcon)
-                                                              .icon,
-                                                          width: 42,
-                                                        ),
-                                                        title: Text(
-                                                          appls.appName,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  themeTextColor),
-                                                        ),
-                                                      )
-                                                    : ListTile(
-                                                        title: Text(
-                                                          appls.appName,
-                                                          style: TextStyle(
-                                                              color:
-                                                                  themeTextColor),
-                                                        ),
-                                                      ),
-                                              ),
-                                            ]);
-                                      },
-                                      separatorBuilder:
-                                          (BuildContext context, int index) {
-                                        // if (index == 0) {
-                                        //   print(getFirstLetter(
-                                        //       appops.searchAppList[index].appName));
-                                        //   return Text(
-                                        //     getFirstLetter(
-                                        //         appops.searchAppList[index].appName),
-                                        //     style: TextStyle(color: themeTextColor),
-                                        //   );
-                                        // } else {
-                                        //   String currentLetter = getFirstLetter(
-                                        //       appops.searchAppList[index].appName);
-                                        //   String previousLetter = getFirstLetter(
-                                        //       appops.searchAppList[index - 1].appName);
-                                        //   if (currentLetter != previousLetter) {
-                                        //     return Text(
-                                        //       currentLetter,
-                                        //       style: const TextStyle(color: themeTextColor),
-                                        //     );
-                                        //   } else {
-                                        return const SizedBox
-                                            .shrink(); // Return an empty separator when the letter doesn't change
-                                        // }
-                                        // }
-                                      },
-                                    ),
-                                  ),
-                                ),
-                                // Column(
-                                //   mainAxisAlignment: MainAxisAlignment.center,
-                                //   children: List.generate(
-                                //     alphabets.length,
-                                //     (index) => GestureDetector(
-                                //       onTap: () {
-                                //         setState(() {
-                                //           _currentIndex = index;
-                                //         });
-                                //         _scrollToItemStartingWith(
-                                //             alphabets[_currentIndex]);
-                                //       },
-                                //       child: Container(
-                                //         // margin: const EdgeInsets.all(2),
-                                //         padding: const EdgeInsets.only(
-                                //             left: 10, right: 10),
-                                //         decoration: BoxDecoration(
-                                //             color: _currentIndex == index
-                                //                 ? Colors.white
-                                //                 : Colors.transparent,
-                                //             borderRadius: BorderRadius.circular(20)),
-                                //         child: Text(
-                                //           alphabets[index],
-                                //           style: TextStyle(
-                                //             color: _currentIndex == index
-                                //                 ? Colors.blue
-                                //                 : Colors.white,
-                                //             fontWeight: _currentIndex == index
-                                //                 ? FontWeight.bold
-                                //                 : FontWeight.normal,
-                                //           ),
-                                //         ),
-                                //       ),
-                                //     ),
-                                //   ),
-                                // ),
-                              ],
-                            )),
-                            TextField(
-                              controller: _textEditingController,
-                              onSubmitted: (value) {
-                                appops.openApps(appops.searchAppList[0]);
-                              },
-                              style: TextStyle(color: themeTextColor),
-                              decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(
-                                    top: 15, bottom: 15, left: 20, right: 20),
-                                focusColor: themeTextColor,
-                                hintText: "Search",
-                                hintStyle: TextStyle(color: themeTextColor),
-                                filled: true,
-                                fillColor:
-                                    currentTheme.brightness == Brightness.dark
-                                        ? Colors.grey[800]
-                                        : Colors.grey[200],
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(30.0),
-                                  borderSide: BorderSide.none,
-                                ),
-                                suffixIcon: _textEditingController.text != ''
-                                    ? IconButton(
-                                        icon: const Icon(Icons.clear),
-                                        onPressed: () {
-                                          _clearText();
-                                          setState(() {
-                                            appops.searchApp('');
-                                          });
-                                        },
-                                      )
-                                    : const Text(''),
-                                prefixIcon: const Icon(Icons.search),
-                              ),
-                              onChanged: (String value) {
-                                setState(() {
-                                  appops.searchApp(value);
-                                });
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ]),
             ),
           ),

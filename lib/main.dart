@@ -20,7 +20,7 @@ class _MyAppState extends State<MyApp> {
   bool shouldShowClock = true;
   bool shouldShowDate = true;
   bool shouldShowDayProgress = true;
-  bool shouldShowTodo = true;
+  bool shouldShowTodo = false;
   int dIconSize = 48;
   var brightness =
       SchedulerBinding.instance.platformDispatcher.platformBrightness;
