@@ -122,6 +122,12 @@ class _HomePageState extends State<HomePage> {
     setState(() {});
   }
 
+  void removeUninstalledApp(String packageName) {
+    setState(() {
+      appops.searchAppList.removeWhere((app) => app.packageName == packageName);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     themeTextColor = Theme.of(context).textTheme.bodyLarge!.color!;
@@ -152,14 +158,14 @@ class _HomePageState extends State<HomePage> {
           resizeToAvoidBottomInset: false,
           backgroundColor: themeBackground,
           body: GestureDetector(
-            onVerticalDragEnd: (details) async {
+            onVerticalDragUpdate: (details) async {
               // Check if the user swiped up
-              if (details.primaryVelocity! > 0) {
+              if (details.delta.dy > 0) {
                 // User swiped Down
                 // StatusBarManager.expandNotificationsPanel();
                 _showNotificationPanel();
               }
-              if (details.primaryVelocity! < 0) {
+              if (details.delta.dy < 0) {
                 // User swiped up
                 // appops.searchApp('phone');
                 // appops.openApps(appops.searchAppList[0]);
@@ -193,6 +199,7 @@ class _HomePageState extends State<HomePage> {
                                   minChildSize: 0.99,
                                   maxChildSize: 1.0,
                                   expand: false,
+                                  snap: true,
                                   builder: (context, scrollController) {
                                     return Column(
                                       // ignore: prefer_const_literals_to_create_immutables
@@ -366,6 +373,7 @@ class _HomePageState extends State<HomePage> {
                                                                                 () async {
                                                                               Navigator.of(context).pop();
                                                                               await DeviceApps.uninstallApp(appls.packageName);
+                                                                              removeUninstalledApp(appls.packageName);
                                                                             },
                                                                             child:
                                                                                 ListTile(
@@ -376,41 +384,6 @@ class _HomePageState extends State<HomePage> {
                                                                               ),
                                                                             ),
                                                                           ),
-                                                                          // const Divider(
-                                                                          //   color: Colors.grey,
-                                                                          // ),
-                                                                          // GestureDetector(
-                                                                          //   onTap: () async {
-                                                                          //     Navigator.pop(context);
-                                                                          //     Navigator.push(
-                                                                          //       context,
-                                                                          //       MaterialPageRoute(
-                                                                          //           builder: (context) =>
-                                                                          //               SettingsPage(
-                                                                          //                   showIcons:
-                                                                          //                       shouldShowIcons,
-                                                                          //                   onShowIconsChanged:
-                                                                          //                       (bool
-                                                                          //                           value) {
-                                                                          //                     shouldShowIcons =
-                                                                          //                         value;
-                                                                          //                   },
-                                                                          //                   onThemeChanged:
-                                                                          //                       widget
-                                                                          //                           .onThemeChanged)),
-                                                                          //     );
-                                                                          //   },
-                                                                          //   child: ListTile(
-                                                                          //     leading: const Icon(Icons
-                                                                          //         .settings_outlined),
-                                                                          //     title: Text(
-                                                                          //       "Launchy Settings",
-                                                                          //       style: TextStyle(
-                                                                          //           color:
-                                                                          //               themeTextColor),
-                                                                          //     ),
-                                                                          //   ),
-                                                                          // ),
                                                                         ],
                                                                       ),
                                                                     ),
@@ -451,25 +424,6 @@ class _HomePageState extends State<HomePage> {
                                                   separatorBuilder:
                                                       (BuildContext context,
                                                           int index) {
-                                                    // if (index == 0) {
-                                                    //   print(getFirstLetter(
-                                                    //       appops.searchAppList[index].appName));
-                                                    //   return Text(
-                                                    //     getFirstLetter(
-                                                    //         appops.searchAppList[index].appName),
-                                                    //     style: TextStyle(color: themeTextColor),
-                                                    //   );
-                                                    // } else {
-                                                    //   String currentLetter = getFirstLetter(
-                                                    //       appops.searchAppList[index].appName);
-                                                    //   String previousLetter = getFirstLetter(
-                                                    //       appops.searchAppList[index - 1].appName);
-                                                    //   if (currentLetter != previousLetter) {
-                                                    //     return Text(
-                                                    //       currentLetter,
-                                                    //       style: const TextStyle(color: themeTextColor),
-                                                    //     );
-                                                    //   } else {
                                                     return const SizedBox
                                                         .shrink(); // Return an empty separator when the letter doesn't change
                                                     // }
@@ -478,42 +432,6 @@ class _HomePageState extends State<HomePage> {
                                                 ),
                                               ),
                                             ),
-                                            // Column(
-                                            //   mainAxisAlignment: MainAxisAlignment.center,
-                                            //   children: List.generate(
-                                            //     alphabets.length,
-                                            //     (index) => GestureDetector(
-                                            //       onTap: () {
-                                            //         setState(() {
-                                            //           _currentIndex = index;
-                                            //         });
-                                            //         _scrollToItemStartingWith(
-                                            //             alphabets[_currentIndex]);
-                                            //       },
-                                            //       child: Container(
-                                            //         // margin: const EdgeInsets.all(2),
-                                            //         padding: const EdgeInsets.only(
-                                            //             left: 10, right: 10),
-                                            //         decoration: BoxDecoration(
-                                            //             color: _currentIndex == index
-                                            //                 ? Colors.white
-                                            //                 : Colors.transparent,
-                                            //             borderRadius: BorderRadius.circular(20)),
-                                            //         child: Text(
-                                            //           alphabets[index],
-                                            //           style: TextStyle(
-                                            //             color: _currentIndex == index
-                                            //                 ? Colors.blue
-                                            //                 : Colors.white,
-                                            //             fontWeight: _currentIndex == index
-                                            //                 ? FontWeight.bold
-                                            //                 : FontWeight.normal,
-                                            //           ),
-                                            //         ),
-                                            //       ),
-                                            //     ),
-                                            //   ),
-                                            // ),
                                           ],
                                         )),
                                         TextField(
