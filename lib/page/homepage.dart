@@ -86,12 +86,12 @@ class _HomePageState extends State<HomePage> {
     _textEditingController.clear();
   }
 
-// displays notification panel
+  // displays notification panel
   void _showNotificationPanel() {
     _channel.invokeMethod('showNotificationPanel');
   }
 
-// creating list of installed apps
+  // creating list of installed apps
   Future<void> loadApps() async {
     List<Application> apps = await DeviceApps.getInstalledApplications(
         includeAppIcons: true,
@@ -106,22 +106,24 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-// clears input text serach textfield
+  // clears input text serach textfield
   void _clearText() {
     _textEditingController.clear();
   }
 
-// Gettinng first letter of appname
+  // Gettinng first letter of appname
   String getFirstLetter(String appName) {
     return appName[0].toUpperCase();
   }
 
+  // battery status
   void getBatteryPercentage() async {
     final batteryLevel = await battery.batteryLevel;
     bLevel = batteryLevel;
     setState(() {});
   }
 
+  // clears uninstalled app
   void removeUninstalledApp(String packageName) {
     setState(() {
       appops.searchAppList.removeWhere((app) => app.packageName == packageName);
