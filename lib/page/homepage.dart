@@ -181,6 +181,7 @@ class _HomePageState extends State<HomePage> {
                 //   throw 'Could not launch phone app';
                 // }
 
+                // Display Drawer
                 showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
@@ -436,6 +437,7 @@ class _HomePageState extends State<HomePage> {
                                             ),
                                           ],
                                         )),
+                                        // Serarch Bar in Drawer
                                         TextField(
                                           controller: _textEditingController,
                                           onSubmitted: (value) {
@@ -601,6 +603,7 @@ class _HomePageState extends State<HomePage> {
                   // physics: const BouncingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   children: [
+                    // HomePage
                     Container(
                         margin: const EdgeInsets.all(20),
                         child: Column(
@@ -652,6 +655,7 @@ class _HomePageState extends State<HomePage> {
                                         //     ),
                                         //   ],
                                         // ),
+                                        // Digital clock widget
                                         shouldShowClock
                                             ? Row(
                                                 children: [
@@ -691,6 +695,7 @@ class _HomePageState extends State<HomePage> {
                                         const SizedBox(
                                           height: 20,
                                         ),
+                                        // Display date widget
                                         shouldShowDayProgress
                                             ? Column(
                                                 crossAxisAlignment:
@@ -715,6 +720,7 @@ class _HomePageState extends State<HomePage> {
                                         const SizedBox(
                                           height: 20,
                                         ),
+                                        // Displays Todo widget
                                         shouldShowTodo
                                             ? const SizedBox(
                                                 height: 300, child: TodoList())
