@@ -160,14 +160,14 @@ class _HomePageState extends State<HomePage> {
           resizeToAvoidBottomInset: false,
           backgroundColor: themeBackground,
           body: GestureDetector(
-            onVerticalDragUpdate: (details) async {
+            onVerticalDragEnd: (details) async {
               // Check if the user swiped up
-              if (details.delta.dy > 0) {
+              if (details.velocity.pixelsPerSecond.dy > 0) {
                 // User swiped Down
                 // StatusBarManager.expandNotificationsPanel();
                 _showNotificationPanel();
               }
-              if (details.delta.dy < 0) {
+              if (details.velocity.pixelsPerSecond.dy < 0) {
                 // User swiped up
                 // appops.searchApp('phone');
                 // appops.openApps(appops.searchAppList[0]);
@@ -760,161 +760,158 @@ class _HomePageState extends State<HomePage> {
                                                   Colors.transparent,
                                               isScrollControlled: true,
                                               builder: (BuildContext context) {
-                                                return Container(
-                                                  decoration: BoxDecoration(
-                                                    color: currentTheme
-                                                                .brightness ==
-                                                            Brightness.dark
-                                                        ? Colors.grey[800]
-                                                        : Colors.grey[100],
-                                                    borderRadius:
-                                                        const BorderRadius.only(
-                                                      topLeft:
-                                                          Radius.circular(20),
-                                                      topRight:
-                                                          Radius.circular(20),
-                                                    ),
-                                                  ),
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.all(
-                                                            16),
-                                                    child: Column(
-                                                      mainAxisSize:
-                                                          MainAxisSize.min,
-                                                      children: [
-                                                        GestureDetector(
-                                                          onTap: () async {
-                                                            final AndroidIntent
-                                                                intent =
-                                                                AndroidIntent(
-                                                              action:
-                                                                  'action_application_details_settings',
-                                                              data:
-                                                                  'package:${dockIconList[index].packageName}',
-                                                            );
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                            await intent
-                                                                .launch();
-                                                          },
-                                                          child: ListTile(
-                                                            leading: const Icon(
-                                                                Icons
-                                                                    .info_outline),
-                                                            title: Text(
-                                                              "App Info",
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      themeTextColor),
+                                                return DraggableScrollableSheet(
+                                                  expand: false,
+                                                  initialChildSize: 0.6,
+                                                  builder: (context,
+                                                      scrollController) {
+                                                    return Container(
+                                                      decoration: BoxDecoration(
+                                                        color: currentTheme
+                                                                    .brightness ==
+                                                                Brightness.dark
+                                                            ? Colors.grey[800]
+                                                            : Colors.grey[100],
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  20),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  20),
+                                                        ),
+                                                      ),
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .all(16),
+                                                        child: Column(
+                                                          mainAxisSize:
+                                                              MainAxisSize.min,
+                                                          children: [
+                                                            GestureDetector(
+                                                              onTap: () async {
+                                                                final AndroidIntent
+                                                                    intent =
+                                                                    AndroidIntent(
+                                                                  action:
+                                                                      'action_application_details_settings',
+                                                                  data:
+                                                                      'package:${dockIconList[index].packageName}',
+                                                                );
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                                await intent
+                                                                    .launch();
+                                                              },
+                                                              child: ListTile(
+                                                                leading: const Icon(
+                                                                    Icons
+                                                                        .info_outline),
+                                                                title: Text(
+                                                                  "App Info",
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          themeTextColor),
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                        GestureDetector(
-                                                          onTap: () async {
-                                                            setState(() {
-                                                              dockIconList
-                                                                  .removeAt(
-                                                                      index);
-                                                            });
-                                                            Navigator.of(
-                                                                    context)
-                                                                .pop();
-                                                          },
-                                                          child: ListTile(
-                                                            leading: const Icon(
-                                                                Icons
-                                                                    .remove_circle_outline),
-                                                            title: Text(
-                                                              "Remove",
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      themeTextColor),
+                                                            GestureDetector(
+                                                              onTap: () async {
+                                                                setState(() {
+                                                                  dockIconList
+                                                                      .removeAt(
+                                                                          index);
+                                                                });
+                                                                Navigator.of(
+                                                                        context)
+                                                                    .pop();
+                                                              },
+                                                              child: ListTile(
+                                                                leading: const Icon(
+                                                                    Icons
+                                                                        .remove_circle_outline),
+                                                                title: Text(
+                                                                  "Remove",
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          themeTextColor),
+                                                                ),
+                                                              ),
                                                             ),
-                                                          ),
-                                                        ),
-                                                        const Divider(
-                                                          color: Colors.grey,
-                                                        ),
-                                                        GestureDetector(
-                                                          onTap: () async {
-                                                            Navigator.pop(
-                                                                context);
-                                                            Navigator.push(
-                                                              context,
-                                                              MaterialPageRoute(
-                                                                  builder:
-                                                                      (context) =>
-                                                                          SettingsPage(
-                                                                            showClock:
-                                                                                shouldShowClock,
-                                                                            showDate:
-                                                                                shouldShowDate,
-                                                                            showDayProgress:
-                                                                                shouldShowDayProgress,
-                                                                            showTodo:
-                                                                                shouldShowTodo,
-                                                                            dIconSize:
-                                                                                dIconSize,
-                                                                            showIcons:
-                                                                                shouldShowIcons,
-                                                                            setTheme:
-                                                                                widget.setTheme,
-                                                                            onShowIconsChanged:
-                                                                                (bool value) {
-                                                                              shouldShowIcons = value;
-                                                                            },
-                                                                            onThemeChanged:
-                                                                                widget.onThemeChanged,
-                                                                            onDIconSizeChanged:
-                                                                                (value) {
-                                                                              setState(() {
-                                                                                dIconSize = value;
-                                                                              });
-                                                                            },
-                                                                            onShowClockChanged:
-                                                                                (bool value) {
-                                                                              setState(() {
-                                                                                shouldShowClock = value;
-                                                                              });
-                                                                            },
-                                                                            onShowDateChanged:
-                                                                                (bool value) {
-                                                                              setState(() {
-                                                                                shouldShowDate = value;
-                                                                              });
-                                                                            },
-                                                                            onShowDayProgressChanged:
-                                                                                (bool value) {
-                                                                              setState(() {
-                                                                                shouldShowDayProgress = value;
-                                                                              });
-                                                                            },
-                                                                            onShowTodoChanged:
-                                                                                (bool value) {
-                                                                              setState(() {
-                                                                                shouldShowTodo = value;
-                                                                              });
-                                                                            },
-                                                                          )),
-                                                            );
-                                                          },
-                                                          child: ListTile(
-                                                            leading: const Icon(
-                                                                Icons
-                                                                    .settings_outlined),
-                                                            title: Text(
-                                                              "Launchy Settings",
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      themeTextColor),
+                                                            const Divider(
+                                                              color:
+                                                                  Colors.grey,
                                                             ),
-                                                          ),
+                                                            GestureDetector(
+                                                              onTap: () async {
+                                                                Navigator.pop(
+                                                                    context);
+                                                                Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder:
+                                                                          (context) =>
+                                                                              SettingsPage(
+                                                                                showClock: shouldShowClock,
+                                                                                showDate: shouldShowDate,
+                                                                                showDayProgress: shouldShowDayProgress,
+                                                                                showTodo: shouldShowTodo,
+                                                                                dIconSize: dIconSize,
+                                                                                showIcons: shouldShowIcons,
+                                                                                setTheme: widget.setTheme,
+                                                                                onShowIconsChanged: (bool value) {
+                                                                                  shouldShowIcons = value;
+                                                                                },
+                                                                                onThemeChanged: widget.onThemeChanged,
+                                                                                onDIconSizeChanged: (value) {
+                                                                                  setState(() {
+                                                                                    dIconSize = value;
+                                                                                  });
+                                                                                },
+                                                                                onShowClockChanged: (bool value) {
+                                                                                  setState(() {
+                                                                                    shouldShowClock = value;
+                                                                                  });
+                                                                                },
+                                                                                onShowDateChanged: (bool value) {
+                                                                                  setState(() {
+                                                                                    shouldShowDate = value;
+                                                                                  });
+                                                                                },
+                                                                                onShowDayProgressChanged: (bool value) {
+                                                                                  setState(() {
+                                                                                    shouldShowDayProgress = value;
+                                                                                  });
+                                                                                },
+                                                                                onShowTodoChanged: (bool value) {
+                                                                                  setState(() {
+                                                                                    shouldShowTodo = value;
+                                                                                  });
+                                                                                },
+                                                                              )),
+                                                                );
+                                                              },
+                                                              child: ListTile(
+                                                                leading: const Icon(
+                                                                    Icons
+                                                                        .settings_outlined),
+                                                                title: Text(
+                                                                  "Launchy Settings",
+                                                                  style: TextStyle(
+                                                                      color:
+                                                                          themeTextColor),
+                                                                ),
+                                                              ),
+                                                            ),
+                                                          ],
                                                         ),
-                                                      ],
-                                                    ),
-                                                  ),
+                                                      ),
+                                                    );
+                                                  },
                                                 );
                                               },
                                             );
