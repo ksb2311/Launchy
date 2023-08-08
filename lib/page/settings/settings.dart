@@ -1,7 +1,9 @@
 import 'dart:io';
 
 import 'package:android_intent_plus/android_intent.dart';
+import 'package:android_intent_plus/flag.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SettingsPage extends StatefulWidget {
   final Function(String) onThemeChanged;
@@ -41,6 +43,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
+  final MethodChannel _channel = const MethodChannel('my_channel');
+
   late String _selectedTheme;
   // double _iconSize = 24;
   late bool showIcons;
@@ -70,19 +74,24 @@ class _SettingsPageState extends State<SettingsPage> {
     _value = dIconSizeList.indexOf(dIconSize).toDouble() + 1;
   }
 
-  Future<void> openDefaultLauncher(BuildContext context) async {
-    if (Platform.isAndroid) {
-      AndroidIntent intent = const AndroidIntent(
-        action: 'android.intent.action.MAIN',
-        category: 'android.intent.category.HOME',
-      );
-      await intent.launch();
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('This feature is only available on Android devices')),
-      );
-    }
+  // Future<void> openDefaultLauncher(BuildContext context) async {
+  //   if (Platform.isAndroid) {
+  //     AndroidIntent intent = AndroidIntent(
+  //       action: 'android.intent.action.MAIN',
+  //       category: 'android.intent.category.HOME',
+  //       flags: [Flag.FLAG_ACTIVITY_NEW_TASK],
+  //     );
+  //     intent.launch();
+  //   } else {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(
+  //           content: Text('This feature is only available on Android devices')),
+  //     );
+  //   }
+  // }
+
+  void openDefaultLauncher() {
+    _channel.invokeMethod('setDefaultLauncher');
   }
 
   @override
@@ -423,7 +432,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                       title: const Text('Set as Default'),
                                       onTap: () {
                                         // Navigate to Set as Default settings page
-                                        openDefaultLauncher(context);
+                                        // openDefaultLauncher(context);
+                                        openDefaultLauncher();
                                       },
                                     ),
                                     ListTile(
