@@ -54,7 +54,7 @@ class _TodoListState extends State<TodoList> {
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(20.0),
                 ),
-                filled: true,
+                // filled: true,
                 fillColor: currentTheme.brightness == Brightness.dark
                     ? Colors.grey[600]
                     : Colors.grey[100],

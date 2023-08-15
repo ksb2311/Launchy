@@ -9,8 +9,6 @@ Color themeBackground = Colors.white;
 const Color drawerBackgroundLight = Colors.white;
 const Color drawerBackgroundDark = Colors.grey;
 
-
-
 ThemeData _buildDefaultTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
@@ -19,7 +17,7 @@ ThemeData _buildDefaultTheme() {
       primary: Colors.blue,
       secondary: Colors.blue,
       error: Colors.red,
-      background: Colors.white,
+      // background: Colors.transparent,
     ),
     textTheme: _buildDefaultTextTheme(base.textTheme),
     primaryTextTheme: _buildDefaultTextTheme(base.primaryTextTheme),
@@ -34,7 +32,7 @@ ThemeData _buildDefaultTheme() {
         fontSize: 20.0,
       ),
     ),
-    scaffoldBackgroundColor: Colors.white,
+    scaffoldBackgroundColor: Colors.transparent,
   );
 }
 
@@ -61,7 +59,7 @@ ThemeData _buildDarkTheme() {
         fontSize: 20.0,
       ),
     ),
-    scaffoldBackgroundColor: Colors.black,
+    scaffoldBackgroundColor: Colors.transparent,
   );
 }
 

@@ -112,6 +112,9 @@ class _SettingsPageState extends State<SettingsPage> {
         : Colors.white;
 
     return Scaffold(
+      backgroundColor: Theme.of(context).brightness == Brightness.dark
+          ? Colors.black
+          : Colors.white,
       appBar: AppBar(
         title: const Text('Settings'),
         shadowColor: Colors.transparent,

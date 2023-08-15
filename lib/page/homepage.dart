@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:android_intent_plus/android_intent.dart';
 import 'package:battery_plus/battery_plus.dart';
 import 'package:device_apps/device_apps.dart';
@@ -130,8 +132,6 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  
-
   @override
   Widget build(BuildContext context) {
     themeTextColor = Theme.of(context).textTheme.bodyLarge!.color!;
@@ -159,8 +159,8 @@ class _HomePageState extends State<HomePage> {
           }
         },
         child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: themeBackground,
+          resizeToAvoidBottomInset: true,
+          backgroundColor: Colors.transparent,
           body: GestureDetector(
             onVerticalDragEnd: (details) async {
               // Check if the user swiped up
@@ -191,254 +191,26 @@ class _HomePageState extends State<HomePage> {
                     builder: (context) {
                       return GestureDetector(
                         onTap: (() => FocusScope.of(context).unfocus()),
-                        child: Container(
-                          // color: currentTheme.brightness == Brightness.dark
-                          //     ? drawerBackgroundDark
-                          //     : drawerBackgroundLight,
-                          margin: const EdgeInsets.only(
-                              top: 30, left: 10, right: 10, bottom: 10),
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQueryData.fromView(View.of(context))
+                                  .padding
+                                  .top,
+                              left: 10,
+                              right: 10,
+                              bottom: 10),
                           child: StatefulBuilder(
                             builder: (BuildContext context, setState) {
                               return DraggableScrollableSheet(
                                   initialChildSize: 1.0,
                                   minChildSize: 0.99,
                                   maxChildSize: 1.0,
-                                  expand: false,
+                                  expand: true,
                                   snap: true,
                                   builder: (context, scrollController) {
                                     return Column(
                                       // ignore: prefer_const_literals_to_create_immutables
                                       children: [
-                                        Expanded(
-                                            child: Row(
-                                          children: [
-                                            SizedBox(
-                                              // width: MediaQuery.sizeOf(context).width - 60,
-                                              width: MediaQuery.sizeOf(context)
-                                                      .width -
-                                                  20,
-                                              child: Scrollbar(
-                                                controller: scrollController,
-                                                interactive: true,
-                                                // thumbVisibility: true,
-                                                radius:
-                                                    const Radius.circular(10),
-                                                // trackVisibility: true,
-                                                thickness: 10,
-                                                child: ListView.separated(
-                                                  cacheExtent: 9999,
-                                                  controller: scrollController,
-                                                  itemCount: appops
-                                                      .searchAppList.length,
-                                                  itemBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    final appls = appops
-                                                        .searchAppList[index];
-                                                    String currentLetter =
-                                                        getFirstLetter(
-                                                            appls.appName);
-
-                                                    // Check if the separator should be displayed
-                                                    bool
-                                                        shouldDisplaySeparator =
-                                                        index == 0 ||
-                                                            currentLetter !=
-                                                                getFirstLetter(appops
-                                                                    .searchAppList[
-                                                                        index -
-                                                                            1]
-                                                                    .appName);
-                                                    return Column(
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment
-                                                                .start,
-                                                        children: [
-                                                          if (shouldDisplaySeparator)
-                                                            Text(
-                                                              currentLetter,
-                                                              style: TextStyle(
-                                                                  color:
-                                                                      themeTextColor,
-                                                                  fontSize: 18),
-                                                            ),
-                                                          GestureDetector(
-                                                            onTap: () {
-                                                              appops.openApps(
-                                                                  appls);
-                                                            },
-                                                            onLongPress: () {
-                                                              showModalBottomSheet(
-                                                                context:
-                                                                    context,
-                                                                backgroundColor:
-                                                                    Colors
-                                                                        .transparent,
-                                                                isScrollControlled:
-                                                                    true,
-                                                                builder:
-                                                                    (BuildContext
-                                                                        context) {
-                                                                  return Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: currentTheme.brightness ==
-                                                                              Brightness
-                                                                                  .dark
-                                                                          ? Colors.grey[
-                                                                              800]
-                                                                          : Colors
-                                                                              .grey[100],
-                                                                      borderRadius:
-                                                                          const BorderRadius
-                                                                              .only(
-                                                                        topLeft:
-                                                                            Radius.circular(20),
-                                                                        topRight:
-                                                                            Radius.circular(20),
-                                                                      ),
-                                                                    ),
-                                                                    child:
-                                                                        Padding(
-                                                                      padding:
-                                                                          const EdgeInsets.all(
-                                                                              16),
-                                                                      child:
-                                                                          Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.min,
-                                                                        children: [
-                                                                          Container(
-                                                                            padding:
-                                                                                const EdgeInsets.all(10),
-                                                                            decoration:
-                                                                                BoxDecoration(color: currentTheme.brightness == Brightness.dark ? Colors.grey[900] : Colors.grey[200], borderRadius: BorderRadius.circular(30)),
-                                                                            child:
-                                                                                Row(
-                                                                              mainAxisAlignment: MainAxisAlignment.center,
-                                                                              children: [
-                                                                                Image.memory(
-                                                                                  (appls as ApplicationWithIcon).icon,
-                                                                                  width: 42,
-                                                                                  height: 42,
-                                                                                  // cacheHeight: 42,
-                                                                                ),
-                                                                                const SizedBox(
-                                                                                  width: 10,
-                                                                                ),
-                                                                                Text(appls.appName),
-                                                                              ],
-                                                                            ),
-                                                                          ),
-                                                                          const SizedBox(
-                                                                              height: 16),
-                                                                          GestureDetector(
-                                                                            onTap:
-                                                                                () {
-                                                                              if (dockIconList.length != 4 && !dockIconList.contains(appls)) {
-                                                                                setState(() {
-                                                                                  appops.addAppToDock(appls.appName);
-                                                                                  dockIconList = appops.docklistitems;
-                                                                                });
-                                                                              }
-                                                                              debugPrint(dockIconList.toString());
-                                                                              Navigator.of(context).pop();
-                                                                            },
-                                                                            child:
-                                                                                ListTile(
-                                                                              leading: const Icon(Icons.add_circle_outline),
-                                                                              title: Text(
-                                                                                dockIconList.length != 4 ? "Add to Dock" : "Dock is Full",
-                                                                                style: TextStyle(color: themeTextColor),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          GestureDetector(
-                                                                            onTap:
-                                                                                () async {
-                                                                              Navigator.of(context).pop();
-                                                                              final AndroidIntent intent = AndroidIntent(
-                                                                                action: 'action_application_details_settings',
-                                                                                data: 'package:${appls.packageName}',
-                                                                              );
-
-                                                                              await intent.launch();
-                                                                            },
-                                                                            child:
-                                                                                ListTile(
-                                                                              leading: const Icon(Icons.info_outline),
-                                                                              title: Text(
-                                                                                "App Info",
-                                                                                style: TextStyle(color: themeTextColor),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                          GestureDetector(
-                                                                            onTap:
-                                                                                () async {
-                                                                              Navigator.of(context).pop();
-                                                                              await DeviceApps.uninstallApp(appls.packageName);
-                                                                              removeUninstalledApp(appls.packageName);
-                                                                            },
-                                                                            child:
-                                                                                ListTile(
-                                                                              leading: const Icon(Icons.remove_circle_outline),
-                                                                              title: Text(
-                                                                                "Uninstall",
-                                                                                style: TextStyle(color: themeTextColor),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                },
-                                                              );
-                                                            },
-                                                            child:
-                                                                shouldShowIcons
-                                                                    ? ListTile(
-                                                                        leading:
-                                                                            Image.memory(
-                                                                          (appls as ApplicationWithIcon)
-                                                                              .icon,
-                                                                          width:
-                                                                              42,
-                                                                        ),
-                                                                        title:
-                                                                            Text(
-                                                                          appls
-                                                                              .appName,
-                                                                          style:
-                                                                              TextStyle(color: themeTextColor),
-                                                                        ),
-                                                                      )
-                                                                    : ListTile(
-                                                                        title:
-                                                                            Text(
-                                                                          appls
-                                                                              .appName,
-                                                                          style:
-                                                                              TextStyle(color: themeTextColor),
-                                                                        ),
-                                                                      ),
-                                                          ),
-                                                        ]);
-                                                  },
-                                                  separatorBuilder:
-                                                      (BuildContext context,
-                                                          int index) {
-                                                    return const SizedBox
-                                                        .shrink(); // Return an empty separator when the letter doesn't change
-                                                    // }
-                                                    // }
-                                                  },
-                                                ),
-                                              ),
-                                            ),
-                                          ],
-                                        )),
                                         // Serarch Bar in Drawer
                                         TextField(
                                           controller: _textEditingController,
@@ -493,6 +265,220 @@ class _HomePageState extends State<HomePage> {
                                             });
                                           },
                                         ),
+                                        Flexible(
+                                            child: Row(
+                                          children: [
+                                            SizedBox(
+                                              // width: MediaQuery.sizeOf(context).width - 60,
+                                              width: MediaQuery.sizeOf(context)
+                                                      .width -
+                                                  20,
+                                              child: Scrollbar(
+                                                controller: scrollController,
+                                                interactive: true,
+                                                // thumbVisibility: true,
+                                                radius:
+                                                    const Radius.circular(10),
+                                                // trackVisibility: true,
+                                                thickness: 10,
+                                                child: ListView.separated(
+                                                  cacheExtent: 9999,
+                                                  controller: scrollController,
+                                                  itemCount: appops
+                                                      .searchAppList.length,
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    final appls = appops
+                                                        .searchAppList[index];
+                                                    String currentLetter =
+                                                        getFirstLetter(
+                                                            appls.appName);
+
+                                                    // Check if the separator should be displayed
+                                                    bool
+                                                        shouldDisplaySeparator =
+                                                        index == 0 ||
+                                                            currentLetter !=
+                                                                getFirstLetter(appops
+                                                                    .searchAppList[
+                                                                        index -
+                                                                            1]
+                                                                    .appName);
+                                                    return appops.searchAppList
+                                                            .isNotEmpty
+                                                        ? Column(
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment
+                                                                    .start,
+                                                            children: [
+                                                                if (shouldDisplaySeparator)
+                                                                  Text(
+                                                                    currentLetter,
+                                                                    style: TextStyle(
+                                                                        color:
+                                                                            themeTextColor,
+                                                                        fontSize:
+                                                                            18),
+                                                                  ),
+                                                                GestureDetector(
+                                                                  onTap: () {
+                                                                    Navigator.pop(
+                                                                        context);
+                                                                    appops.openApps(
+                                                                        appls);
+                                                                  },
+                                                                  onLongPress:
+                                                                      () {
+                                                                    showModalBottomSheet(
+                                                                      context:
+                                                                          context,
+                                                                      backgroundColor:
+                                                                          Colors
+                                                                              .transparent,
+                                                                      isScrollControlled:
+                                                                          true,
+                                                                      builder:
+                                                                          (BuildContext
+                                                                              context) {
+                                                                        return Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            color: currentTheme.brightness == Brightness.dark
+                                                                                ? Colors.grey[800]
+                                                                                : Colors.grey[100],
+                                                                            borderRadius:
+                                                                                const BorderRadius.only(
+                                                                              topLeft: Radius.circular(20),
+                                                                              topRight: Radius.circular(20),
+                                                                            ),
+                                                                          ),
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.all(16),
+                                                                            child:
+                                                                                Column(
+                                                                              mainAxisSize: MainAxisSize.min,
+                                                                              children: [
+                                                                                Container(
+                                                                                  padding: const EdgeInsets.all(10),
+                                                                                  decoration: BoxDecoration(color: currentTheme.brightness == Brightness.dark ? Colors.grey[900] : Colors.grey[200], borderRadius: BorderRadius.circular(30)),
+                                                                                  child: Row(
+                                                                                    mainAxisAlignment: MainAxisAlignment.center,
+                                                                                    children: [
+                                                                                      Image.memory(
+                                                                                        (appls as ApplicationWithIcon).icon,
+                                                                                        width: 42,
+                                                                                        height: 42,
+                                                                                        // cacheHeight: 42,
+                                                                                      ),
+                                                                                      const SizedBox(
+                                                                                        width: 10,
+                                                                                      ),
+                                                                                      Text(appls.appName),
+                                                                                    ],
+                                                                                  ),
+                                                                                ),
+                                                                                const SizedBox(height: 16),
+                                                                                GestureDetector(
+                                                                                  onTap: () {
+                                                                                    if (dockIconList.length != 4 && !dockIconList.contains(appls)) {
+                                                                                      setState(() {
+                                                                                        appops.addAppToDock(appls.appName);
+                                                                                        dockIconList = appops.docklistitems;
+                                                                                      });
+                                                                                    }
+                                                                                    debugPrint(dockIconList.toString());
+                                                                                    Navigator.of(context).pop();
+                                                                                  },
+                                                                                  child: ListTile(
+                                                                                    leading: const Icon(Icons.add_circle_outline),
+                                                                                    title: Text(
+                                                                                      dockIconList.length != 4 ? "Add to Dock" : "Dock is Full",
+                                                                                      style: TextStyle(color: themeTextColor),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                GestureDetector(
+                                                                                  onTap: () async {
+                                                                                    Navigator.of(context).pop();
+                                                                                    final AndroidIntent intent = AndroidIntent(
+                                                                                      action: 'action_application_details_settings',
+                                                                                      data: 'package:${appls.packageName}',
+                                                                                    );
+
+                                                                                    await intent.launch();
+                                                                                  },
+                                                                                  child: ListTile(
+                                                                                    leading: const Icon(Icons.info_outline),
+                                                                                    title: Text(
+                                                                                      "App Info",
+                                                                                      style: TextStyle(color: themeTextColor),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                                GestureDetector(
+                                                                                  onTap: () async {
+                                                                                    Navigator.of(context).pop();
+                                                                                    await DeviceApps.uninstallApp(appls.packageName);
+                                                                                    removeUninstalledApp(appls.packageName);
+                                                                                  },
+                                                                                  child: ListTile(
+                                                                                    leading: const Icon(Icons.remove_circle_outline),
+                                                                                    title: Text(
+                                                                                      "Uninstall",
+                                                                                      style: TextStyle(color: themeTextColor),
+                                                                                    ),
+                                                                                  ),
+                                                                                ),
+                                                                              ],
+                                                                            ),
+                                                                          ),
+                                                                        );
+                                                                      },
+                                                                    );
+                                                                  },
+                                                                  child: shouldShowIcons
+                                                                      ? ListTile(
+                                                                          leading:
+                                                                              Image.memory(
+                                                                            (appls as ApplicationWithIcon).icon,
+                                                                            width:
+                                                                                42,
+                                                                          ),
+                                                                          title:
+                                                                              Text(
+                                                                            appls.appName,
+                                                                            style:
+                                                                                TextStyle(color: themeTextColor),
+                                                                          ),
+                                                                        )
+                                                                      : ListTile(
+                                                                          title:
+                                                                              Text(
+                                                                            appls.appName,
+                                                                            style:
+                                                                                TextStyle(color: themeTextColor),
+                                                                          ),
+                                                                        ),
+                                                                ),
+                                                              ])
+                                                        : const CircularProgressIndicator();
+                                                  },
+                                                  separatorBuilder:
+                                                      (BuildContext context,
+                                                          int index) {
+                                                    return const SizedBox
+                                                        .shrink(); // Return an empty separator when the letter doesn't change
+                                                    // }
+                                                    // }
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        )),
                                       ],
                                     );
                                   });
@@ -668,6 +654,15 @@ class _HomePageState extends State<HomePage> {
                                                     style: TextStyle(
                                                       color: themeTextColor,
                                                       fontSize: 30,
+                                                      shadows: [
+                                                        Shadow(
+                                                          color: Colors.black
+                                                              .withOpacity(0.5),
+                                                          offset: const Offset(
+                                                              2, 2),
+                                                          blurRadius: 2,
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
                                                   Text(
@@ -677,6 +672,17 @@ class _HomePageState extends State<HomePage> {
                                                     style: TextStyle(
                                                         color: themeTextColor,
                                                         fontSize: 30,
+                                                        shadows: [
+                                                          Shadow(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.5),
+                                                            offset:
+                                                                const Offset(
+                                                                    2, 2),
+                                                            blurRadius: 2,
+                                                          ),
+                                                        ],
                                                         fontWeight:
                                                             FontWeight.w200),
                                                   ),
@@ -691,6 +697,15 @@ class _HomePageState extends State<HomePage> {
                                                 style: TextStyle(
                                                   color: themeTextColor,
                                                   fontSize: 15,
+                                                  shadows: [
+                                                    Shadow(
+                                                      color: Colors.black
+                                                          .withOpacity(0.5),
+                                                      offset:
+                                                          const Offset(2, 2),
+                                                      blurRadius: 2,
+                                                    ),
+                                                  ],
                                                 ),
                                               )
                                             : const SizedBox(),
@@ -704,7 +719,21 @@ class _HomePageState extends State<HomePage> {
                                                     CrossAxisAlignment.start,
                                                 children: [
                                                     Text(
-                                                        'Day Progress ${(progress / 1 * 100).floor()} %'),
+                                                      'Day Progress ${(progress / 1 * 100).floor()} %',
+                                                      style: TextStyle(
+                                                        shadows: [
+                                                          Shadow(
+                                                            color: Colors.black
+                                                                .withOpacity(
+                                                                    0.5),
+                                                            offset:
+                                                                const Offset(
+                                                                    2, 2),
+                                                            blurRadius: 2,
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
                                                     const SizedBox(
                                                       height: 10,
                                                     ),
