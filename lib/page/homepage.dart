@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_launcher/operations/appops.dart';
 import 'package:flutter_launcher/page/settings/settings.dart';
-import 'package:flutter_launcher/widgets/todo.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter_launcher/widgets/home_widgets.dart';
+import 'package:flutter_launcher/widgets/todo_widget.dart';
 import 'package:flutter_launcher/themes.dart';
 
 class HomePage extends StatefulWidget {
@@ -36,7 +36,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
   // List<Application> listApps = AppOps().searchAppList;
   final appops = AppOps();
   List<Application> dockIconList = [];
@@ -73,6 +73,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     loadApps();
+    WidgetsBinding.instance.addObserver(this);
     shouldShowIcons = widget.setIcon;
     shouldShowClock = widget.setClock;
     shouldShowDate = widget.setDate;
@@ -86,6 +87,23 @@ class _HomePageState extends State<HomePage> {
   void dispose() {
     super.dispose();
     _textEditingController.clear();
+    WidgetsBinding.instance.removeObserver(this);
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    super.didChangeAppLifecycleState(state);
+
+    if (state == AppLifecycleState.paused) {
+      // Handle the app being uninstalled
+      // Perform the necessary list update here
+      // Example: delete all items from the `todoItems` list
+
+      setState(() {
+        appops.searchAppList.clear();
+        loadApps();
+      });
+    }
   }
 
   // displays notification panel
@@ -138,14 +156,6 @@ class _HomePageState extends State<HomePage> {
     themeBackground = Theme.of(context).scaffoldBackgroundColor;
     final ThemeData currentTheme = Theme.of(context);
 
-    DateTime now = DateTime.now();
-    int hours = now.hour;
-    int minutes = now.minute;
-    int seconds = now.second;
-
-    int totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
-    double progress = totalSeconds / 86400;
-
     return WillPopScope(
       onWillPop: () async {
         // Disable back button functionality
@@ -187,18 +197,19 @@ class _HomePageState extends State<HomePage> {
                 showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
+                    shape: const ContinuousRectangleBorder(),
                     // backgroundColor: Colors.transparent,
                     builder: (context) {
                       return GestureDetector(
                         onTap: (() => FocusScope.of(context).unfocus()),
                         child: Padding(
                           padding: EdgeInsets.only(
-                              top: MediaQueryData.fromView(View.of(context))
-                                  .padding
-                                  .top,
-                              left: 10,
-                              right: 10,
-                              bottom: 10),
+                            top: MediaQueryData.fromView(View.of(context))
+                                .padding
+                                .top,
+                            left: 10,
+                            right: 10,
+                          ),
                           child: StatefulBuilder(
                             builder: (BuildContext context, setState) {
                               return DraggableScrollableSheet(
@@ -212,58 +223,62 @@ class _HomePageState extends State<HomePage> {
                                       // ignore: prefer_const_literals_to_create_immutables
                                       children: [
                                         // Serarch Bar in Drawer
-                                        TextField(
-                                          controller: _textEditingController,
-                                          onSubmitted: (value) {
-                                            appops.openApps(
-                                                appops.searchAppList[0]);
-                                          },
-                                          style:
-                                              TextStyle(color: themeTextColor),
-                                          decoration: InputDecoration(
-                                            contentPadding:
-                                                const EdgeInsets.only(
-                                                    top: 15,
-                                                    bottom: 15,
-                                                    left: 20,
-                                                    right: 20),
-                                            focusColor: themeTextColor,
-                                            hintText: "Search",
-                                            hintStyle: TextStyle(
+                                        Padding(
+                                          padding:
+                                              const EdgeInsets.only(top: 5),
+                                          child: TextField(
+                                            controller: _textEditingController,
+                                            onSubmitted: (value) {
+                                              appops.openApps(
+                                                  appops.searchAppList[0]);
+                                            },
+                                            style: TextStyle(
                                                 color: themeTextColor),
-                                            filled: true,
-                                            fillColor:
-                                                currentTheme.brightness ==
-                                                        Brightness.dark
-                                                    ? Colors.grey[900]
-                                                    : Colors.grey[200],
-                                            border: OutlineInputBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(30.0),
-                                              borderSide: BorderSide.none,
+                                            decoration: InputDecoration(
+                                              contentPadding:
+                                                  const EdgeInsets.only(
+                                                      top: 15,
+                                                      bottom: 15,
+                                                      left: 20,
+                                                      right: 20),
+                                              focusColor: themeTextColor,
+                                              hintText: "Search",
+                                              hintStyle: TextStyle(
+                                                  color: themeTextColor),
+                                              filled: true,
+                                              fillColor:
+                                                  currentTheme.brightness ==
+                                                          Brightness.dark
+                                                      ? Colors.grey[900]
+                                                      : Colors.grey[200],
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(30.0),
+                                                borderSide: BorderSide.none,
+                                              ),
+                                              suffixIcon: _textEditingController
+                                                          .text !=
+                                                      ''
+                                                  ? IconButton(
+                                                      icon: const Icon(
+                                                          Icons.clear),
+                                                      onPressed: () {
+                                                        _clearText();
+                                                        setState(() {
+                                                          appops.searchApp('');
+                                                        });
+                                                      },
+                                                    )
+                                                  : const Text(''),
+                                              prefixIcon:
+                                                  const Icon(Icons.search),
                                             ),
-                                            suffixIcon: _textEditingController
-                                                        .text !=
-                                                    ''
-                                                ? IconButton(
-                                                    icon:
-                                                        const Icon(Icons.clear),
-                                                    onPressed: () {
-                                                      _clearText();
-                                                      setState(() {
-                                                        appops.searchApp('');
-                                                      });
-                                                    },
-                                                  )
-                                                : const Text(''),
-                                            prefixIcon:
-                                                const Icon(Icons.search),
+                                            onChanged: (String value) {
+                                              setState(() {
+                                                appops.searchApp(value);
+                                              });
+                                            },
                                           ),
-                                          onChanged: (String value) {
-                                            setState(() {
-                                              appops.searchApp(value);
-                                            });
-                                          },
                                         ),
                                         Flexible(
                                             child: Row(
@@ -422,7 +437,7 @@ class _HomePageState extends State<HomePage> {
                                                                                   onTap: () async {
                                                                                     Navigator.of(context).pop();
                                                                                     await DeviceApps.uninstallApp(appls.packageName);
-                                                                                    removeUninstalledApp(appls.packageName);
+                                                                                    // removeUninstalledApp(appls.packageName);
                                                                                   },
                                                                                   child: ListTile(
                                                                                     leading: const Icon(Icons.remove_circle_outline),
@@ -645,108 +660,17 @@ class _HomePageState extends State<HomePage> {
                                         // ),
                                         // Digital clock widget
                                         shouldShowClock
-                                            ? Row(
-                                                children: [
-                                                  Text(
-                                                    // DateFormat('MM/dd/yyyy hh:mm:ss')
-                                                    DateFormat('hh')
-                                                        .format(DateTime.now()),
-                                                    style: TextStyle(
-                                                      color: themeTextColor,
-                                                      fontSize: 30,
-                                                      shadows: [
-                                                        Shadow(
-                                                          color: Colors.black
-                                                              .withOpacity(0.5),
-                                                          offset: const Offset(
-                                                              2, 2),
-                                                          blurRadius: 2,
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    // DateFormat('MM/dd/yyyy hh:mm:ss')
-                                                    DateFormat(':mm a')
-                                                        .format(DateTime.now()),
-                                                    style: TextStyle(
-                                                        color: themeTextColor,
-                                                        fontSize: 30,
-                                                        shadows: [
-                                                          Shadow(
-                                                            color: Colors.black
-                                                                .withOpacity(
-                                                                    0.5),
-                                                            offset:
-                                                                const Offset(
-                                                                    2, 2),
-                                                            blurRadius: 2,
-                                                          ),
-                                                        ],
-                                                        fontWeight:
-                                                            FontWeight.w200),
-                                                  ),
-                                                ],
-                                              )
+                                            ? const DigitalClockWidget()
                                             : const SizedBox(),
                                         shouldShowDate
-                                            ? Text(
-                                                // DateFormat('MM/dd/yyyy hh:mm:ss')
-                                                DateFormat('E dd MMM yyyy')
-                                                    .format(DateTime.now()),
-                                                style: TextStyle(
-                                                  color: themeTextColor,
-                                                  fontSize: 15,
-                                                  shadows: [
-                                                    Shadow(
-                                                      color: Colors.black
-                                                          .withOpacity(0.5),
-                                                      offset:
-                                                          const Offset(2, 2),
-                                                      blurRadius: 2,
-                                                    ),
-                                                  ],
-                                                ),
-                                              )
+                                            ? const FullDateWidget()
                                             : const SizedBox(),
                                         const SizedBox(
                                           height: 20,
                                         ),
                                         // Display date widget
                                         shouldShowDayProgress
-                                            ? Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                    Text(
-                                                      'Day Progress ${(progress / 1 * 100).floor()} %',
-                                                      style: TextStyle(
-                                                        shadows: [
-                                                          Shadow(
-                                                            color: Colors.black
-                                                                .withOpacity(
-                                                                    0.5),
-                                                            offset:
-                                                                const Offset(
-                                                                    2, 2),
-                                                            blurRadius: 2,
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    const SizedBox(
-                                                      height: 10,
-                                                    ),
-                                                    LinearProgressIndicator(
-                                                      value: progress,
-                                                      backgroundColor:
-                                                          Colors.grey,
-                                                      valueColor:
-                                                          AlwaysStoppedAnimation<
-                                                                  Color>(
-                                                              themeTextColor),
-                                                    ),
-                                                  ])
+                                            ? const DayProgressWidget()
                                             : const SizedBox(),
                                         const SizedBox(
                                           height: 20,
@@ -791,158 +715,161 @@ class _HomePageState extends State<HomePage> {
                                                   Colors.transparent,
                                               isScrollControlled: true,
                                               builder: (BuildContext context) {
-                                                return DraggableScrollableSheet(
-                                                  expand: false,
-                                                  initialChildSize: 0.6,
-                                                  builder: (context,
-                                                      scrollController) {
-                                                    return Container(
-                                                      decoration: BoxDecoration(
-                                                        color: currentTheme
-                                                                    .brightness ==
-                                                                Brightness.dark
-                                                            ? Colors.grey[800]
-                                                            : Colors.grey[100],
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .only(
-                                                          topLeft:
-                                                              Radius.circular(
-                                                                  20),
-                                                          topRight:
-                                                              Radius.circular(
-                                                                  20),
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                    color: currentTheme
+                                                                .brightness ==
+                                                            Brightness.dark
+                                                        ? Colors.grey[800]
+                                                        : Colors.grey[100],
+                                                    borderRadius:
+                                                        const BorderRadius.only(
+                                                      topLeft:
+                                                          Radius.circular(20),
+                                                      topRight:
+                                                          Radius.circular(20),
+                                                    ),
+                                                  ),
+                                                  child: Padding(
+                                                    padding:
+                                                        const EdgeInsets.all(
+                                                            16),
+                                                    child: Column(
+                                                      mainAxisSize:
+                                                          MainAxisSize.min,
+                                                      children: [
+                                                        GestureDetector(
+                                                          onTap: () async {
+                                                            final AndroidIntent
+                                                                intent =
+                                                                AndroidIntent(
+                                                              action:
+                                                                  'action_application_details_settings',
+                                                              data:
+                                                                  'package:${dockIconList[index].packageName}',
+                                                            );
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                            await intent
+                                                                .launch();
+                                                          },
+                                                          child: ListTile(
+                                                            leading: const Icon(
+                                                                Icons
+                                                                    .info_outline),
+                                                            title: Text(
+                                                              "App Info",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      themeTextColor),
+                                                            ),
+                                                          ),
                                                         ),
-                                                      ),
-                                                      child: Padding(
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .all(16),
-                                                        child: Column(
-                                                          mainAxisSize:
-                                                              MainAxisSize.min,
-                                                          children: [
-                                                            GestureDetector(
-                                                              onTap: () async {
-                                                                final AndroidIntent
-                                                                    intent =
-                                                                    AndroidIntent(
-                                                                  action:
-                                                                      'action_application_details_settings',
-                                                                  data:
-                                                                      'package:${dockIconList[index].packageName}',
-                                                                );
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                                await intent
-                                                                    .launch();
-                                                              },
-                                                              child: ListTile(
-                                                                leading: const Icon(
-                                                                    Icons
-                                                                        .info_outline),
-                                                                title: Text(
-                                                                  "App Info",
-                                                                  style: TextStyle(
-                                                                      color:
-                                                                          themeTextColor),
-                                                                ),
-                                                              ),
+                                                        GestureDetector(
+                                                          onTap: () async {
+                                                            setState(() {
+                                                              dockIconList
+                                                                  .removeAt(
+                                                                      index);
+                                                            });
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop();
+                                                          },
+                                                          child: ListTile(
+                                                            leading: const Icon(
+                                                                Icons
+                                                                    .remove_circle_outline),
+                                                            title: Text(
+                                                              "Remove",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      themeTextColor),
                                                             ),
-                                                            GestureDetector(
-                                                              onTap: () async {
-                                                                setState(() {
-                                                                  dockIconList
-                                                                      .removeAt(
-                                                                          index);
-                                                                });
-                                                                Navigator.of(
-                                                                        context)
-                                                                    .pop();
-                                                              },
-                                                              child: ListTile(
-                                                                leading: const Icon(
-                                                                    Icons
-                                                                        .remove_circle_outline),
-                                                                title: Text(
-                                                                  "Remove",
-                                                                  style: TextStyle(
-                                                                      color:
-                                                                          themeTextColor),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                            const Divider(
-                                                              color:
-                                                                  Colors.grey,
-                                                            ),
-                                                            GestureDetector(
-                                                              onTap: () async {
-                                                                Navigator.pop(
-                                                                    context);
-                                                                Navigator.push(
-                                                                  context,
-                                                                  MaterialPageRoute(
-                                                                      builder:
-                                                                          (context) =>
-                                                                              SettingsPage(
-                                                                                showClock: shouldShowClock,
-                                                                                showDate: shouldShowDate,
-                                                                                showDayProgress: shouldShowDayProgress,
-                                                                                showTodo: shouldShowTodo,
-                                                                                dIconSize: dIconSize,
-                                                                                showIcons: shouldShowIcons,
-                                                                                setTheme: widget.setTheme,
-                                                                                onShowIconsChanged: (bool value) {
-                                                                                  shouldShowIcons = value;
-                                                                                },
-                                                                                onThemeChanged: widget.onThemeChanged,
-                                                                                onDIconSizeChanged: (value) {
-                                                                                  setState(() {
-                                                                                    dIconSize = value;
-                                                                                  });
-                                                                                },
-                                                                                onShowClockChanged: (bool value) {
-                                                                                  setState(() {
-                                                                                    shouldShowClock = value;
-                                                                                  });
-                                                                                },
-                                                                                onShowDateChanged: (bool value) {
-                                                                                  setState(() {
-                                                                                    shouldShowDate = value;
-                                                                                  });
-                                                                                },
-                                                                                onShowDayProgressChanged: (bool value) {
-                                                                                  setState(() {
-                                                                                    shouldShowDayProgress = value;
-                                                                                  });
-                                                                                },
-                                                                                onShowTodoChanged: (bool value) {
-                                                                                  setState(() {
-                                                                                    shouldShowTodo = value;
-                                                                                  });
-                                                                                },
-                                                                              )),
-                                                                );
-                                                              },
-                                                              child: ListTile(
-                                                                leading: const Icon(
-                                                                    Icons
-                                                                        .settings_outlined),
-                                                                title: Text(
-                                                                  "Launchy Settings",
-                                                                  style: TextStyle(
-                                                                      color:
-                                                                          themeTextColor),
-                                                                ),
-                                                              ),
-                                                            ),
-                                                          ],
+                                                          ),
                                                         ),
-                                                      ),
-                                                    );
-                                                  },
+                                                        const Divider(
+                                                          color: Colors.grey,
+                                                        ),
+                                                        GestureDetector(
+                                                          onTap: () async {
+                                                            Navigator.pop(
+                                                                context);
+                                                            Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder:
+                                                                      (context) =>
+                                                                          SettingsPage(
+                                                                            showClock:
+                                                                                shouldShowClock,
+                                                                            showDate:
+                                                                                shouldShowDate,
+                                                                            showDayProgress:
+                                                                                shouldShowDayProgress,
+                                                                            showTodo:
+                                                                                shouldShowTodo,
+                                                                            dIconSize:
+                                                                                dIconSize,
+                                                                            showIcons:
+                                                                                shouldShowIcons,
+                                                                            setTheme:
+                                                                                widget.setTheme,
+                                                                            onShowIconsChanged:
+                                                                                (bool value) {
+                                                                              shouldShowIcons = value;
+                                                                            },
+                                                                            onThemeChanged:
+                                                                                widget.onThemeChanged,
+                                                                            onDIconSizeChanged:
+                                                                                (value) {
+                                                                              setState(() {
+                                                                                dIconSize = value;
+                                                                              });
+                                                                            },
+                                                                            onShowClockChanged:
+                                                                                (bool value) {
+                                                                              setState(() {
+                                                                                shouldShowClock = value;
+                                                                              });
+                                                                            },
+                                                                            onShowDateChanged:
+                                                                                (bool value) {
+                                                                              setState(() {
+                                                                                shouldShowDate = value;
+                                                                              });
+                                                                            },
+                                                                            onShowDayProgressChanged:
+                                                                                (bool value) {
+                                                                              setState(() {
+                                                                                shouldShowDayProgress = value;
+                                                                              });
+                                                                            },
+                                                                            onShowTodoChanged:
+                                                                                (bool value) {
+                                                                              setState(() {
+                                                                                shouldShowTodo = value;
+                                                                              });
+                                                                            },
+                                                                          )),
+                                                            );
+                                                          },
+                                                          child: ListTile(
+                                                            leading: const Icon(
+                                                                Icons
+                                                                    .settings_outlined),
+                                                            title: Text(
+                                                              "Launchy Settings",
+                                                              style: TextStyle(
+                                                                  color:
+                                                                      themeTextColor),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
                                                 );
                                               },
                                             );

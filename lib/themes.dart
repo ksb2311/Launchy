@@ -4,8 +4,9 @@ final ThemeData defaultTheme = _buildDefaultTheme();
 
 final ThemeData darkTheme = _buildDarkTheme();
 
-Color themeTextColor = Colors.black;
+Color themeTextColor = Colors.white;
 Color themeBackground = Colors.white;
+Color homeWidgetTextColor = Colors.white;
 const Color drawerBackgroundLight = Colors.white;
 const Color drawerBackgroundDark = Colors.grey;
 
@@ -14,8 +15,8 @@ ThemeData _buildDefaultTheme() {
   return base.copyWith(
     useMaterial3: true,
     colorScheme: base.colorScheme.copyWith(
-      primary: Colors.blue,
-      secondary: Colors.blue,
+      primary: Colors.grey,
+      secondary: Colors.grey,
       error: Colors.red,
       // background: Colors.transparent,
     ),
@@ -41,8 +42,8 @@ ThemeData _buildDarkTheme() {
   return base.copyWith(
     useMaterial3: true,
     colorScheme: base.colorScheme.copyWith(
-      primary: Colors.tealAccent,
-      secondary: Colors.tealAccent,
+      primary: Colors.grey,
+      secondary: Colors.grey,
       error: Colors.red,
       background: Colors.black,
     ),

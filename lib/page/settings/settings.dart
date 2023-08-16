@@ -151,20 +151,20 @@ class _SettingsPageState extends State<SettingsPage> {
                               child: Column(
                                 children: [
                                   Container(
-                                    alignment: Alignment.center,
+                                    alignment: Alignment.centerLeft,
                                     padding: const EdgeInsets.all(5),
                                     margin: const EdgeInsets.all(15),
                                     width: MediaQuery.of(context).size.width,
-                                    decoration: BoxDecoration(
-                                      color: Theme.of(context).brightness ==
-                                              Brightness.dark
-                                          ? Colors.black
-                                          : Colors.white,
-                                      borderRadius: BorderRadius.circular(20),
-                                    ),
+                                    // decoration: BoxDecoration(
+                                    //   color: Theme.of(context).brightness ==
+                                    //           Brightness.dark
+                                    //       ? Colors.black
+                                    //       : Colors.white,
+                                    //   borderRadius: BorderRadius.circular(20),
+                                    // ),
                                     child: const Text(
                                       'Appearance',
-                                      style: TextStyle(fontSize: 15),
+                                      style: TextStyle(fontSize: 20),
                                     ),
                                   ),
                                   ListTile(
@@ -316,20 +316,20 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: Column(
                                   children: [
                                     Container(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerLeft,
                                       padding: const EdgeInsets.all(5),
                                       margin: const EdgeInsets.all(15),
                                       width: MediaQuery.sizeOf(context).width,
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? Colors.black
-                                              : Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
+                                      // decoration: BoxDecoration(
+                                      //     color: Theme.of(context).brightness ==
+                                      //             Brightness.dark
+                                      //         ? Colors.black
+                                      //         : Colors.white,
+                                      //     borderRadius:
+                                      //         BorderRadius.circular(20)),
                                       child: const Text(
                                         'Widgets',
-                                        style: TextStyle(fontSize: 15),
+                                        style: TextStyle(fontSize: 20),
                                       ),
                                     ),
                                     ListTile(
@@ -415,20 +415,20 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: Column(
                                   children: [
                                     Container(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerLeft,
                                       padding: const EdgeInsets.all(5),
                                       margin: const EdgeInsets.all(15),
                                       width: MediaQuery.sizeOf(context).width,
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? Colors.black
-                                              : Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
+                                      // decoration: BoxDecoration(
+                                      //     color: Theme.of(context).brightness ==
+                                      //             Brightness.dark
+                                      //         ? Colors.black
+                                      //         : Colors.white,
+                                      //     borderRadius:
+                                      //         BorderRadius.circular(20)),
                                       child: const Text(
                                         'Misc',
-                                        style: TextStyle(fontSize: 15),
+                                        style: TextStyle(fontSize: 20),
                                       ),
                                     ),
                                     ListTile(
@@ -492,20 +492,20 @@ class _SettingsPageState extends State<SettingsPage> {
                                 child: Column(
                                   children: [
                                     Container(
-                                      alignment: Alignment.center,
+                                      alignment: Alignment.centerLeft,
                                       padding: const EdgeInsets.all(5),
                                       margin: const EdgeInsets.all(15),
                                       width: MediaQuery.sizeOf(context).width,
-                                      decoration: BoxDecoration(
-                                          color: Theme.of(context).brightness ==
-                                                  Brightness.dark
-                                              ? Colors.black
-                                              : Colors.white,
-                                          borderRadius:
-                                              BorderRadius.circular(20)),
+                                      // decoration: BoxDecoration(
+                                      //     color: Theme.of(context).brightness ==
+                                      //             Brightness.dark
+                                      //         ? Colors.black
+                                      //         : Colors.white,
+                                      //     borderRadius:
+                                      //         BorderRadius.circular(20)),
                                       child: const Text(
                                         'Launchy',
-                                        style: TextStyle(fontSize: 15),
+                                        style: TextStyle(fontSize: 20),
                                       ),
                                     ),
                                     ListTile(

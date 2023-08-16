@@ -4,7 +4,7 @@ import 'package:flutter_launcher/page/homepage.dart';
 import 'package:flutter_launcher/themes.dart';
 
 void main() async {
-  runApp(const MyApp());
+  runApp(const MaterialApp(home: MyApp()));
 }
 
 class MyApp extends StatefulWidget {
