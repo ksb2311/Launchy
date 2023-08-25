@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_launcher/themes.dart';
 
+// shows digital clock 12hr
 class DigitalClockWidget extends StatelessWidget {
   const DigitalClockWidget({Key? key}) : super(key: key);
 
@@ -48,6 +49,7 @@ class DigitalClockWidget extends StatelessWidget {
   }
 }
 
+// shows full date with day
 class FullDateWidget extends StatelessWidget {
   const FullDateWidget({Key? key}) : super(key: key);
 
@@ -71,6 +73,7 @@ class FullDateWidget extends StatelessWidget {
   }
 }
 
+//shows day progress bar
 class DayProgressWidget extends StatelessWidget {
   const DayProgressWidget({Key? key}) : super(key: key);
 
