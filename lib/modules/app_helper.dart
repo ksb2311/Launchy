@@ -18,8 +18,7 @@ class AppOps {
         includeSystemApps: true,
         onlyAppsWithLaunchIntent: true,
       );
-      apps.sort(
-          (a, b) => a.appName.toLowerCase().compareTo(b.appName.toLowerCase()));
+      apps.sort((a, b) => a.appName.toLowerCase().compareTo(b.appName.toLowerCase()));
       searchAppList.addAll(apps);
     } catch (e) {
       log('error');

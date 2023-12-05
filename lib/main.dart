@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
-import 'package:flutter_launcher/page/homepage.dart';
-import 'package:flutter_launcher/themes.dart';
+import 'package:flutter_launcher/pages/homepage.dart';
+import 'package:flutter_launcher/constants/themes/theme_const.dart';
+import 'package:system_theme/system_theme.dart';
 
 void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemTheme.accentColor.load();
   runApp(const MaterialApp(home: MyApp()));
 }
 
@@ -19,11 +22,10 @@ class _MyAppState extends State<MyApp> {
   bool shouldShowIcons = true;
   bool shouldShowClock = true;
   bool shouldShowDate = true;
-  bool shouldShowDayProgress = true;
+  bool shouldShowDayProgress = false;
   bool shouldShowTodo = false;
   int dIconSize = 48;
-  var brightness =
-      SchedulerBinding.instance.platformDispatcher.platformBrightness;
+  Brightness brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
 
   @override
   Widget build(BuildContext context) {

@@ -6,7 +6,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ">=2.12.0 <3.0.0"
+  sdk: '>=3.1.1 <4.0.0'
 
 
 dependencies:
@@ -16,21 +16,23 @@ dependencies:
 
 
   cupertino_icons: ^1.0.2
-  shared_preferences: ^2.0.15
-  flutter_bloc: ^8.1.1
+  shared_preferences: ^2.2.1
+  flutter_bloc: ^8.1.3
   device_apps: ^2.2.0
-  one_clock: ^1.0.7
-  provider: ^6.0.3
+  one_clock: ^1.0.9
+  provider: ^6.0.5
   azlistview: ^2.0.0
-  android_intent_plus: ^2.0.0
-  battery_plus: ^4.0.1
-  url_launcher: ^6.1.11
+  android_intent_plus: ^4.0.2
+  battery_plus: ^4.0.2
+  url_launcher: ^6.1.14
+  system_theme: ^2.3.1
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.3
 
 flutter:
 

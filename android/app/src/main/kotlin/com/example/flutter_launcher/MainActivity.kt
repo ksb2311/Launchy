@@ -1,30 +1,30 @@
 package com.example.flutter_launcher
 
 import android.annotation.SuppressLint
+import android.app.role.RoleManager
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
-import androidx.annotation.NonNull
 import androidx.annotation.RequiresApi
 import io.flutter.embedding.android.FlutterActivity
+import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode.transparent
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import java.lang.reflect.Method
-import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode.transparent
 
 
 class MainActivity: FlutterActivity() {
-    private val myCHANNEL = "my_channel"
+    private val settingsChannel = "settings_channel"
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
-    override fun configureFlutterEngine(@NonNull flutterEngine: FlutterEngine) {
+    override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
         super.configureFlutterEngine(flutterEngine)
 
-        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, myCHANNEL).setMethodCallHandler { call: MethodCall, result: MethodChannel.Result ->
+        MethodChannel(flutterEngine.dartExecutor.binaryMessenger, settingsChannel).setMethodCallHandler { call: MethodCall, result: MethodChannel.Result ->
             when (call.method) {
                 "showNotificationPanel" -> {
                     expandNotif()
@@ -72,61 +72,77 @@ class MainActivity: FlutterActivity() {
 //        intent.addCategory(Intent.CATEGORY_DEFAULT)
 //        intent.flags = Intent.FLAG_ACTIVITY_NEW_DOCUMENT
 //        startActivity(intent)
-
+//
 //        val startMain = Intent(Intent.ACTION_MAIN)
 //        startMain.addCategory(Intent.CATEGORY_HOME)
 //        startMain.flags = Intent.FLAG_ACTIVITY_NEW_TASK
 //        startActivity(startMain)
 
-        val intent = Intent(Intent.ACTION_MAIN)
-        intent.addCategory(Intent.CATEGORY_HOME)
-        val resolveInfo = packageManager.resolveActivity(intent, PackageManager.MATCH_DEFAULT_ONLY)
-        val currentHomePackage = resolveInfo!!.activityInfo.packageName
 
     }
 
-    fun resetPreferredLauncherAndOpenChooserNew(context: Context) {
-        val packageManager = context.packageManager
-        val componentName =
-            ComponentName(context, FakeLauncherActivity::class.java)
-        packageManager.setComponentEnabledSetting(
-            componentName,
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-            PackageManager.DONT_KILL_APP
-        )
-        val selector = Intent(Intent.ACTION_MAIN)
-        selector.addCategory(Intent.CATEGORY_HOME)
-        selector.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        context.startActivity(selector)
-        packageManager.setComponentEnabledSetting(
-            componentName,
-            PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
-            PackageManager.DONT_KILL_APP
-        )
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun resetPreferredLauncherAndOpenChooserNew(context: Context) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            val packageManager = context.packageManager
+            val componentName =
+                ComponentName(context, FakeLauncherActivity::class.java)
+            packageManager.setComponentEnabledSetting(
+                componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+                PackageManager.DONT_KILL_APP
+            )
+            val selector = Intent(Intent.ACTION_MAIN)
+            selector.addCategory(Intent.CATEGORY_HOME)
+            selector.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            context.startActivity(selector)
+            packageManager.setComponentEnabledSetting(
+                componentName,
+                PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
+                PackageManager.DONT_KILL_APP
+            )
+        }else {
+            val roleManager = activity.getSystemService(
+                ROLE_SERVICE
+            ) as RoleManager
+            if (!roleManager.isRoleAvailable(RoleManager.ROLE_HOME) ||
+                roleManager.isRoleHeld(RoleManager.ROLE_HOME)
+            ) {
+                return
+            }
+            activity.startActivityForResult(
+                roleManager.createRequestRoleIntent(
+                    RoleManager.ROLE_HOME
+                ),
+                1
+            )
+        }
+
     }
     private fun resetPreferredLauncherAndOpenChooser(context: Context) {
-        val packageManager: PackageManager = context.packageManager
-        val componentName = ComponentName(context, FakeLauncherActivity::class.java)
+         val packageManager: PackageManager = context.packageManager
+         val componentName = ComponentName(context, FakeLauncherActivity::class.java)
 
-        // Enable the fake launcher activity
-        packageManager.setComponentEnabledSetting(
-            componentName,
-            PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-            PackageManager.DONT_KILL_APP
-        )
+         // Enable the fake launcher activity
+         packageManager.setComponentEnabledSetting(
+             componentName,
+             PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+             PackageManager.DONT_KILL_APP
+         )
 
-        // Launch the home chooser activity
-        val selector = Intent(Intent.ACTION_MAIN)
-            .addCategory(Intent.CATEGORY_HOME)
-            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        context.startActivity(selector)
+         // Launch the home chooser activity
+         val selector = Intent(Intent.ACTION_MAIN)
+             .addCategory(Intent.CATEGORY_HOME)
+             .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+         context.startActivity(selector)
 
-        // Set the fake launcher activity back to default
-        packageManager.setComponentEnabledSetting(
-            componentName,
-            PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
-            PackageManager.DONT_KILL_APP
-        )
+         // Set the fake launcher activity back to default
+         packageManager.setComponentEnabledSetting(
+             componentName,
+             PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
+             PackageManager.DONT_KILL_APP
+         )
+
     }
 
 

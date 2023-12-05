@@ -4,7 +4,7 @@ class TodoList extends StatefulWidget {
   const TodoList({Key? key}) : super(key: key);
 
   @override
-  _TodoListState createState() => _TodoListState();
+  State<TodoList> createState() => _TodoListState();
 }
 
 class _TodoListState extends State<TodoList> {
@@ -41,33 +41,32 @@ class _TodoListState extends State<TodoList> {
       // ),
       body: Container(
         decoration: BoxDecoration(
-            color: currentTheme.brightness == Brightness.dark
-                ? Colors.grey[800]
-                : Colors.grey[300],
-            borderRadius: BorderRadius.circular(20)),
+            color: currentTheme.brightness == Brightness.dark ? Colors.grey[800] : Colors.grey[300], borderRadius: BorderRadius.circular(20)),
         padding: const EdgeInsets.all(10),
         child: Column(
           children: [
             TextField(
               controller: _textEditingController,
               decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                ),
-                // filled: true,
-                fillColor: currentTheme.brightness == Brightness.dark
-                    ? Colors.grey[600]
-                    : Colors.grey[100],
-                labelText: 'Add Task',
-              ),
+                  enabledBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.red, width: 2.0),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                    borderRadius: BorderRadius.circular(20.0),
+                  ),
+                  focusColor: Colors.black,
+                  hintText: ' Add Task'),
               onSubmitted: (value) {
                 if (value.isNotEmpty) {
                   addTodoItem(value);
                 }
               },
             ),
-            Expanded(
+            Flexible(
               child: ListView.builder(
+                padding: EdgeInsets.zero,
                 itemCount: todoItems.length,
                 itemBuilder: (context, index) {
                   return Dismissible(
@@ -77,24 +76,24 @@ class _TodoListState extends State<TodoList> {
                     },
                     background: Container(
                       color: Colors.red,
+                      alignment: Alignment.centerLeft,
+                      padding: const EdgeInsets.only(left: 20),
                       child: const Icon(
                         Icons.delete,
                         color: Colors.white,
                       ),
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.only(left: 20),
                     ),
                     secondaryBackground: Container(
                       color: Colors.red,
+                      alignment: Alignment.centerRight,
+                      padding: const EdgeInsets.only(right: 20),
                       child: const Icon(
                         Icons.delete,
                         color: Colors.white,
                       ),
-                      alignment: Alignment.centerRight,
-                      padding: const EdgeInsets.only(right: 20),
                     ),
                     child: CheckboxListTile(
-                      title: Text(todoItems[index].text),
+                      title: Text("$index ${todoItems[index].text}"),
                       value: todoItems[index].completed,
                       onChanged: (newValue) {
                         setState(() {

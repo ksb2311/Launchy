@@ -1,20 +1,39 @@
-import 'dart:ui';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
-import 'package:flutter_launcher/themes.dart';
+import 'package:flutter_launcher/constants/themes/theme_const.dart';
 
 // shows digital clock 12hr
-class DigitalClockWidget extends StatelessWidget {
+class DigitalClockWidget extends StatefulWidget {
   const DigitalClockWidget({Key? key}) : super(key: key);
+
+  @override
+  State<DigitalClockWidget> createState() => _DigitalClockWidgetState();
+}
+
+class _DigitalClockWidgetState extends State<DigitalClockWidget> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         Text(
-          // DateFormat('MM/dd/yyyy hh:mm:ss')
           DateFormat('hh').format(DateTime.now()),
           style: TextStyle(
             color: homeWidgetTextColor,
@@ -22,14 +41,12 @@ class DigitalClockWidget extends StatelessWidget {
             shadows: [
               Shadow(
                 color: Colors.black.withOpacity(0.5),
-                // offset: const Offset(1, 1),
                 blurRadius: 10,
               ),
             ],
           ),
         ),
         Text(
-          // DateFormat('MM/dd/yyyy hh:mm:ss')
           DateFormat(':mm a').format(DateTime.now()),
           style: TextStyle(
             color: homeWidgetTextColor,
@@ -37,11 +54,9 @@ class DigitalClockWidget extends StatelessWidget {
             shadows: [
               Shadow(
                 color: Colors.black.withOpacity(0.5),
-                // offset: const Offset(1, 1),
                 blurRadius: 10,
               ),
             ],
-            // fontWeight: FontWeight.w200
           ),
         ),
       ],
@@ -50,8 +65,29 @@ class DigitalClockWidget extends StatelessWidget {
 }
 
 // shows full date with day
-class FullDateWidget extends StatelessWidget {
+class FullDateWidget extends StatefulWidget {
   const FullDateWidget({Key? key}) : super(key: key);
+
+  @override
+  State<FullDateWidget> createState() => _FullDateWidgetState();
+}
+
+class _FullDateWidgetState extends State<FullDateWidget> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(days: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,8 +110,29 @@ class FullDateWidget extends StatelessWidget {
 }
 
 //shows day progress bar
-class DayProgressWidget extends StatelessWidget {
+class DayProgressWidget extends StatefulWidget {
   const DayProgressWidget({Key? key}) : super(key: key);
+
+  @override
+  State<DayProgressWidget> createState() => _DayProgressWidgetState();
+}
+
+class _DayProgressWidgetState extends State<DayProgressWidget> {
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(hours: 1), (timer) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -106,7 +163,7 @@ class DayProgressWidget extends StatelessWidget {
       LinearProgressIndicator(
         value: progress,
         backgroundColor: Colors.grey,
-        valueColor: AlwaysStoppedAnimation<Color>(homeWidgetTextColor),
+        valueColor: const AlwaysStoppedAnimation<Color>(homeWidgetTextColor),
       ),
     ]);
   }
