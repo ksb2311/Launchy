@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_launcher/constants/themes/theme_const.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/settings.dart';
-import 'package:flutter_launcher/widgets/home_widgets.dart';
-import 'package:flutter_launcher/widgets/todo_widget.dart';
+import 'package:flutter_launcher/widgets/home_widgets/day_progress_widget.dart';
+import 'package:flutter_launcher/widgets/home_widgets/digital_clock_widget.dart';
+import 'package:flutter_launcher/widgets/home_widgets/full_date_widget.dart';
+import 'package:flutter_launcher/widgets/home_widgets/todo_widget.dart';
 
 class CustomPageView extends StatefulWidget {
   final Function(String) onThemeChanged;
@@ -143,28 +145,8 @@ class _CustomPageViewState extends State<CustomPageView> {
                               BlendMode.modulate,
                             ),
                             child: ColorFiltered(
-                              colorFilter: const ColorFilter.matrix(<double>[
-                                0.2126,
-                                0.7152,
-                                0.0722,
-                                0,
-                                0,
-                                0.2126,
-                                0.7152,
-                                0.0722,
-                                0,
-                                0,
-                                0.2126,
-                                0.7152,
-                                0.0722,
-                                0,
-                                0,
-                                0,
-                                0,
-                                0,
-                                1,
-                                0,
-                              ]),
+                              colorFilter: const ColorFilter.matrix(
+                                  <double>[0.2126, 0.7152, 0.0722, 0, 0, 0.2126, 0.7152, 0.0722, 0, 0, 0.2126, 0.7152, 0.0722, 0, 0, 0, 0, 0, 1, 0]),
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                 children: List<Widget>.generate(widget.dockIconList.length <= 4 ? widget.dockIconList.length : 4, (index) {

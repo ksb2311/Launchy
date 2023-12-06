@@ -1,4 +1,5 @@
-import 'package:android_intent_plus/android_intent.dart';
+import 'dart:ui';
+
 import 'package:battery_plus/battery_plus.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
@@ -7,10 +8,7 @@ import 'package:flutter_launcher/modules/app_focus_observer.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/settings.dart';
 import 'package:flutter_launcher/widgets/drawer_widget.dart';
-import 'package:flutter_launcher/widgets/home_widgets.dart';
 import 'package:flutter_launcher/widgets/pageview_widget.dart';
-import 'package:flutter_launcher/widgets/todo_widget.dart';
-import 'package:flutter_launcher/constants/themes/theme_const.dart';
 
 class HomePage extends StatefulWidget {
   final Function(String) onThemeChanged;
@@ -212,33 +210,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                 showModalBottomSheet(
                     context: context,
                     isScrollControlled: true,
-                    shape: const ContinuousRectangleBorder(),
+                    // shape: const ContinuousRectangleBorder(),
                     // backgroundColor: Colors.transparent,
+                    // barrierColor: Colors.transparent,
                     builder: (context) {
-                      return GestureDetector(
-                        onTap: (() => FocusScope.of(context).unfocus()),
-                        child: StatefulBuilder(
-                          builder: (BuildContext context, setState) {
-                            return DraggableScrollableSheet(
-                                initialChildSize: 1.0,
-                                minChildSize: 0.99,
-                                maxChildSize: 1.0,
-                                expand: true,
-                                snap: true,
-                                builder: (context, scrollController) {
-                                  return CustomModalBottomSheet(
-                                      textEditingController: _textEditingController,
-                                      appops: appops,
-                                      sysBrightness: sysBrightness,
-                                      themeTextColor: themeTextColor,
-                                      addToDock: addToDock,
-                                      clearText: _clearText,
-                                      getFirstLetter: getFirstLetter,
-                                      loadApps: loadApps,
-                                      dockIconList: dockIconList);
-                                });
-                          },
-                        ),
+                      return StatefulBuilder(
+                        builder: (BuildContext context, setState) {
+                          return CustomModalBottomSheet(
+                            textEditingController: _textEditingController,
+                            appops: appops,
+                            sysBrightness: sysBrightness,
+                            themeTextColor: themeTextColor,
+                            addToDock: addToDock,
+                            clearText: _clearText,
+                            getFirstLetter: getFirstLetter,
+                            loadApps: loadApps,
+                            dockIconList: dockIconList,
+                            setIcon: shouldShowIcons,
+                          );
+                        },
                       );
                     });
               }
@@ -323,6 +313,18 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               leading: const Icon(Icons.settings_outlined),
                               title: Text(
                                 "Launchy Settings",
+                                style: TextStyle(color: themeTextColor),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              Navigator.pop(context);
+                            },
+                            child: ListTile(
+                              leading: const Icon(Icons.wallpaper),
+                              title: Text(
+                                "Wallpaper",
                                 style: TextStyle(color: themeTextColor),
                               ),
                             ),

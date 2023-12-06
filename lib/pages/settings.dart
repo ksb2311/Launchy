@@ -115,6 +115,7 @@ class _SettingsPageState extends State<SettingsPage> {
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
             child: Container(

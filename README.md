@@ -1,25 +1,36 @@
 # Flutter Launcher
 
-An android launcher based on [Flutter](https://flutter.dev/)
+An Android launcher based on [Flutter](https://flutter.dev/)
 
-## Requirement
+## Build (Android only)
+
+### Requirement
+
 * Flutter framework
 * Android Studio / SDK
 * VS code or Android Studio as IDE
-* Android only device
+* Android OS device
 
-## Build
+### Prepare to Build
+
 * clone or download zip
-```
+
+```bash
 git clone https://github.com/ksb2311/flutter_launcher.git
 ```
+
 * Go to directory
-```
+
+```bash
 cd flutter_launcher
-``` 
-* Open folder in vscode or in android studio
-* Build the project
+```
+
+* Build and run the project
+
+```bash
+flutter run
+```
 
 ## Releases
-* Coming Soon
 
+* Coming Soon
