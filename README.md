@@ -2,6 +2,13 @@
 
 An Android launcher based on [Flutter](https://flutter.dev/)
 
+## Features
+
+* Themed Icons
+* List or Grid view app drawer
+* Custom Tasks widget
+* Familier UI and control
+
 ## Build (Android only)
 
 ### Requirement
@@ -13,7 +20,7 @@ An Android launcher based on [Flutter](https://flutter.dev/)
 
 ### Prepare to Build
 
-* clone or download zip
+* Clone or download zip
 
 ```bash
 git clone https://github.com/ksb2311/flutter_launcher.git
