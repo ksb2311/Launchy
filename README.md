@@ -1,4 +1,4 @@
-# Flutter Launcher
+# Launchy Launcher
 
 An Android launcher based on [Flutter](https://flutter.dev/)
 
@@ -7,7 +7,7 @@ An Android launcher based on [Flutter](https://flutter.dev/)
 * Themed Icons
 * List or Grid view app drawer
 * Custom Tasks widget
-* Familier UI and control
+* Familier UI and Control
 
 ## Build (Android only)
 
