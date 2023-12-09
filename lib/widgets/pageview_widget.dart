@@ -11,32 +11,44 @@ import 'package:flutter_launcher/widgets/home_widgets/todo_widget.dart';
 
 class CustomPageView extends StatefulWidget {
   final Function(String) onThemeChanged;
-  final bool shouldShowClock;
-  final bool shouldShowDate;
-  final bool shouldShowDayProgress;
-  final bool shouldShowTodo;
-  final bool shouldShowIcons;
+  final ValueChanged<bool> onShowIconsChanged;
+  final ValueChanged<bool> onShowClockChanged;
+  final ValueChanged<bool> onShowDateChanged;
+  final ValueChanged<bool> onShowDayProgressChanged;
+  final ValueChanged<bool> onShowTodoChanged;
+  final ValueChanged<int> onDIconSizeChanged;
+  final bool showIcons;
+  final bool showClock;
+  final bool showDate;
+  final bool showDayProgress;
+  final bool showTodo;
+  final String setTheme;
   final int dIconSize;
   final List<Application> dockIconList;
   final AppOps appops;
   final bool sysBrightness;
   final Color themeTextColor;
-  final String setTheme;
 
   const CustomPageView({
     super.key,
-    required this.shouldShowClock,
-    required this.shouldShowDate,
-    required this.shouldShowDayProgress,
-    required this.shouldShowTodo,
     required this.dIconSize,
     required this.dockIconList,
     required this.appops,
     required this.sysBrightness,
     required this.themeTextColor,
-    required this.shouldShowIcons,
     required this.setTheme,
     required this.onThemeChanged,
+    required this.showIcons,
+    required this.showClock,
+    required this.showDate,
+    required this.showDayProgress,
+    required this.showTodo,
+    required this.onShowIconsChanged,
+    required this.onShowClockChanged,
+    required this.onShowDateChanged,
+    required this.onShowDayProgressChanged,
+    required this.onShowTodoChanged,
+    required this.onDIconSizeChanged,
   });
 
   @override
@@ -45,12 +57,26 @@ class CustomPageView extends StatefulWidget {
 
 class _CustomPageViewState extends State<CustomPageView> {
   //  settings parametere
-  late bool shouldShowIcons = widget.shouldShowIcons;
-  late bool shouldShowClock = widget.shouldShowClock;
-  late bool shouldShowDate = widget.shouldShowDate;
-  late bool shouldShowDayProgress = widget.shouldShowDayProgress;
-  late bool shouldShowTodo = widget.shouldShowTodo;
+  late bool showIcons;
+  late bool showClock;
+  late bool showDate;
+  late bool showDayProgress;
+  late bool showTodo;
+  late String setTheme;
   late int dIconSize;
+
+  final GlobalKey containerKey = GlobalKey();
+
+  @override
+  void initState() {
+    super.initState();
+    showIcons = widget.showIcons;
+    showClock = widget.showClock;
+    showDate = widget.showDate;
+    showDayProgress = widget.showDayProgress;
+    showTodo = widget.showTodo;
+    dIconSize = widget.dIconSize;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -108,18 +134,43 @@ class _CustomPageViewState extends State<CustomPageView> {
                               //   ],
                               // ),
                               // Digital clock widget
-                              widget.shouldShowClock ? const DigitalClockWidget() : const SizedBox(),
-                              widget.shouldShowDate ? const FullDateWidget() : const SizedBox(),
+                              widget.showClock ? const DigitalClockWidget() : const SizedBox(),
+                              widget.showDate ? const FullDateWidget() : const SizedBox(),
                               const SizedBox(
                                 height: 20,
                               ),
                               // Display date widget
-                              widget.shouldShowDayProgress ? const DayProgressWidget() : const SizedBox(),
+                              widget.showDayProgress ? const DayProgressWidget() : const SizedBox(),
                               const SizedBox(
                                 height: 20,
                               ),
                               // Displays Todo widget
-                              widget.shouldShowTodo ? const SizedBox(height: 300, child: TodoList()) : const SizedBox(),
+                              widget.showTodo
+                                  ? GestureDetector(
+                                      onLongPressStart: (details) {
+                                        RenderBox box = containerKey.currentContext!.findRenderObject() as RenderBox;
+                                        showMenu(
+                                          context: context,
+                                          position: RelativeRect.fromLTRB(
+                                            details.globalPosition.dx,
+                                            details.globalPosition.dy,
+                                            details.globalPosition.dx + box.size.width,
+                                            details.globalPosition.dy + box.size.height,
+                                          ),
+                                          items: [
+                                            PopupMenuItem(
+                                                onTap: () {
+                                                  showTodo = !showTodo;
+                                                  widget.onShowTodoChanged(showTodo);
+                                                },
+                                                value: 1,
+                                                child: const Icon(Icons.close)),
+                                            // PopupMenuItem(child: Text("Option 2"), value: 2),
+                                          ],
+                                        );
+                                      },
+                                      child: SizedBox(key: containerKey, height: 300, child: const TodoList()))
+                                  : const SizedBox(),
                               // const SizedBox(
                               //   height: 100,
                               //   width: 100,
@@ -212,15 +263,15 @@ class _CustomPageViewState extends State<CustomPageView> {
                                                           context,
                                                           MaterialPageRoute(
                                                               builder: (context) => SettingsPage(
-                                                                    showClock: widget.shouldShowClock,
-                                                                    showDate: widget.shouldShowDate,
-                                                                    showDayProgress: widget.shouldShowDayProgress,
-                                                                    showTodo: widget.shouldShowTodo,
+                                                                    showClock: showClock,
+                                                                    showDate: showDate,
+                                                                    showDayProgress: showDayProgress,
+                                                                    showTodo: showTodo,
                                                                     dIconSize: widget.dIconSize,
-                                                                    showIcons: widget.shouldShowIcons,
+                                                                    showIcons: showIcons,
                                                                     setTheme: widget.setTheme,
                                                                     onShowIconsChanged: (bool value) {
-                                                                      shouldShowIcons = value;
+                                                                      showIcons = value;
                                                                     },
                                                                     onThemeChanged: widget.onThemeChanged,
                                                                     onDIconSizeChanged: (value) {
@@ -230,22 +281,22 @@ class _CustomPageViewState extends State<CustomPageView> {
                                                                     },
                                                                     onShowClockChanged: (bool value) {
                                                                       setState(() {
-                                                                        shouldShowClock = value;
+                                                                        showClock = value;
                                                                       });
                                                                     },
                                                                     onShowDateChanged: (bool value) {
                                                                       setState(() {
-                                                                        shouldShowDate = value;
+                                                                        showDate = value;
                                                                       });
                                                                     },
                                                                     onShowDayProgressChanged: (bool value) {
                                                                       setState(() {
-                                                                        shouldShowDayProgress = value;
+                                                                        showDayProgress = value;
                                                                       });
                                                                     },
                                                                     onShowTodoChanged: (bool value) {
                                                                       setState(() {
-                                                                        shouldShowTodo = value;
+                                                                        showTodo = value;
                                                                       });
                                                                     },
                                                                   )),

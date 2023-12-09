@@ -34,10 +34,11 @@ class _DigitalClockWidgetState extends State<DigitalClockWidget> {
     return Row(
       children: [
         Text(
-          DateFormat('hh').format(DateTime.now()),
+          DateFormat('h').format(DateTime.now()),
           style: TextStyle(
             color: homeWidgetTextColor,
-            fontSize: 30,
+            fontSize: 50,
+            fontWeight: FontWeight.bold,
             shadows: [
               Shadow(
                 color: Colors.black.withOpacity(0.5),
@@ -47,10 +48,11 @@ class _DigitalClockWidgetState extends State<DigitalClockWidget> {
           ),
         ),
         Text(
-          DateFormat(':mm a').format(DateTime.now()),
+          DateFormat(':mm').format(DateTime.now()),
           style: TextStyle(
             color: homeWidgetTextColor,
-            fontSize: 30,
+            fontSize: 50,
+            fontWeight: FontWeight.bold,
             shadows: [
               Shadow(
                 color: Colors.black.withOpacity(0.5),

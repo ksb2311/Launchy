@@ -339,18 +339,47 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
             child: ScrollConfiguration(
                 behavior: MyBehavior(),
                 child: CustomPageView(
-                    shouldShowClock: shouldShowClock,
-                    shouldShowDate: shouldShowDate,
-                    shouldShowDayProgress: shouldShowDayProgress,
-                    shouldShowTodo: shouldShowTodo,
-                    dIconSize: dIconSize,
-                    dockIconList: dockIconList,
-                    appops: appops,
-                    sysBrightness: sysBrightness,
-                    themeTextColor: themeTextColor,
-                    shouldShowIcons: shouldShowIcons,
-                    setTheme: widget.setTheme,
-                    onThemeChanged: widget.onThemeChanged)),
+                  onShowIconsChanged: (bool value) {
+                    shouldShowIcons = value;
+                  },
+                  onDIconSizeChanged: (int value) {
+                    setState(() {
+                      dIconSize = value;
+                    });
+                  },
+                  onShowClockChanged: (bool value) {
+                    setState(() {
+                      shouldShowClock = value;
+                    });
+                  },
+                  onShowDateChanged: (bool value) {
+                    setState(() {
+                      shouldShowDate = value;
+                    });
+                  },
+                  onShowDayProgressChanged: (bool value) {
+                    setState(() {
+                      shouldShowDayProgress = value;
+                    });
+                  },
+                  onShowTodoChanged: (bool value) {
+                    setState(() {
+                      shouldShowTodo = value;
+                    });
+                  },
+                  dIconSize: dIconSize,
+                  dockIconList: dockIconList,
+                  appops: appops,
+                  sysBrightness: sysBrightness,
+                  themeTextColor: themeTextColor,
+                  setTheme: widget.setTheme,
+                  onThemeChanged: widget.onThemeChanged,
+                  showIcons: shouldShowIcons,
+                  showClock: shouldShowClock,
+                  showDate: shouldShowDate,
+                  showDayProgress: shouldShowDayProgress,
+                  showTodo: shouldShowTodo,
+                )),
           ),
         ),
       ),
