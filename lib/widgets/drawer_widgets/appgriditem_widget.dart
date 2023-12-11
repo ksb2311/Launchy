@@ -142,13 +142,10 @@ class AppGridItem extends StatelessWidget {
           },
           child: Column(
             children: [
-              Container(
-                padding: const EdgeInsets.all(8.0),
-                child: Image.memory(
-                  (appls as ApplicationWithIcon).icon,
-                  fit: BoxFit.contain,
-                  width: 48,
-                ),
+              Image.memory(
+                (appls as ApplicationWithIcon).icon,
+                fit: BoxFit.contain,
+                width: 64,
               ),
               Text(
                 appls.appName,

@@ -4,10 +4,11 @@ import 'package:battery_plus/battery_plus.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_launcher/constants/themes/theme_const.dart';
 import 'package:flutter_launcher/modules/app_focus_observer.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/settings.dart';
-import 'package:flutter_launcher/widgets/drawer_widget.dart';
+import 'package:flutter_launcher/widgets/appdrawer_widget.dart';
 import 'package:flutter_launcher/widgets/pageview_widget.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,7 +36,7 @@ class HomePage extends StatefulWidget {
   State<HomePage> createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
+class _HomePageState extends State<HomePage> with WidgetsBindingObserver, TickerProviderStateMixin {
   // List<Application> listApps = AppOps().searchAppList;
   final appops = AppOps();
   late List<Application> dockIconList;
@@ -44,6 +45,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
 
 // search textfield controller
   final _textEditingController = TextEditingController();
+  late AnimationController anicontroller;
 
 // settings parametere
   late bool shouldShowIcons;
@@ -83,6 +85,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
     // Stream<ApplicationEvent> appEvents = DeviceApps.listenToAppsChanges();
     WidgetsBinding.instance.addObserver(appFocusObserver);
     dockIconList = appops.docklistitems;
+    anicontroller = BottomSheet.createAnimationController(this);
+    anicontroller.duration = const Duration(milliseconds: 500);
   }
 
   @override
@@ -211,12 +215,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                     context: context,
                     isScrollControlled: true,
                     // shape: const ContinuousRectangleBorder(),
-                    // backgroundColor: Colors.transparent,
+                    backgroundColor: sysBrightness ? drawerBackgroundDark : drawerBackgroundLight,
                     // barrierColor: Colors.transparent,
+                    transitionAnimationController: anicontroller,
                     builder: (context) {
                       return StatefulBuilder(
                         builder: (BuildContext context, setState) {
-                          return CustomModalBottomSheet(
+                          return AppDrawer(
                             textEditingController: _textEditingController,
                             appops: appops,
                             sysBrightness: sysBrightness,
@@ -317,6 +322,31 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver {
                               ),
                             ),
                           ),
+                          // GestureDetector(
+                          //   onTap: () async {
+                          //     Navigator.pop(context);
+                          //     showModalBottomSheet(
+                          //         // backgroundColor: Colors.transparent,
+                          //         context: context,
+                          //         builder: (BuildContext context) {
+                          //           return HomeWidgetSwitch(
+                          //             setIcon: shouldShowIcons,
+                          //             setClock: shouldShowClock,
+                          //             setDate: shouldShowDate,
+                          //             setDayProgress: shouldShowDayProgress,
+                          //             setTodo: shouldShowTodo,
+                          //             dIconSize: dIconSize,
+                          //           );
+                          //         });
+                          //   },
+                          //   child: ListTile(
+                          //     leading: const Icon(Icons.widgets_outlined),
+                          //     title: Text(
+                          //       "Home Widgets",
+                          //       style: TextStyle(color: themeTextColor),
+                          //     ),
+                          //   ),
+                          // ),
                           GestureDetector(
                             onTap: () async {
                               Navigator.pop(context);

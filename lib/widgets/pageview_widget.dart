@@ -145,32 +145,7 @@ class _CustomPageViewState extends State<CustomPageView> {
                                 height: 20,
                               ),
                               // Displays Todo widget
-                              widget.showTodo
-                                  ? GestureDetector(
-                                      onLongPressStart: (details) {
-                                        RenderBox box = containerKey.currentContext!.findRenderObject() as RenderBox;
-                                        showMenu(
-                                          context: context,
-                                          position: RelativeRect.fromLTRB(
-                                            details.globalPosition.dx,
-                                            details.globalPosition.dy,
-                                            details.globalPosition.dx + box.size.width,
-                                            details.globalPosition.dy + box.size.height,
-                                          ),
-                                          items: [
-                                            PopupMenuItem(
-                                                onTap: () {
-                                                  showTodo = !showTodo;
-                                                  widget.onShowTodoChanged(showTodo);
-                                                },
-                                                value: 1,
-                                                child: const Icon(Icons.close)),
-                                            // PopupMenuItem(child: Text("Option 2"), value: 2),
-                                          ],
-                                        );
-                                      },
-                                      child: SizedBox(key: containerKey, height: 300, child: const TodoList()))
-                                  : const SizedBox(),
+                              widget.showTodo ? SizedBox(key: containerKey, height: 300, child: const TodoList()) : const SizedBox(),
                               // const SizedBox(
                               //   height: 100,
                               //   width: 100,

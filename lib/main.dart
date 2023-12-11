@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_launcher/pages/homepage.dart';
 import 'package:flutter_launcher/constants/themes/theme_const.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:system_theme/system_theme.dart';
 
 void main() async {
@@ -18,14 +19,38 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  String _selectedTheme = 'System Default';
-  bool shouldShowIcons = true;
-  bool shouldShowClock = true;
-  bool shouldShowDate = true;
-  bool shouldShowDayProgress = false;
-  bool shouldShowTodo = false;
-  int dIconSize = 48;
+  late SharedPreferences prefs;
+
+  late String _selectedTheme = 'System Default';
+  late bool shouldShowIcons = true;
+  late bool shouldShowClock = true;
+  late bool shouldShowDate = true;
+  late bool shouldShowDayProgress = false;
+  late bool shouldShowTodo = false;
+  late int dIconSize = 48;
+  
   Brightness brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
+
+  @override
+  void initState() {
+    super.initState();
+    initPrefs();
+  }
+
+  void initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    loadSettings();
+  }
+
+  void loadSettings() {
+    _selectedTheme = prefs.getString('_selectedTheme') ?? 'System Default';
+    shouldShowIcons = prefs.getBool('shouldShowIcons') ?? true;
+    shouldShowClock = prefs.getBool('shouldShowClock') ?? true;
+    shouldShowDate = prefs.getBool('shouldShowDate') ?? true;
+    shouldShowDayProgress = prefs.getBool('shouldShowDayProgress') ?? false;
+    shouldShowTodo = prefs.getBool('shouldShowTodo') ?? false;
+    dIconSize = prefs.getInt('dIconSize') ?? 48;
+  }
 
   @override
   Widget build(BuildContext context) {

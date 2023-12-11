@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_launcher/constants/settings/settings_const.dart';
 import 'package:flutter_launcher/widgets/settings_widgets.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
   final Function(String) onThemeChanged;
@@ -44,6 +45,9 @@ class _SettingsPageState extends State<SettingsPage> {
   final MethodChannel _channel = const MethodChannel('settings_channel');
 
   late String _selectedTheme;
+
+  late SharedPreferences prefs;
+
   // double _iconSize = 24;
   late bool showIcons;
   late bool showClock;
@@ -62,6 +66,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   void initState() {
     super.initState();
+    initPrefs();
     showIcons = widget.showIcons;
     showClock = widget.showClock;
     showDate = widget.showDate;
@@ -70,6 +75,18 @@ class _SettingsPageState extends State<SettingsPage> {
     _selectedTheme = widget.setTheme;
     dIconSize = widget.dIconSize;
     _value = dIconSizeList.indexOf(dIconSize).toDouble() + 1;
+  }
+
+  void initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+  }
+
+  void saveSetting(String key, dynamic value) async {
+    if (value is bool) {
+      await prefs.setBool(key, value);
+    } else if (value is int) {
+      await prefs.setInt(key, value);
+    }
   }
 
   // Future<void> openDefaultLauncher(BuildContext context) async {
@@ -229,6 +246,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                   _selectedTheme = value!;
                                                 });
                                                 widget.onThemeChanged(value!);
+                                                saveSetting('_selectedTheme', value);
                                               },
                                             ),
                                           ),
@@ -246,6 +264,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               showIcons = value;
                                             });
                                             widget.onShowIconsChanged(value);
+                                            saveSetting('showIcons', value);
                                           },
                                         ),
                                         ListTile(
@@ -291,6 +310,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 dIconSize = dIconSizeList[_value.toInt() - 1];
                                               });
                                               widget.onDIconSizeChanged(dIconSize);
+                                              saveSetting('dIconSize', dIconSize);
                                             },
                                           ),
                                         ),
@@ -357,6 +377,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 showClock = value;
                                               });
                                               widget.onShowClockChanged(value);
+                                              saveSetting('showClock', value);
                                             },
                                           ),
                                           SwitchListTile(
@@ -368,6 +389,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 showDate = value;
                                               });
                                               widget.onShowDateChanged(value);
+                                              saveSetting('showDate', value);
                                             },
                                           ),
                                           SwitchListTile(
@@ -379,6 +401,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 showDayProgress = value;
                                               });
                                               widget.onShowDayProgressChanged(value);
+                                              saveSetting('showDayProgress', value);
                                             },
                                           ),
                                           SwitchListTile(
@@ -390,6 +413,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 showTodo = value;
                                               });
                                               widget.onShowTodoChanged(value);
+                                              saveSetting('showTodo', value);
                                             },
                                           ),
                                         ],

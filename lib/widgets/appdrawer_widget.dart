@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/widgets/drawer_widgets/appgriditem_widget.dart';
 
-class CustomModalBottomSheet extends StatelessWidget {
+class AppDrawer extends StatelessWidget {
   final TextEditingController _textEditingController;
   final AppOps appops;
   final bool sysBrightness;
@@ -16,7 +16,7 @@ class CustomModalBottomSheet extends StatelessWidget {
   final bool setIcon;
   final List<Application> dockIconList;
 
-  const CustomModalBottomSheet({
+  const AppDrawer({
     super.key,
     required TextEditingController textEditingController,
     required this.appops,
@@ -57,7 +57,7 @@ class CustomModalBottomSheet extends StatelessWidget {
                         children: [
                           // Serarch Bar in Drawer
                           Padding(
-                            padding: const EdgeInsets.only(top: 5, bottom: 2),
+                            padding: const EdgeInsets.only(top: 10, bottom: 10),
                             child: TextField(
                               controller: _textEditingController,
                               onSubmitted: (value) {
@@ -74,7 +74,7 @@ class CustomModalBottomSheet extends StatelessWidget {
                               },
                               style: TextStyle(color: themeTextColor),
                               decoration: InputDecoration(
-                                contentPadding: const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
+                                contentPadding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
                                 focusColor: themeTextColor,
                                 hintText: "Search",
                                 hintStyle: TextStyle(color: themeTextColor),
@@ -118,7 +118,8 @@ class CustomModalBottomSheet extends StatelessWidget {
                                         controller: scrollController,
                                         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                           crossAxisCount: 4,
-                                          childAspectRatio: 1.0,
+                                          // childAspectRatio: 2.0,
+                                          mainAxisSpacing: 30,
                                         ),
                                         itemCount: appops.searchAppList.length,
                                         itemBuilder: (BuildContext context, int index) {
@@ -178,7 +179,7 @@ class CustomModalBottomSheet extends StatelessWidget {
                           children: [
                             // Serarch Bar in Drawer
                             Padding(
-                              padding: const EdgeInsets.only(top: 5, bottom: 2),
+                              padding: const EdgeInsets.only(top: 10, bottom: 10),
                               child: TextField(
                                 controller: _textEditingController,
                                 onSubmitted: (value) {
@@ -190,7 +191,7 @@ class CustomModalBottomSheet extends StatelessWidget {
                                 },
                                 style: TextStyle(color: themeTextColor),
                                 decoration: InputDecoration(
-                                  contentPadding: const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
+                                  contentPadding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
                                   focusColor: themeTextColor,
                                   hintText: "Search",
                                   hintStyle: TextStyle(color: themeTextColor),
@@ -305,9 +306,9 @@ class CustomModalBottomSheet extends StatelessWidget {
                                                                         mainAxisAlignment: MainAxisAlignment.center,
                                                                         children: [
                                                                           Image.memory(
-                                                                            (appls as ApplicationWithIcon).icon,
-                                                                            width: 42,
-                                                                            height: 42,
+                                                                            (appls).icon,
+                                                                            width: 48,
+                                                                            height: 48,
                                                                             // cacheHeight: 42,
                                                                           ),
                                                                           const SizedBox(
