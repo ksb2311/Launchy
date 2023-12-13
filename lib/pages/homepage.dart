@@ -10,27 +10,14 @@ import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/settings.dart';
 import 'package:flutter_launcher/widgets/appdrawer_widget.dart';
 import 'package:flutter_launcher/widgets/pageview_widget.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
-  final Function(String) onThemeChanged;
   final String setTheme;
-  final bool setIcon;
-  final bool setClock;
-  final bool setDate;
-  final bool setDayProgress;
-  final bool setTodo;
-  final int dIconSize;
-  const HomePage(
-      {Key? key,
-      required this.onThemeChanged,
-      required this.setTheme,
-      required this.setIcon,
-      required this.dIconSize,
-      required this.setClock,
-      required this.setDate,
-      required this.setDayProgress,
-      required this.setTodo})
-      : super(key: key);
+  const HomePage({
+    Key? key,
+    required this.setTheme,
+  }) : super(key: key);
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -47,13 +34,17 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   final _textEditingController = TextEditingController();
   late AnimationController anicontroller;
 
+// shared preferences
+  late SharedPreferences prefs;
+
 // settings parametere
-  late bool shouldShowIcons;
-  late bool shouldShowClock;
-  late bool shouldShowDate;
-  late bool shouldShowDayProgress;
-  late bool shouldShowTodo;
-  late int dIconSize;
+  late String _selectedTheme = 'System Default';
+  late bool shouldShowIcons = true;
+  late bool shouldShowClock = true;
+  late bool shouldShowDate = true;
+  late bool shouldShowDayProgress = false;
+  late bool shouldShowTodo = false;
+  late int dIconSize = 48;
 
 // scroll controller
   // final ScrollController _scrollController = ScrollController();
@@ -75,18 +66,14 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     super.initState();
     loadApps();
     WidgetsBinding.instance.addObserver(this);
-    shouldShowIcons = widget.setIcon;
-    shouldShowClock = widget.setClock;
-    shouldShowDate = widget.setDate;
-    shouldShowDayProgress = widget.setDayProgress;
-    shouldShowTodo = widget.setTodo;
-    dIconSize = widget.dIconSize;
+    initPrefs();
     getBatteryPercentage();
     // Stream<ApplicationEvent> appEvents = DeviceApps.listenToAppsChanges();
     WidgetsBinding.instance.addObserver(appFocusObserver);
     dockIconList = appops.docklistitems;
     anicontroller = BottomSheet.createAnimationController(this);
     anicontroller.duration = const Duration(milliseconds: 500);
+    _selectedTheme = widget.setTheme;
   }
 
   @override
@@ -95,6 +82,22 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     _textEditingController.clear();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
+  }
+
+  void initPrefs() async {
+    prefs = await SharedPreferences.getInstance();
+    loadSettings();
+  }
+
+  void loadSettings() {
+    _selectedTheme = (prefs.getString('_selectedTheme')) != null ? prefs.getString('_selectedTheme')! : 'System Default';
+    shouldShowIcons = prefs.getBool('shouldShowIcons') != null ? prefs.getBool('shouldShowIcons')! : true;
+    shouldShowClock = prefs.getBool('shouldShowClock') != null ? prefs.getBool('shouldShowClock')! : true;
+    shouldShowDate = prefs.getBool('shouldShowDate') != null ? prefs.getBool('shouldShowDate')! : true;
+    shouldShowDayProgress = prefs.getBool('shouldShowDayProgress') != null ? prefs.getBool('shouldShowDayProgress')! : false;
+    shouldShowTodo = prefs.getBool('shouldShowTodo') != null ? prefs.getBool('shouldShowTodo')! : false;
+    dIconSize = prefs.getInt('dIconSize') != null ? prefs.getInt('dIconSize')! : 48;
+    print('dIconSize $dIconSize');
   }
 
   // @override
@@ -281,11 +284,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                           showDate: shouldShowDate,
                                           showDayProgress: shouldShowDayProgress,
                                           showTodo: shouldShowTodo,
-                                          setTheme: widget.setTheme,
+                                          setTheme: _selectedTheme,
                                           onShowIconsChanged: (bool value) {
                                             shouldShowIcons = value;
                                           },
-                                          onThemeChanged: widget.onThemeChanged,
+                                          onThemeChanged: (p0) {
+                                            setState(() {
+                                              _selectedTheme = p0;
+                                            });
+                                          },
                                           onDIconSizeChanged: (int value) {
                                             setState(() {
                                               dIconSize = value;
@@ -402,8 +409,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                   appops: appops,
                   sysBrightness: sysBrightness,
                   themeTextColor: themeTextColor,
-                  setTheme: widget.setTheme,
-                  onThemeChanged: widget.onThemeChanged,
+                  setTheme: _selectedTheme,
+                  onThemeChanged: (p0) {
+                    _selectedTheme = p0;
+                  },
                   showIcons: shouldShowIcons,
                   showClock: shouldShowClock,
                   showDate: shouldShowDate,

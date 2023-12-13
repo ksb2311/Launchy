@@ -22,13 +22,7 @@ class _MyAppState extends State<MyApp> {
   late SharedPreferences prefs;
 
   late String _selectedTheme = 'System Default';
-  late bool shouldShowIcons = true;
-  late bool shouldShowClock = true;
-  late bool shouldShowDate = true;
-  late bool shouldShowDayProgress = false;
-  late bool shouldShowTodo = false;
-  late int dIconSize = 48;
-  
+
   Brightness brightness = SchedulerBinding.instance.platformDispatcher.platformBrightness;
 
   @override
@@ -39,17 +33,7 @@ class _MyAppState extends State<MyApp> {
 
   void initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    loadSettings();
-  }
-
-  void loadSettings() {
     _selectedTheme = prefs.getString('_selectedTheme') ?? 'System Default';
-    shouldShowIcons = prefs.getBool('shouldShowIcons') ?? true;
-    shouldShowClock = prefs.getBool('shouldShowClock') ?? true;
-    shouldShowDate = prefs.getBool('shouldShowDate') ?? true;
-    shouldShowDayProgress = prefs.getBool('shouldShowDayProgress') ?? false;
-    shouldShowTodo = prefs.getBool('shouldShowTodo') ?? false;
-    dIconSize = prefs.getInt('dIconSize') ?? 48;
   }
 
   @override
@@ -74,18 +58,7 @@ class _MyAppState extends State<MyApp> {
         theme: getThemeData(_selectedTheme),
         themeMode: ThemeMode.system,
         home: HomePage(
-          dIconSize: dIconSize,
           setTheme: _selectedTheme,
-          setIcon: shouldShowIcons,
-          setClock: shouldShowClock,
-          setDate: shouldShowDate,
-          setDayProgress: shouldShowDayProgress,
-          setTodo: shouldShowTodo,
-          onThemeChanged: (String theme) {
-            setState(() {
-              _selectedTheme = theme;
-            });
-          },
         ));
   }
 }

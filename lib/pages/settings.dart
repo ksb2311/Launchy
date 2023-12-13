@@ -86,6 +86,8 @@ class _SettingsPageState extends State<SettingsPage> {
       await prefs.setBool(key, value);
     } else if (value is int) {
       await prefs.setInt(key, value);
+    } else if (value is String) {
+      await prefs.setString(key, value);
     }
   }
 
