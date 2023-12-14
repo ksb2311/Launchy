@@ -75,6 +75,7 @@ class _SettingsPageState extends State<SettingsPage> {
     _selectedTheme = widget.setTheme;
     dIconSize = widget.dIconSize;
     _value = dIconSizeList.indexOf(dIconSize).toDouble() + 1;
+    debugPrint('initPrefs() $_selectedTheme');
   }
 
   void initPrefs() async {
@@ -247,8 +248,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 setState(() {
                                                   _selectedTheme = value!;
                                                 });
-                                                widget.onThemeChanged(value!);
-                                                saveSetting('_selectedTheme', value);
+                                                widget.onThemeChanged(_selectedTheme);
+                                                saveSetting('_selectedTheme', _selectedTheme);
                                               },
                                             ),
                                           ),

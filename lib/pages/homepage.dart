@@ -14,9 +14,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
   final String setTheme;
+  final Function(String) onThemeChanged;
   const HomePage({
     Key? key,
     required this.setTheme,
+    required this.onThemeChanged,
   }) : super(key: key);
 
   @override
@@ -98,6 +100,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     shouldShowTodo = prefs.getBool('shouldShowTodo') != null ? prefs.getBool('shouldShowTodo')! : false;
     dIconSize = prefs.getInt('dIconSize') != null ? prefs.getInt('dIconSize')! : 48;
     print('dIconSize $dIconSize');
+    print('dIconSize $_selectedTheme');
   }
 
   // @override
@@ -284,15 +287,11 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                                           showDate: shouldShowDate,
                                           showDayProgress: shouldShowDayProgress,
                                           showTodo: shouldShowTodo,
-                                          setTheme: _selectedTheme,
+                                          setTheme: widget.setTheme,
                                           onShowIconsChanged: (bool value) {
                                             shouldShowIcons = value;
                                           },
-                                          onThemeChanged: (p0) {
-                                            setState(() {
-                                              _selectedTheme = p0;
-                                            });
-                                          },
+                                          onThemeChanged: widget.onThemeChanged,
                                           onDIconSizeChanged: (int value) {
                                             setState(() {
                                               dIconSize = value;
@@ -410,9 +409,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                   sysBrightness: sysBrightness,
                   themeTextColor: themeTextColor,
                   setTheme: _selectedTheme,
-                  onThemeChanged: (p0) {
-                    _selectedTheme = p0;
-                  },
+                  onThemeChanged: widget.onThemeChanged,
                   showIcons: shouldShowIcons,
                   showClock: shouldShowClock,
                   showDate: shouldShowDate,

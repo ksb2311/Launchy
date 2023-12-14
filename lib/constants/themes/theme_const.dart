@@ -26,7 +26,7 @@ const defaultAppBarBGColor = Colors.white;
 const defaultAppBarFGColor = Colors.black;
 
 // dark theme
-const Color drawerBackgroundDark = Color.fromARGB(255, 30, 30, 30);
+const Color drawerBackgroundDark = Colors.black;
 const darkAppBarBGColor = Colors.black;
 const darkAppBarFGColor = Colors.white;
 

@@ -33,12 +33,14 @@ class _MyAppState extends State<MyApp> {
 
   void initPrefs() async {
     prefs = await SharedPreferences.getInstance();
-    _selectedTheme = prefs.getString('_selectedTheme') ?? 'System Default';
+    _selectedTheme = prefs.getString('_selectedTheme') != null ? prefs.getString('_selectedTheme')! : 'System Default';
+    debugPrint('Theme changed to $_selectedTheme');
   }
 
   @override
   Widget build(BuildContext context) {
     ThemeData getThemeData(String theme) {
+      debugPrint('getThemeData changed to $_selectedTheme $theme');
       switch (theme) {
         case 'Light':
           return defaultTheme;
@@ -58,7 +60,11 @@ class _MyAppState extends State<MyApp> {
         theme: getThemeData(_selectedTheme),
         themeMode: ThemeMode.system,
         home: HomePage(
-          setTheme: _selectedTheme,
-        ));
+            setTheme: _selectedTheme,
+            onThemeChanged: (String theme) {
+              setState(() {
+                _selectedTheme = theme;
+              });
+            }));
   }
 }
