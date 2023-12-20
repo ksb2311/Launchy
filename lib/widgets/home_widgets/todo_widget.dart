@@ -41,7 +41,7 @@ class _TodoListState extends State<TodoList> {
       // ),
       body: Container(
         decoration: BoxDecoration(
-          color: currentTheme.brightness == Brightness.dark ? Colors.grey[900] : Colors.grey[300],
+          // color: currentTheme.brightness == Brightness.dark ? Colors.grey[900] : Colors.grey[300],
           // color: Colors.white54,
           borderRadius: BorderRadius.circular(20),
         ),
@@ -51,15 +51,16 @@ class _TodoListState extends State<TodoList> {
             TextField(
               controller: _textEditingController,
               decoration: InputDecoration(
+                  filled: true,
                   enabledBorder: OutlineInputBorder(
                     borderSide: const BorderSide(color: Colors.grey, width: 2.0),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.blue, width: 2.0),
+                    borderSide: const BorderSide(color: Colors.white, width: 2.0),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
-                  focusColor: Colors.black,
+                  // focusColor: Colors.black,
                   hintText: ' Add Task'),
               onSubmitted: (value) {
                 if (value.isNotEmpty) {
@@ -82,9 +83,9 @@ class _TodoListState extends State<TodoList> {
                       background: Container(
                         alignment: Alignment.centerLeft,
                         padding: const EdgeInsets.only(left: 20),
-                        decoration: const BoxDecoration(
-                          // borderRadius: BorderRadius.circular(20),
-                          color: Colors.red,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.redAccent,
                         ),
                         child: const Icon(
                           Icons.delete,
@@ -94,30 +95,36 @@ class _TodoListState extends State<TodoList> {
                       secondaryBackground: Container(
                         alignment: Alignment.centerRight,
                         padding: const EdgeInsets.only(right: 20),
-                        decoration: const BoxDecoration(
-                          // borderRadius: BorderRadius.circular(20),
-                          color: Colors.red,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(20),
+                          color: Colors.redAccent,
                         ),
                         child: const Icon(
                           Icons.delete,
                           color: Colors.white,
                         ),
                       ),
-                      child: CheckboxListTile(
-                        // visualDensity: VisualDensity.compact,
-                        checkboxShape: const CircleBorder(),
-                        title: Text(
-                          todoItems[index].text,
-                          style: TextStyle(
-                            decoration: todoItems[index].completed ? TextDecoration.lineThrough : null,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 5.0),
+                        child: CheckboxListTile(
+                          // visualDensity: VisualDensity.compact,
+                          checkboxShape: const CircleBorder(),
+                          tileColor: currentTheme.canvasColor,
+                          // tileColor: Colors.grey[900],
+                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                          title: Text(
+                            todoItems[index].text,
+                            style: TextStyle(
+                              decoration: todoItems[index].completed ? TextDecoration.lineThrough : null,
+                            ),
                           ),
+                          value: todoItems[index].completed,
+                          onChanged: (newValue) {
+                            setState(() {
+                              todoItems[index].completed = newValue!;
+                            });
+                          },
                         ),
-                        value: todoItems[index].completed,
-                        onChanged: (newValue) {
-                          setState(() {
-                            todoItems[index].completed = newValue!;
-                          });
-                        },
                       ),
                     );
                   },
@@ -134,6 +141,5 @@ class _TodoListState extends State<TodoList> {
 class TodoItem {
   String text;
   bool completed;
-
   TodoItem({required this.text, required this.completed});
 }

@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
-    <application android:icon="@mipmap/ic_launcher" android:label="flutter_launcher">
+    <application android:icon="@mipmap/ic_launcher" android:label="flutter_launcher" android:enableOnBackInvokedCallback="true">
         <activity android:name=".FakeLauncherActivity" android:enabled="false" android:exported="false" android:label="@string/title_activity_fake_launcher" android:theme="@style/Theme.Android">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -14,13 +14,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:exported="true"
-            android:name=".MainActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/Theme.Transparent"
-            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode"
-            android:hardwareAccelerated="true"
-            android:windowSoftInputMode="adjustResize">
+        <activity android:exported="true" android:name=".MainActivity" android:launchMode="singleTop" android:theme="@style/Theme.Transparent" android:configChanges="orientation|keyboardHidden|keyboard|screenSize|smallestScreenSize|locale|layoutDirection|fontScale|screenLayout|density|uiMode" android:hardwareAccelerated="true" android:windowSoftInputMode="adjustResize">
             <!-- Specifies an Android theme to apply to this Activity as soon as
                  the Android process has started. This theme is visible to the user
                  while the Flutter UI initializes. After that, this theme continues

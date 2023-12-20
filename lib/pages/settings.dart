@@ -59,7 +59,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   Color themeTextColor = Colors.black;
   Color themeBackground = Colors.white;
-  var dIconSizeList = [24, 32, 48, 52];
+  var dIconSizeList = [32, 48, 52, 60];
 
   late double _value;
 
@@ -254,31 +254,41 @@ class _SettingsPageState extends State<SettingsPage> {
                                             ),
                                           ),
                                         ),
-                                        SwitchListTile(
-                                          title: const Text('Show Icons in Drawer'),
-                                          value: showIcons,
-                                          inactiveTrackColor: Colors.grey,
-                                          // trackOutlineColor:
-                                          //     MaterialStatePropertyAll(
-                                          //         Colors.grey[400]),
-                                          // activeTrackColor: Colors.grey,
-                                          onChanged: (bool value) {
-                                            setState(() {
-                                              showIcons = value;
-                                            });
-                                            widget.onShowIconsChanged(value);
-                                            saveSetting('showIcons', value);
-                                          },
+                                        ListTile(
+                                          title: const Text('App Drawer Style'),
+                                          trailing: ToggleButtons(
+                                            isSelected: [showIcons, !showIcons],
+                                            borderRadius: BorderRadius.circular(20),
+                                            onPressed: (int index) {
+                                              setState(() {
+                                                for (int i = 0; i < 2; i++) {
+                                                  if (i == index) {
+                                                    showIcons = !showIcons;
+                                                  }
+                                                }
+                                              });
+                                              widget.onShowIconsChanged(showIcons);
+                                              saveSetting('showIcons', showIcons);
+                                            },
+                                            children: const <Widget>[
+                                              Icon(Icons.grid_view),
+                                              Icon(Icons.list),
+                                            ],
+                                          ),
                                         ),
                                         ListTile(
-                                          title: Text('Home Icon Size $dIconSize'),
+                                          title: const Text('Home Icon Size'),
+                                          trailing: Text(
+                                            '$dIconSize',
+                                            style: const TextStyle(fontSize: 16),
+                                          ),
                                           // onTap: () {
                                           //   // Navigate to Widgets settings page
                                           // },
                                         ),
                                         SliderTheme(
                                           data: SliderTheme.of(context).copyWith(
-                                            trackHeight: 10.0,
+                                            // trackHeight: 10.0,
                                             trackShape: const RoundedRectSliderTrackShape(),
                                             thumbShape: const RoundSliderThumbShape(
                                                 enabledThumbRadius: 14.0,
@@ -307,6 +317,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                             max: 4,
                                             value: _value,
                                             divisions: 3,
+                                            label: '$dIconSize',
                                             onChanged: (value) {
                                               setState(() {
                                                 _value = value;
@@ -374,7 +385,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           SwitchListTile(
                                             title: const Text(clockHomeWidget),
                                             value: showClock,
-                                            inactiveTrackColor: Colors.grey,
+                                            // inactiveTrackColor: Colors.grey,
                                             onChanged: (bool value) {
                                               setState(() {
                                                 showClock = value;
@@ -386,7 +397,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           SwitchListTile(
                                             title: const Text(dateHomeWidget),
                                             value: showDate,
-                                            inactiveTrackColor: Colors.grey,
+                                            // inactiveTrackColor: Colors.grey,
                                             onChanged: (bool value) {
                                               setState(() {
                                                 showDate = value;
@@ -398,7 +409,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           SwitchListTile(
                                             title: const Text(dayprogressHomeWidget),
                                             value: showDayProgress,
-                                            inactiveTrackColor: Colors.grey,
+                                            // inactiveTrackColor: Colors.grey,
                                             onChanged: (bool value) {
                                               setState(() {
                                                 showDayProgress = value;
@@ -410,7 +421,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           SwitchListTile(
                                             title: const Text(tasksHomeWidget),
                                             value: showTodo,
-                                            inactiveTrackColor: Colors.grey,
+                                            // inactiveTrackColor: Colors.grey,
                                             onChanged: (bool value) {
                                               setState(() {
                                                 showTodo = value;

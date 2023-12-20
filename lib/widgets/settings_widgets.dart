@@ -45,6 +45,7 @@ class AboutSetting extends StatelessWidget {
                   ListTile(
                     title: const Text('Licences'),
                     onTap: () {
+                      Navigator.of(context).pop();
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {
@@ -68,6 +69,7 @@ class AboutSetting extends StatelessWidget {
                   ListTile(
                     title: const Text('About'),
                     onTap: () {
+                      Navigator.of(context).pop();
                       showDialog(
                         context: context,
                         builder: (BuildContext context) {

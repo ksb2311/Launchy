@@ -33,7 +33,6 @@ const darkAppBarFGColor = Colors.white;
 ThemeData _buildDefaultTheme() {
   final ThemeData base = ThemeData.light();
   return base.copyWith(
-    useMaterial3: true,
     colorScheme: base.colorScheme.copyWith(
       primary: systemAccentColor,
       // secondary: Colors.grey,
@@ -43,8 +42,8 @@ ThemeData _buildDefaultTheme() {
     textTheme: _buildDefaultTextTheme(base.textTheme),
     primaryTextTheme: _buildDefaultTextTheme(base.primaryTextTheme),
     appBarTheme: const AppBarTheme(
-      backgroundColor: defaultAppBarBGColor,
-      foregroundColor: defaultAppBarFGColor,
+      // backgroundColor: defaultAppBarBGColor,
+      // foregroundColor: defaultAppBarFGColor,
       elevation: 1,
       centerTitle: true,
       titleTextStyle: TextStyle(
@@ -60,7 +59,6 @@ ThemeData _buildDefaultTheme() {
 ThemeData _buildDarkTheme() {
   final ThemeData base = ThemeData.dark();
   return base.copyWith(
-    useMaterial3: true,
     colorScheme: base.colorScheme.copyWith(
       primary: systemAccentColor,
       // secondary: themeTextColor,
@@ -70,8 +68,8 @@ ThemeData _buildDarkTheme() {
     textTheme: _buildDefaultTextTheme(base.textTheme),
     primaryTextTheme: _buildDefaultTextTheme(base.primaryTextTheme),
     appBarTheme: const AppBarTheme(
-      backgroundColor: darkAppBarBGColor,
-      foregroundColor: darkAppBarFGColor,
+      // backgroundColor: darkAppBarBGColor,
+      // foregroundColor: darkAppBarFGColor,
       elevation: 1,
       centerTitle: true,
       titleTextStyle: TextStyle(

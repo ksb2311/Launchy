@@ -174,7 +174,7 @@ class _CustomPageViewState extends State<CustomPageView> {
                               colorFilter: const ColorFilter.matrix(
                                   <double>[0.2126, 0.7152, 0.0722, 0, 0, 0.2126, 0.7152, 0.0722, 0, 0, 0.2126, 0.7152, 0.0722, 0, 0, 0, 0, 0, 1, 0]),
                               child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                mainAxisAlignment: MainAxisAlignment.spaceAround,
                                 children: List<Widget>.generate(widget.dockIconList.length <= 4 ? widget.dockIconList.length : 4, (index) {
                                   return GestureDetector(
                                       onLongPress: () {

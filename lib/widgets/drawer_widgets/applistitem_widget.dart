@@ -3,17 +3,19 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 
-class AppGridItem extends StatelessWidget {
+class AppListItem extends StatelessWidget {
   final Application appls;
   final Color themeTextColor;
   final Function addToDock;
   final Function loadApps;
   final AppOps appops;
   final bool sysBrightness;
+  final bool shouldDisplaySeparator;
+  final String currentLetter;
   final List<Application> dockIconList;
 
-  const AppGridItem({
-    Key? key,
+  const AppListItem({
+    super.key,
     required this.appls,
     required this.themeTextColor,
     required this.addToDock,
@@ -21,14 +23,40 @@ class AppGridItem extends StatelessWidget {
     required this.appops,
     required this.sysBrightness,
     required this.dockIconList,
-  }) : super(key: key);
+    required this.shouldDisplaySeparator,
+    required this.currentLetter,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        GestureDetector(
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      if (shouldDisplaySeparator)
+        Padding(
+          padding: const EdgeInsets.only(top: 10, bottom: 10),
+          child: Row(
+            // mainAxisAlignment:
+            //     MainAxisAlignment
+            //         .spaceEvenly,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(left: 15),
+                child: Text(
+                  currentLetter,
+                  style: TextStyle(color: themeTextColor, fontSize: 20, fontWeight: FontWeight.bold),
+                ),
+              ),
+              // Container(
+              //   height:
+              //       2,
+              //   width:
+              //       MediaQuery.sizeOf(context).width - 80,
+              //   color:
+              //       Colors.grey,
+              // ),
+            ],
+          ),
+        ),
+      GestureDetector(
           onTap: () {
             Navigator.pop(context);
             appops.openApps(appls);
@@ -59,10 +87,10 @@ class AppGridItem extends StatelessWidget {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Image(
-                                image: MemoryImage((appls as ApplicationWithIcon).icon),
-                                width: 42,
-                                height: 42,
+                              Image.memory(
+                                (appls as ApplicationWithIcon).icon,
+                                width: 48,
+                                height: 48,
                                 // cacheHeight: 42,
                               ),
                               const SizedBox(
@@ -140,30 +168,61 @@ class AppGridItem extends StatelessWidget {
               },
             );
           },
-          child: Column(
-            children: [
-              Container(
-                padding: const EdgeInsets.all(10),
-                decoration: BoxDecoration(borderRadius: BorderRadius.circular(50), color: Colors.white),
-                child: Image.memory(
-                  (appls as ApplicationWithIcon).icon,
-                  // fit: BoxFit.scaleDown,
-                  width: 42,
-                ),
-              ),
-              const SizedBox(
-                height: 10.0,
-              ),
-              Text(
-                appls.appName,
-                style: TextStyle(color: themeTextColor),
-                overflow: TextOverflow.ellipsis,
-                maxLines: 1,
-              ),
-            ],
+          child: ListTile(
+            leading:
+                //   ColorFiltered(
+                // colorFilter:
+                //     ColorFilter.mode(
+                //   systemAccentColor,
+                //   BlendMode.modulate,
+                // ),
+                // child: ColorFiltered(
+                //     colorFilter: const ColorFilter.matrix(<double>[
+                //       0.2126,
+                //       0.7152,
+                //       0.0722,
+                //       0,
+                //       0,
+                //       0.2126,
+                //       0.7152,
+                //       0.0722,
+                //       0,
+                //       0,
+                //       0.2126,
+                //       0.7152,
+                //       0.0722,
+                //       0,
+                //       0,
+                //       0,
+                //       0,
+                //       0,
+                //       1,
+                //       0,
+                //     ]),
+                //     child: Image.memory(
+                Image.memory(
+              (appls as ApplicationWithIcon).icon,
+              width: 48,
+              // color:
+              //     systemAccentColor,
+              // colorBlendMode:
+              //     BlendMode.modulate,
+            ),
+            title: Text(
+              appls.appName,
+              style: TextStyle(color: themeTextColor),
+            ),
+          )
+          // tileColor:
+          //     Colors.grey[300],
+
+          // : ListTile(
+          //     title: Text(
+          //       appls.appName,
+          //       style: TextStyle(color: themeTextColor),
+          //     ),
+          //   ),
           ),
-        ),
-      ],
-    );
+    ]);
   }
 }

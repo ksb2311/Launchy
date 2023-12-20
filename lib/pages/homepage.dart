@@ -1,10 +1,7 @@
-import 'dart:ui';
-
 import 'package:battery_plus/battery_plus.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_launcher/constants/themes/theme_const.dart';
 import 'package:flutter_launcher/modules/app_focus_observer.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/settings.dart';
@@ -179,11 +176,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     Color themeTextColor = Theme.of(context).textTheme.bodyLarge!.color!;
     // Color themeBackground = Theme.of(context).scaffoldBackgroundColor;
 
-    return WillPopScope(
-      onWillPop: () async {
-        // Disable back button functionality
-        return false;
-      },
+    return PopScope(
+      canPop: false,
       child: GestureDetector(
         onTap: () {
           FocusScopeNode currentFocus = FocusScope.of(context);
@@ -221,7 +215,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                     context: context,
                     isScrollControlled: true,
                     // shape: const ContinuousRectangleBorder(),
-                    backgroundColor: sysBrightness ? drawerBackgroundDark : drawerBackgroundLight,
+                    // backgroundColor: sysBrightness ? drawerBackgroundDark : drawerBackgroundLight,
                     // barrierColor: Colors.transparent,
                     transitionAnimationController: anicontroller,
                     builder: (context) {
@@ -258,13 +252,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
             onLongPress: () {
               showModalBottomSheet(
                 context: context,
-                backgroundColor: Colors.transparent,
+                // backgroundColor: Colors.transparent,
                 isScrollControlled: true,
                 builder: (BuildContext context) {
                   return Container(
-                    decoration: BoxDecoration(
-                      color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
-                      borderRadius: const BorderRadius.only(
+                    decoration: const BoxDecoration(
+                      // color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
+                      borderRadius: BorderRadius.only(
                         topLeft: Radius.circular(20),
                         topRight: Radius.circular(20),
                       ),
