@@ -52,12 +52,13 @@ class _TodoListState extends State<TodoList> {
               controller: _textEditingController,
               decoration: InputDecoration(
                   filled: true,
+                  // fillColor: const Color.fromARGB(255, 50, 50, 50),
                   enabledBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.grey, width: 2.0),
+                    // borderSide: const BorderSide(color: Color.fromARGB(255, 50, 50, 50), width: 2.0),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   focusedBorder: OutlineInputBorder(
-                    borderSide: const BorderSide(color: Colors.white, width: 2.0),
+                    // borderSide: const BorderSide(color: Colors.white, width: 2.0),
                     borderRadius: BorderRadius.circular(20.0),
                   ),
                   // focusColor: Colors.black,
@@ -70,60 +71,64 @@ class _TodoListState extends State<TodoList> {
             ),
             Flexible(
               child: Padding(
-                padding: const EdgeInsets.only(top: 5.0),
+                padding: const EdgeInsets.only(top: 2.0),
                 child: ListView.builder(
                   padding: EdgeInsets.zero,
                   itemCount: todoItems.length,
                   itemBuilder: (context, index) {
-                    return Dismissible(
-                      key: Key(todoItems[index].text),
-                      onDismissed: (direction) {
-                        deleteTodoItem(index);
-                      },
-                      background: Container(
-                        alignment: Alignment.centerLeft,
-                        padding: const EdgeInsets.only(left: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.redAccent,
-                        ),
-                        child: const Icon(
-                          Icons.delete,
-                          color: Colors.white,
-                        ),
-                      ),
-                      secondaryBackground: Container(
-                        alignment: Alignment.centerRight,
-                        padding: const EdgeInsets.only(right: 20),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(20),
-                          color: Colors.redAccent,
-                        ),
-                        child: const Icon(
-                          Icons.delete,
-                          color: Colors.white,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 5.0),
-                        child: CheckboxListTile(
-                          // visualDensity: VisualDensity.compact,
-                          checkboxShape: const CircleBorder(),
-                          tileColor: currentTheme.canvasColor,
-                          // tileColor: Colors.grey[900],
-                          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                          title: Text(
-                            todoItems[index].text,
-                            style: TextStyle(
-                              decoration: todoItems[index].completed ? TextDecoration.lineThrough : null,
-                            ),
+                    return Container(
+                      margin: const EdgeInsets.all(2.0),
+                      decoration: BoxDecoration(color: currentTheme.canvasColor, borderRadius: BorderRadius.circular(20)),
+                      child: Dismissible(
+                        key: Key(todoItems[index].text),
+                        onDismissed: (direction) {
+                          deleteTodoItem(index);
+                        },
+                        background: Container(
+                          alignment: Alignment.centerLeft,
+                          padding: const EdgeInsets.only(left: 20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.redAccent,
                           ),
-                          value: todoItems[index].completed,
-                          onChanged: (newValue) {
-                            setState(() {
-                              todoItems[index].completed = newValue!;
-                            });
-                          },
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                        ),
+                        secondaryBackground: Container(
+                          alignment: Alignment.centerRight,
+                          padding: const EdgeInsets.only(right: 20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20),
+                            color: Colors.redAccent,
+                          ),
+                          child: const Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 5.0),
+                          child: CheckboxListTile(
+                            // visualDensity: VisualDensity.compact,
+                            checkboxShape: const CircleBorder(),
+                            // tileColor: currentTheme.canvasColor,
+                            // tileColor: Colors.grey[900],
+                            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                            title: Text(
+                              todoItems[index].text,
+                              style: TextStyle(
+                                decoration: todoItems[index].completed ? TextDecoration.lineThrough : null,
+                              ),
+                            ),
+                            value: todoItems[index].completed,
+                            onChanged: (newValue) {
+                              setState(() {
+                                todoItems[index].completed = newValue!;
+                              });
+                            },
+                          ),
                         ),
                       ),
                     );
