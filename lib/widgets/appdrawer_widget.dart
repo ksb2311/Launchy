@@ -120,7 +120,7 @@ class AppDrawer extends StatelessWidget {
                                           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                                             crossAxisCount: 4,
                                             childAspectRatio: 0.9,
-                                            mainAxisSpacing: 30,
+                                            mainAxisSpacing: 60,
                                             crossAxisSpacing: 10,
                                             // mainAxisExtent: 110,
                                           ),

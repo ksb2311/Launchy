@@ -38,7 +38,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
 
 // settings parametere
   late String _selectedTheme = 'System Default';
-  late bool shouldShowIcons = true;
+  late bool shouldShowIcons = false;
   late bool shouldShowClock = true;
   late bool shouldShowDate = true;
   late bool shouldShowDayProgress = false;
@@ -63,7 +63,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   @override
   void initState() {
     super.initState();
-    loadApps();
+    appops.listAllApps();
     WidgetsBinding.instance.addObserver(this);
     initPrefs();
     getBatteryPercentage();
@@ -73,6 +73,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     anicontroller = BottomSheet.createAnimationController(this);
     anicontroller.duration = const Duration(milliseconds: 500);
     _selectedTheme = widget.setTheme;
+    
   }
 
   @override
@@ -96,8 +97,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     shouldShowDayProgress = prefs.getBool('shouldShowDayProgress') != null ? prefs.getBool('shouldShowDayProgress')! : false;
     shouldShowTodo = prefs.getBool('shouldShowTodo') != null ? prefs.getBool('shouldShowTodo')! : false;
     dIconSize = prefs.getInt('dIconSize') != null ? prefs.getInt('dIconSize')! : 48;
-    print('dIconSize $dIconSize');
-    print('dIconSize $_selectedTheme');
   }
 
   // @override
@@ -122,16 +121,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   }
 
   // creating list of installed apps
-  Future<void> loadApps() async {
-    List<Application> apps =
-        await DeviceApps.getInstalledApplications(includeAppIcons: true, includeSystemApps: true, onlyAppsWithLaunchIntent: true);
+  // Future<void> loadApps() async {
+  //   List<Application> apps =
+  //       await DeviceApps.getInstalledApplications(includeAppIcons: true, includeSystemApps: true, onlyAppsWithLaunchIntent: true);
 
-    apps.sort((a, b) => a.appName.toLowerCase().compareTo(b.appName.toLowerCase()));
+  //   apps.sort((a, b) => a.appName.toLowerCase().compareTo(b.appName.toLowerCase()));
 
-    setState(() {
-      appops.searchAppList = apps;
-    });
-  }
+  //   setState(() {
+  //     appops.searchAppList = apps;
+  //   });
+  // }
 
   // clears input text serach textfield
   void _clearText() {
@@ -159,7 +158,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
 
   void addToDock(appls) {
     if (dockIconList.length != 4 && !dockIconList.contains(appls)) {
-      appops.addAppToDock(appls.appName);
+      appops.addAppToDock(appls.packageName);
       setState(() {
         dockIconList = appops.docklistitems;
         debugPrint(dockIconList.toString());
@@ -229,7 +228,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                             addToDock: addToDock,
                             clearText: _clearText,
                             getFirstLetter: getFirstLetter,
-                            loadApps: loadApps,
+                            loadApps: appops.listAllApps,
                             dockIconList: dockIconList,
                             setIcon: shouldShowIcons,
                           );

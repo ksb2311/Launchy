@@ -8,9 +8,13 @@ class AppOps extends ChangeNotifier {
   List<Application> searchAppList = [];
   List<Application> docklistitems = [];
 
-  AppOps() {
-    listAllApps();
-  }
+  // AppOps() {
+  //   listAllApps();
+  //   getPackageName('phone');
+  //   getPackageName('Messages');
+  //   getPackageName('Chrome');
+  //   getPackageName('Camera');
+  // }
 
   void listAllApps() async {
     try {
@@ -25,6 +29,21 @@ class AppOps extends ChangeNotifier {
       notifyListeners();
     } catch (e) {
       log('error');
+    }
+  }
+
+  void getPackageName(String appName) async {
+    apps = await DeviceApps.getInstalledApplications(
+      includeAppIcons: true,
+      includeSystemApps: true,
+      onlyAppsWithLaunchIntent: true,
+    );
+    for (Application app in apps) {
+      if (app.appName.toLowerCase() == appName.toLowerCase()) {
+        addAppToDock(app.packageName);
+        notifyListeners();
+        break;
+      }
     }
   }
 
@@ -55,7 +74,7 @@ class AppOps extends ChangeNotifier {
   // }
   void addAppToDock(String value) {
     for (Application application in apps) {
-      if (application.appName.toLowerCase().contains(value.toLowerCase())) {
+      if (application.packageName.toLowerCase().contains(value.toLowerCase())) {
         docklistitems.add(application);
         notifyListeners(); // Notify listeners here
         break;
