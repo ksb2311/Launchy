@@ -42,7 +42,7 @@ class _TodoListState extends State<TodoList> {
       body: Container(
         decoration: BoxDecoration(
           // color: currentTheme.brightness == Brightness.dark ? Colors.grey[900] : Colors.grey[300],
-          // color: Colors.white54,
+          color: Colors.black45,
           borderRadius: BorderRadius.circular(20),
         ),
         padding: const EdgeInsets.all(10),

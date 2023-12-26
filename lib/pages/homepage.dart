@@ -24,7 +24,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver, TickerProviderStateMixin {
   // List<Application> listApps = AppOps().searchAppList;
-  final appops = AppOps();
+  late AppOps appops;
   late List<Application> dockIconList;
   List<Application> preAppList = [];
   AppFocusObserver appFocusObserver = AppFocusObserver();
@@ -63,7 +63,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   @override
   void initState() {
     super.initState();
-    appops.listAllApps();
+    // appops.listAllApps();
+    appops = AppOps();
     WidgetsBinding.instance.addObserver(this);
     initPrefs();
     getBatteryPercentage();
@@ -73,7 +74,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     anicontroller = BottomSheet.createAnimationController(this);
     anicontroller.duration = const Duration(milliseconds: 500);
     _selectedTheme = widget.setTheme;
-    
   }
 
   @override
@@ -168,6 +168,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
 
   @override
   Widget build(BuildContext context) {
+    // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    //   systemNavigationBarColor: Colors.transparent,
+    // ));
+    // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
     // themeTextColor = Theme.of(context).textTheme.bodyLarge!.color!;
     // themeBackground = Theme.of(context).scaffoldBackgroundColor;
     final ThemeData currentTheme = Theme.of(context);

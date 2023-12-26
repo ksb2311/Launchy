@@ -145,7 +145,7 @@ class _CustomPageViewState extends State<CustomPageView> {
                                 height: 20,
                               ),
                               // Displays Todo widget
-                              widget.showTodo ? SizedBox(key: containerKey, height: 300, child: const TodoList()) : const SizedBox(),
+                              widget.showTodo ? SizedBox(height: 300, key: containerKey, child: const TodoList()) : const SizedBox(),
                               // const SizedBox(
                               //   height: 100,
                               //   width: 100,
