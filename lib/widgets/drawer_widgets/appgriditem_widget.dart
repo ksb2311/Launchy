@@ -40,6 +40,9 @@ class AppGridItem extends StatelessWidget {
               isScrollControlled: true,
               builder: (BuildContext context) {
                 return Container(
+                  // margin: EdgeInsets.only(
+                  //   bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
+                  // ),
                   decoration: BoxDecoration(
                     color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
                     borderRadius: const BorderRadius.only(
@@ -142,9 +145,8 @@ class AppGridItem extends StatelessWidget {
           },
           child: Column(
             children: [
-              Image.memory(
-                (appls as ApplicationWithIcon).icon,
-                // fit: BoxFit.scaleDown,
+              Image(
+                image: MemoryImage((appls as ApplicationWithIcon).icon),
                 width: 52,
               ),
               const SizedBox(

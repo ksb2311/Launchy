@@ -7,6 +7,7 @@ import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/settings.dart';
 import 'package:flutter_launcher/widgets/appdrawer_widget.dart';
 import 'package:flutter_launcher/widgets/pageview_widget.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,7 +25,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver, TickerProviderStateMixin {
   // List<Application> listApps = AppOps().searchAppList;
-  late AppOps appops;
+  late final AppOps appops;
   late List<Application> dockIconList;
   List<Application> preAppList = [];
   AppFocusObserver appFocusObserver = AppFocusObserver();
@@ -57,6 +58,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
 // battery parameters
   var battery = Battery();
   int bLevel = 0;
+
 // expands notification panel
   final MethodChannel _channel = const MethodChannel('settings_channel');
 
@@ -64,17 +66,25 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   void initState() {
     super.initState();
     // appops.listAllApps();
-    appops = AppOps();
+    // appops = AppOps(context);
+    appops = Provider.of<AppOps>(context, listen: false);
+    dockIconList = appops.dockListItems;
     WidgetsBinding.instance.addObserver(this);
     initPrefs();
     getBatteryPercentage();
     // Stream<ApplicationEvent> appEvents = DeviceApps.listenToAppsChanges();
     WidgetsBinding.instance.addObserver(appFocusObserver);
-    dockIconList = appops.docklistitems;
     anicontroller = BottomSheet.createAnimationController(this);
     anicontroller.duration = const Duration(milliseconds: 500);
     _selectedTheme = widget.setTheme;
   }
+
+  // @override
+  // void didChangeDependencies() {
+  //   super.didChangeDependencies();
+  //   appops = Provider.of<AppOps>(context, listen: false);
+  //   dockIconList = appops.dockListItems;
+  // }
 
   @override
   void dispose() {
@@ -159,10 +169,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   void addToDock(appls) {
     if (dockIconList.length != 4 && !dockIconList.contains(appls)) {
       appops.addAppToDock(appls.packageName);
-      setState(() {
-        dockIconList = appops.docklistitems;
-        debugPrint(dockIconList.toString());
-      });
+      // setState(() {
+      //   dockIconList = appops.docklistitems;
+      //   debugPrint(dockIconList.toString());
+      // });
     }
   }
 
@@ -172,248 +182,249 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     //   systemNavigationBarColor: Colors.transparent,
     // ));
     // SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [SystemUiOverlay.top]);
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     // themeTextColor = Theme.of(context).textTheme.bodyLarge!.color!;
     // themeBackground = Theme.of(context).scaffoldBackgroundColor;
     final ThemeData currentTheme = Theme.of(context);
     bool sysBrightness = currentTheme.brightness == Brightness.dark;
     Color themeTextColor = Theme.of(context).textTheme.bodyLarge!.color!;
     // Color themeBackground = Theme.of(context).scaffoldBackgroundColor;
+    return GestureDetector(
+      onTap: () {
+        FocusScopeNode currentFocus = FocusScope.of(context);
+        if (!currentFocus.hasPrimaryFocus) {
+          currentFocus.unfocus();
+        }
+      },
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        // backgroundColor: Colors.transparent,
 
-    return PopScope(
-      canPop: false,
-      child: GestureDetector(
-        onTap: () {
-          FocusScopeNode currentFocus = FocusScope.of(context);
-          if (!currentFocus.hasPrimaryFocus) {
-            currentFocus.unfocus();
-          }
-        },
-        child: Scaffold(
-          resizeToAvoidBottomInset: false,
-          backgroundColor: Colors.transparent,
-          body: GestureDetector(
-            onVerticalDragEnd: (details) async {
-              // Check if the user swiped up
-              if (details.velocity.pixelsPerSecond.dy > 0) {
-                // User swiped Down
-                // StatusBarManager.expandNotificationsPanel();
-                _showNotificationPanel();
-              }
-              if (details.velocity.pixelsPerSecond.dy < 0) {
-                // User swiped up
-                // appops.searchApp('phone');
-                // appops.openApps(appops.searchAppList[0]);
-                // loadApps();
+        body: GestureDetector(
+          onVerticalDragEnd: (details) async {
+            // Check if the user swiped up
+            if (details.velocity.pixelsPerSecond.dy > 0) {
+              // User swiped Down
+              // StatusBarManager.expandNotificationsPanel();
+              _showNotificationPanel();
+            }
+            if (details.velocity.pixelsPerSecond.dy < 0) {
+              // User swiped up
+              // appops.searchApp('phone');
+              // appops.openApps(appops.searchAppList[0]);
+              // loadApps();
 
-                // Uri phoneNumber = Uri.parse('tel:');
+              // Uri phoneNumber = Uri.parse('tel:');
 
-                // if (await canLaunchUrl(phoneNumber)) {
-                //   await launchUrl(phoneNumber);
-                // } else {
-                //   throw 'Could not launch phone app';
-                // }
+              // if (await canLaunchUrl(phoneNumber)) {
+              //   await launchUrl(phoneNumber);
+              // } else {
+              //   throw 'Could not launch phone app';
+              // }
 
-                // Display Drawer
-                showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    // shape: const ContinuousRectangleBorder(),
-                    // backgroundColor: sysBrightness ? drawerBackgroundDark : drawerBackgroundLight,
-                    // barrierColor: Colors.transparent,
-                    transitionAnimationController: anicontroller,
-                    builder: (context) {
-                      return StatefulBuilder(
-                        builder: (BuildContext context, setState) {
-                          return AppDrawer(
-                            textEditingController: _textEditingController,
-                            appops: appops,
-                            sysBrightness: sysBrightness,
-                            themeTextColor: themeTextColor,
-                            addToDock: addToDock,
-                            clearText: _clearText,
-                            getFirstLetter: getFirstLetter,
-                            loadApps: appops.listAllApps,
-                            dockIconList: dockIconList,
-                            setIcon: shouldShowIcons,
-                          );
-                        },
-                      );
-                    });
-              }
-            },
-
-            // onHorizontalDragUpdate: (details) {
-            //   // Check if the user swiped right
-            //   if (details.delta.dx > 0) {
-            //     // User swiped right
-            //     print('swipe right');
-            //     appops.searchApp('camera');
-            //     appops.openApps(appops.searchAppList[0]);
-            //     loadApps();
-            //   }
-            // },
-            onLongPress: () {
+              // Display Drawer
               showModalBottomSheet(
-                context: context,
-                // backgroundColor: Colors.transparent,
-                isScrollControlled: true,
-                builder: (BuildContext context) {
-                  return Container(
-                    decoration: const BoxDecoration(
-                      // color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(20),
-                        topRight: Radius.circular(20),
-                      ),
+                  context: context,
+                  isScrollControlled: true,
+                  // shape: const ContinuousRectangleBorder(),
+                  // backgroundColor: sysBrightness ? drawerBackgroundDark : drawerBackgroundLight,
+                  // barrierColor: Colors.transparent,
+                  transitionAnimationController: anicontroller,
+                  builder: (context) {
+                    return StatefulBuilder(
+                      builder: (BuildContext context, setState) {
+                        return AppDrawer(
+                          textEditingController: _textEditingController,
+                          appops: appops,
+                          sysBrightness: sysBrightness,
+                          themeTextColor: themeTextColor,
+                          addToDock: addToDock,
+                          clearText: _clearText,
+                          getFirstLetter: getFirstLetter,
+                          loadApps: appops.listAllApps,
+                          dockIconList: dockIconList,
+                          setIcon: shouldShowIcons,
+                        );
+                      },
+                    );
+                  });
+            }
+          },
+
+          // onHorizontalDragUpdate: (details) {
+          //   // Check if the user swiped right
+          //   if (details.delta.dx > 0) {
+          //     // User swiped right
+          //     print('swipe right');
+          //     appops.searchApp('camera');
+          //     appops.openApps(appops.searchAppList[0]);
+          //     loadApps();
+          //   }
+          // },
+          onLongPress: () {
+            showModalBottomSheet(
+              context: context,
+              // backgroundColor: Colors.transparent,
+              isScrollControlled: true,
+              builder: (BuildContext context) {
+                return Container(
+                  margin: EdgeInsets.only(
+                    bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
+                  ),
+                  decoration: const BoxDecoration(
+                    // color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(20),
+                      topRight: Radius.circular(20),
                     ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          GestureDetector(
-                            onTap: () async {
-                              Navigator.pop(context);
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => SettingsPage(
-                                          dIconSize: dIconSize,
-                                          showIcons: shouldShowIcons,
-                                          showClock: shouldShowClock,
-                                          showDate: shouldShowDate,
-                                          showDayProgress: shouldShowDayProgress,
-                                          showTodo: shouldShowTodo,
-                                          setTheme: widget.setTheme,
-                                          onShowIconsChanged: (bool value) {
-                                            shouldShowIcons = value;
-                                          },
-                                          onThemeChanged: widget.onThemeChanged,
-                                          onDIconSizeChanged: (int value) {
-                                            setState(() {
-                                              dIconSize = value;
-                                            });
-                                          },
-                                          onShowClockChanged: (bool value) {
-                                            setState(() {
-                                              shouldShowClock = value;
-                                            });
-                                          },
-                                          onShowDateChanged: (bool value) {
-                                            setState(() {
-                                              shouldShowDate = value;
-                                            });
-                                          },
-                                          onShowDayProgressChanged: (bool value) {
-                                            setState(() {
-                                              shouldShowDayProgress = value;
-                                            });
-                                          },
-                                          onShowTodoChanged: (bool value) {
-                                            setState(() {
-                                              shouldShowTodo = value;
-                                            });
-                                          },
-                                        )),
-                              );
-                            },
-                            child: ListTile(
-                              leading: const Icon(Icons.settings_outlined),
-                              title: Text(
-                                "Launchy Settings",
-                                style: TextStyle(color: themeTextColor),
-                              ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        GestureDetector(
+                          onTap: () async {
+                            Navigator.pop(context);
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => SettingsPage(
+                                        dIconSize: dIconSize,
+                                        showIcons: shouldShowIcons,
+                                        showClock: shouldShowClock,
+                                        showDate: shouldShowDate,
+                                        showDayProgress: shouldShowDayProgress,
+                                        showTodo: shouldShowTodo,
+                                        setTheme: widget.setTheme,
+                                        onShowIconsChanged: (bool value) {
+                                          shouldShowIcons = value;
+                                        },
+                                        onThemeChanged: widget.onThemeChanged,
+                                        onDIconSizeChanged: (int value) {
+                                          setState(() {
+                                            dIconSize = value;
+                                          });
+                                        },
+                                        onShowClockChanged: (bool value) {
+                                          setState(() {
+                                            shouldShowClock = value;
+                                          });
+                                        },
+                                        onShowDateChanged: (bool value) {
+                                          setState(() {
+                                            shouldShowDate = value;
+                                          });
+                                        },
+                                        onShowDayProgressChanged: (bool value) {
+                                          setState(() {
+                                            shouldShowDayProgress = value;
+                                          });
+                                        },
+                                        onShowTodoChanged: (bool value) {
+                                          setState(() {
+                                            shouldShowTodo = value;
+                                          });
+                                        },
+                                      )),
+                            );
+                          },
+                          child: ListTile(
+                            leading: const Icon(Icons.settings_outlined),
+                            title: Text(
+                              "Launchy Settings",
+                              style: TextStyle(color: themeTextColor),
                             ),
                           ),
-                          // GestureDetector(
-                          //   onTap: () async {
-                          //     Navigator.pop(context);
-                          //     showModalBottomSheet(
-                          //         // backgroundColor: Colors.transparent,
-                          //         context: context,
-                          //         builder: (BuildContext context) {
-                          //           return HomeWidgetSwitch(
-                          //             setIcon: shouldShowIcons,
-                          //             setClock: shouldShowClock,
-                          //             setDate: shouldShowDate,
-                          //             setDayProgress: shouldShowDayProgress,
-                          //             setTodo: shouldShowTodo,
-                          //             dIconSize: dIconSize,
-                          //           );
-                          //         });
-                          //   },
-                          //   child: ListTile(
-                          //     leading: const Icon(Icons.widgets_outlined),
-                          //     title: Text(
-                          //       "Home Widgets",
-                          //       style: TextStyle(color: themeTextColor),
-                          //     ),
-                          //   ),
-                          // ),
-                          GestureDetector(
-                            onTap: () async {
-                              Navigator.pop(context);
-                            },
-                            child: ListTile(
-                              leading: const Icon(Icons.wallpaper),
-                              title: Text(
-                                "Wallpaper",
-                                style: TextStyle(color: themeTextColor),
-                              ),
+                        ),
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //     Navigator.pop(context);
+                        //     showModalBottomSheet(
+                        //         // backgroundColor: Colors.transparent,
+                        //         context: context,
+                        //         builder: (BuildContext context) {
+                        //           return HomeWidgetSwitch(
+                        //             setIcon: shouldShowIcons,
+                        //             setClock: shouldShowClock,
+                        //             setDate: shouldShowDate,
+                        //             setDayProgress: shouldShowDayProgress,
+                        //             setTodo: shouldShowTodo,
+                        //             dIconSize: dIconSize,
+                        //           );
+                        //         });
+                        //   },
+                        //   child: ListTile(
+                        //     leading: const Icon(Icons.widgets_outlined),
+                        //     title: Text(
+                        //       "Home Widgets",
+                        //       style: TextStyle(color: themeTextColor),
+                        //     ),
+                        //   ),
+                        // ),
+                        GestureDetector(
+                          onTap: () async {
+                            Navigator.pop(context);
+                          },
+                          child: ListTile(
+                            leading: const Icon(Icons.wallpaper),
+                            title: Text(
+                              "Wallpaper",
+                              style: TextStyle(color: themeTextColor),
                             ),
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  );
+                  ),
+                );
+              },
+            );
+          },
+          child: ScrollConfiguration(
+              behavior: MyBehavior(),
+              child: CustomPageView(
+                onShowIconsChanged: (bool value) {
+                  shouldShowIcons = value;
                 },
-              );
-            },
-            child: ScrollConfiguration(
-                behavior: MyBehavior(),
-                child: CustomPageView(
-                  onShowIconsChanged: (bool value) {
-                    shouldShowIcons = value;
-                  },
-                  onDIconSizeChanged: (int value) {
-                    setState(() {
-                      dIconSize = value;
-                    });
-                  },
-                  onShowClockChanged: (bool value) {
-                    setState(() {
-                      shouldShowClock = value;
-                    });
-                  },
-                  onShowDateChanged: (bool value) {
-                    setState(() {
-                      shouldShowDate = value;
-                    });
-                  },
-                  onShowDayProgressChanged: (bool value) {
-                    setState(() {
-                      shouldShowDayProgress = value;
-                    });
-                  },
-                  onShowTodoChanged: (bool value) {
-                    setState(() {
-                      shouldShowTodo = value;
-                    });
-                  },
-                  dIconSize: dIconSize,
-                  dockIconList: dockIconList,
-                  appops: appops,
-                  sysBrightness: sysBrightness,
-                  themeTextColor: themeTextColor,
-                  setTheme: _selectedTheme,
-                  onThemeChanged: widget.onThemeChanged,
-                  showIcons: shouldShowIcons,
-                  showClock: shouldShowClock,
-                  showDate: shouldShowDate,
-                  showDayProgress: shouldShowDayProgress,
-                  showTodo: shouldShowTodo,
-                )),
-          ),
+                onDIconSizeChanged: (int value) {
+                  setState(() {
+                    dIconSize = value;
+                  });
+                },
+                onShowClockChanged: (bool value) {
+                  setState(() {
+                    shouldShowClock = value;
+                  });
+                },
+                onShowDateChanged: (bool value) {
+                  setState(() {
+                    shouldShowDate = value;
+                  });
+                },
+                onShowDayProgressChanged: (bool value) {
+                  setState(() {
+                    shouldShowDayProgress = value;
+                  });
+                },
+                onShowTodoChanged: (bool value) {
+                  setState(() {
+                    shouldShowTodo = value;
+                  });
+                },
+                dIconSize: dIconSize,
+                dockIconList: dockIconList,
+                appops: appops,
+                sysBrightness: sysBrightness,
+                themeTextColor: themeTextColor,
+                setTheme: _selectedTheme,
+                onThemeChanged: widget.onThemeChanged,
+                showIcons: shouldShowIcons,
+                showClock: shouldShowClock,
+                showDate: shouldShowDate,
+                showDayProgress: shouldShowDayProgress,
+                showTodo: shouldShowTodo,
+              )),
         ),
       ),
     );

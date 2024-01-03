@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_launcher/constants/themes/theme_const.dart';
+import 'package:intl/intl.dart';
 
 // shows full date with day
 class FullDateWidget extends StatefulWidget {

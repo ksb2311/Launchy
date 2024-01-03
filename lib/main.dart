@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter_launcher/constants/themes/theme_const.dart';
+import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/homepage.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:system_theme/system_theme.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemTheme.accentColor.load();
-  runApp(const MaterialApp(home: MyApp()));
+  runApp(ChangeNotifierProvider(create: (context) => AppOps(context), child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {

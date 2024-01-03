@@ -133,337 +133,360 @@ class _SettingsPageState extends State<SettingsPage> {
         title: const Text('Settings'),
         shadowColor: Colors.transparent,
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-            child: Container(
-              // height: 300,
-              padding: const EdgeInsets.all(30),
-              child: const Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Launchy',
-                      style: TextStyle(fontSize: 30),
-                      // textAlign: TextAlign.center,
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      'Android Launcher',
-                      // textAlign: TextAlign.center
-                    ),
-                  ],
+      body: Container(
+        margin: EdgeInsets.only(
+          bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+              child: Container(
+                // height: 300,
+                padding: const EdgeInsets.all(30),
+                child: const Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'Launchy',
+                        style: TextStyle(fontSize: 30),
+                        // textAlign: TextAlign.center,
+                      ),
+                      SizedBox(
+                        height: 10,
+                      ),
+                      Text(
+                        'Android Launcher',
+                        // textAlign: TextAlign.center
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
-          ),
-          Container(
-            padding: const EdgeInsets.all(10),
-            child: Column(
-              children: [
-                ListTile(
-                  leading: const Icon(Icons.color_lens_outlined),
-                  title: const Text(appearanceTitle),
-                  onTap: () {
-                    showModalBottomSheet(
-                      // backgroundColor: Colors.transparent,
-                      context: context,
-                      builder: (BuildContext context) {
-                        return GestureDetector(
-                          onTap: () => Navigator.of(context).pop(),
-                          child: Wrap(
-                            children: [
-                              StatefulBuilder(
-                                builder: (BuildContext context, setState) {
-                                  return Container(
-                                    padding: const EdgeInsets.all(5),
-                                    margin: const EdgeInsets.all(10),
-                                    // decoration: BoxDecoration(
-                                    //   color: Theme.of(context).brightness ==
-                                    //           Brightness.dark
-                                    //       ? Colors.grey[800]
-                                    //       : Colors.grey[800],
-                                    //   borderRadius: BorderRadius.circular(30),
-                                    // ),
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.centerLeft,
-                                          padding: const EdgeInsets.all(5),
-                                          margin: const EdgeInsets.all(15),
-                                          width: MediaQuery.of(context).size.width,
-                                          // decoration: BoxDecoration(
-                                          //   color: Theme.of(context).brightness ==
-                                          //           Brightness.dark
-                                          //       ? Colors.black
-                                          //       : Colors.white,
-                                          //   borderRadius: BorderRadius.circular(20),
-                                          // ),
-                                          child: const Text(
-                                            appearanceTitle,
-                                            style: TextStyle(fontSize: 20),
-                                          ),
-                                        ),
-                                        ListTile(
-                                          title: const Text('Theme'),
-                                          trailing: DropdownButtonHideUnderline(
-                                            child: DropdownButton<String>(
-                                              borderRadius: BorderRadius.circular(20),
-                                              value: _selectedTheme,
-                                              items: [
-                                                DropdownMenuItem(
-                                                  value: 'System Default',
-                                                  child: Text(
-                                                    'System Default',
-                                                    style: TextStyle(
-                                                      color: Theme.of(context).textTheme.bodyLarge!.color!,
-                                                    ),
-                                                  ),
-                                                ),
-                                                DropdownMenuItem(
-                                                  value: 'Light',
-                                                  child: Text(
-                                                    'Light',
-                                                    style: TextStyle(
-                                                      color: Theme.of(context).textTheme.bodyLarge!.color!,
-                                                    ),
-                                                  ),
-                                                ),
-                                                DropdownMenuItem(
-                                                  value: 'Dark',
-                                                  child: Text(
-                                                    'Dark',
-                                                    style: TextStyle(
-                                                      color: Theme.of(context).textTheme.bodyLarge!.color!,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                              onChanged: (String? value) {
-                                                setState(() {
-                                                  _selectedTheme = value!;
-                                                });
-                                                widget.onThemeChanged(_selectedTheme);
-                                                saveSetting('_selectedTheme', _selectedTheme);
-                                              },
-                                            ),
-                                          ),
-                                        ),
-                                        ListTile(
-                                          title: const Text('App Drawer Style'),
-                                          trailing: ToggleButtons(
-                                            isSelected: [showIcons, !showIcons],
-                                            borderRadius: BorderRadius.circular(20),
-                                            onPressed: (int index) {
-                                              setState(() {
-                                                for (int i = 0; i < 2; i++) {
-                                                  if (i == index) {
-                                                    showIcons = !showIcons;
-                                                  }
-                                                }
-                                              });
-                                              widget.onShowIconsChanged(showIcons);
-                                              saveSetting('showIcons', showIcons);
-                                            },
-                                            children: const <Widget>[
-                                              Icon(Icons.grid_view),
-                                              Icon(Icons.list),
-                                            ],
-                                          ),
-                                        ),
-                                        ListTile(
-                                          title: const Text('Home Icon Size'),
-                                          trailing: Text(
-                                            '$dIconSize',
-                                            style: const TextStyle(fontSize: 16),
-                                          ),
-                                          // onTap: () {
-                                          //   // Navigate to Widgets settings page
-                                          // },
-                                        ),
-                                        SliderTheme(
-                                          data: SliderTheme.of(context).copyWith(
-                                            // trackHeight: 10.0,
-                                            trackShape: const RoundedRectSliderTrackShape(),
-                                            thumbShape: const RoundSliderThumbShape(
-                                                enabledThumbRadius: 14.0,
-                                                // pressedElevation: 8.0,
-                                                elevation: 2),
-                                            thumbColor: themeBackground,
-                                            // overlayColor:
-                                            //     Colors.black.withOpacity(0.2),
-                                            // overlayShape:
-                                            //     const RoundSliderOverlayShape(
-                                            //         overlayRadius: 32.0),
-                                            tickMarkShape: const RoundSliderTickMarkShape(),
-                                            // inactiveTickMarkColor: Colors.black,
-                                            // activeTickMarkColor: themeTextColor,
-                                            // valueIndicatorShape:
-                                            //     const PaddleSliderValueIndicatorShape(),
-                                            // valueIndicatorColor: themeTextColor,
-                                            // valueIndicatorTextStyle:
-                                            //     const TextStyle(
-                                            //   color: Colors.white,
-                                            //   fontSize: 20.0,
-                                            // ),
-                                          ),
-                                          child: Slider(
-                                            min: 1,
-                                            max: 4,
-                                            value: _value,
-                                            divisions: 3,
-                                            label: '$dIconSize',
-                                            onChanged: (value) {
-                                              setState(() {
-                                                _value = value;
-                                                dIconSize = dIconSizeList[_value.toInt() - 1];
-                                              });
-                                              widget.onDIconSizeChanged(dIconSize);
-                                              saveSetting('dIconSize', dIconSize);
-                                            },
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              )
-                            ],
-                          ),
-                        );
-                      },
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(Icons.widgets_outlined),
-                  title: const Text(homeWidgetsTitle),
-                  onTap: () {
-                    showModalBottomSheet(
+            Container(
+              padding: const EdgeInsets.all(10),
+              child: Column(
+                children: [
+                  ListTile(
+                    leading: const Icon(Icons.color_lens_outlined),
+                    title: const Text(appearanceTitle),
+                    onTap: () {
+                      showModalBottomSheet(
                         // backgroundColor: Colors.transparent,
                         context: context,
                         builder: (BuildContext context) {
-                          return GestureDetector(
+                          return Container(
+                            margin: EdgeInsets.only(
+                              bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
+                            ),
+                            child: GestureDetector(
                               onTap: () => Navigator.of(context).pop(),
-                              child: Wrap(children: [
-                                StatefulBuilder(
-                                  builder: (BuildContext context, setState) {
-                                    return Container(
-                                      padding: const EdgeInsets.all(5),
-                                      margin: const EdgeInsets.all(10),
-                                      // decoration: BoxDecoration(
-                                      //     color: Theme.of(context).brightness ==
-                                      //             Brightness.dark
-                                      //         ? Colors.grey[800]
-                                      //         : Colors.grey[200],
-                                      //     borderRadius:
-                                      //         BorderRadius.circular(30)),
-                                      child: Column(
-                                        children: [
-                                          Container(
-                                            alignment: Alignment.centerLeft,
-                                            padding: const EdgeInsets.all(5),
-                                            margin: const EdgeInsets.all(15),
-                                            width: MediaQuery.sizeOf(context).width,
-                                            // decoration: BoxDecoration(
-                                            //     color: Theme.of(context).brightness ==
-                                            //             Brightness.dark
-                                            //         ? Colors.black
-                                            //         : Colors.white,
-                                            //     borderRadius:
-                                            //         BorderRadius.circular(20)),
-                                            child: const Text(
-                                              'Widgets',
-                                              style: TextStyle(fontSize: 20),
+                              child: Wrap(
+                                children: [
+                                  StatefulBuilder(
+                                    builder: (BuildContext context, setState) {
+                                      return Container(
+                                        padding: const EdgeInsets.all(5),
+                                        margin: const EdgeInsets.all(10),
+                                        // decoration: BoxDecoration(
+                                        //   color: Theme.of(context).brightness ==
+                                        //           Brightness.dark
+                                        //       ? Colors.grey[800]
+                                        //       : Colors.grey[800],
+                                        //   borderRadius: BorderRadius.circular(30),
+                                        // ),
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.centerLeft,
+                                              padding: const EdgeInsets.all(5),
+                                              margin: const EdgeInsets.all(15),
+                                              width: MediaQuery.of(context).size.width,
+                                              // decoration: BoxDecoration(
+                                              //   color: Theme.of(context).brightness ==
+                                              //           Brightness.dark
+                                              //       ? Colors.black
+                                              //       : Colors.white,
+                                              //   borderRadius: BorderRadius.circular(20),
+                                              // ),
+                                              child: const Text(
+                                                appearanceTitle,
+                                                style: TextStyle(fontSize: 20),
+                                              ),
                                             ),
-                                          ),
-                                          SwitchListTile(
-                                            title: const Text(clockHomeWidget),
-                                            value: showClock,
-                                            // inactiveTrackColor: Colors.grey,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                showClock = value;
-                                              });
-                                              widget.onShowClockChanged(value);
-                                              saveSetting('showClock', value);
-                                            },
-                                          ),
-                                          SwitchListTile(
-                                            title: const Text(dateHomeWidget),
-                                            value: showDate,
-                                            // inactiveTrackColor: Colors.grey,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                showDate = value;
-                                              });
-                                              widget.onShowDateChanged(value);
-                                              saveSetting('showDate', value);
-                                            },
-                                          ),
-                                          SwitchListTile(
-                                            title: const Text(dayprogressHomeWidget),
-                                            value: showDayProgress,
-                                            // inactiveTrackColor: Colors.grey,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                showDayProgress = value;
-                                              });
-                                              widget.onShowDayProgressChanged(value);
-                                              saveSetting('showDayProgress', value);
-                                            },
-                                          ),
-                                          SwitchListTile(
-                                            title: const Text(tasksHomeWidget),
-                                            value: showTodo,
-                                            // inactiveTrackColor: Colors.grey,
-                                            onChanged: (bool value) {
-                                              setState(() {
-                                                showTodo = value;
-                                              });
-                                              widget.onShowTodoChanged(value);
-                                              saveSetting('showTodo', value);
-                                            },
-                                          ),
-                                        ],
-                                      ),
-                                    );
-                                  },
-                                )
-                              ]));
-                        });
-                  },
-                ),
-                ListTile(
-                    leading: const Icon(Icons.miscellaneous_services_outlined),
-                    title: const Text(miscTitle),
+                                            ListTile(
+                                              title: const Text('Theme'),
+                                              trailing: DropdownButtonHideUnderline(
+                                                child: DropdownButton<String>(
+                                                  borderRadius: BorderRadius.circular(20),
+                                                  value: _selectedTheme,
+                                                  items: [
+                                                    DropdownMenuItem(
+                                                      value: 'System Default',
+                                                      child: Text(
+                                                        'System Default',
+                                                        style: TextStyle(
+                                                          color: Theme.of(context).textTheme.bodyLarge!.color!,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    DropdownMenuItem(
+                                                      value: 'Light',
+                                                      child: Text(
+                                                        'Light',
+                                                        style: TextStyle(
+                                                          color: Theme.of(context).textTheme.bodyLarge!.color!,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    DropdownMenuItem(
+                                                      value: 'Dark',
+                                                      child: Text(
+                                                        'Dark',
+                                                        style: TextStyle(
+                                                          color: Theme.of(context).textTheme.bodyLarge!.color!,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                  onChanged: (String? value) {
+                                                    setState(() {
+                                                      _selectedTheme = value!;
+                                                    });
+                                                    widget.onThemeChanged(_selectedTheme);
+                                                    saveSetting('_selectedTheme', _selectedTheme);
+                                                  },
+                                                ),
+                                              ),
+                                            ),
+                                            ListTile(
+                                              title: const Text('App Drawer Style'),
+                                              trailing: ToggleButtons(
+                                                isSelected: [showIcons, !showIcons],
+                                                borderRadius: BorderRadius.circular(20),
+                                                onPressed: (int index) {
+                                                  setState(() {
+                                                    for (int i = 0; i < 2; i++) {
+                                                      if (i == index) {
+                                                        showIcons = !showIcons;
+                                                      }
+                                                    }
+                                                  });
+                                                  widget.onShowIconsChanged(showIcons);
+                                                  saveSetting('showIcons', showIcons);
+                                                },
+                                                children: const <Widget>[
+                                                  Icon(Icons.grid_view),
+                                                  Icon(Icons.list),
+                                                ],
+                                              ),
+                                            ),
+                                            ListTile(
+                                              title: const Text('Home Icon Size'),
+                                              trailing: Text(
+                                                '$dIconSize',
+                                                style: const TextStyle(fontSize: 16),
+                                              ),
+                                              // onTap: () {
+                                              //   // Navigate to Widgets settings page
+                                              // },
+                                            ),
+                                            SliderTheme(
+                                              data: SliderTheme.of(context).copyWith(
+                                                // trackHeight: 10.0,
+                                                trackShape: const RoundedRectSliderTrackShape(),
+                                                thumbShape: const RoundSliderThumbShape(
+                                                    enabledThumbRadius: 14.0,
+                                                    // pressedElevation: 8.0,
+                                                    elevation: 2),
+                                                thumbColor: themeBackground,
+                                                // overlayColor:
+                                                //     Colors.black.withOpacity(0.2),
+                                                // overlayShape:
+                                                //     const RoundSliderOverlayShape(
+                                                //         overlayRadius: 32.0),
+                                                tickMarkShape: const RoundSliderTickMarkShape(),
+                                                // inactiveTickMarkColor: Colors.black,
+                                                // activeTickMarkColor: themeTextColor,
+                                                // valueIndicatorShape:
+                                                //     const PaddleSliderValueIndicatorShape(),
+                                                // valueIndicatorColor: themeTextColor,
+                                                // valueIndicatorTextStyle:
+                                                //     const TextStyle(
+                                                //   color: Colors.white,
+                                                //   fontSize: 20.0,
+                                                // ),
+                                              ),
+                                              child: Slider(
+                                                min: 1,
+                                                max: 4,
+                                                value: _value,
+                                                divisions: 3,
+                                                label: '$dIconSize',
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    _value = value;
+                                                    dIconSize = dIconSizeList[_value.toInt() - 1];
+                                                  });
+                                                  widget.onDIconSizeChanged(dIconSize);
+                                                  saveSetting('dIconSize', dIconSize);
+                                                },
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      );
+                                    },
+                                  )
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  ListTile(
+                    leading: const Icon(Icons.widgets_outlined),
+                    title: const Text(homeWidgetsTitle),
                     onTap: () {
                       showModalBottomSheet(
                           // backgroundColor: Colors.transparent,
                           context: context,
                           builder: (BuildContext context) {
-                            return MiscSetting(openDefaultLauncher);
+                            return Container(
+                              margin: EdgeInsets.only(
+                                bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
+                              ),
+                              child: GestureDetector(
+                                  onTap: () => Navigator.of(context).pop(),
+                                  child: Wrap(children: [
+                                    StatefulBuilder(
+                                      builder: (BuildContext context, setState) {
+                                        return Container(
+                                          padding: const EdgeInsets.all(5),
+                                          margin: const EdgeInsets.all(10),
+                                          // decoration: BoxDecoration(
+                                          //     color: Theme.of(context).brightness ==
+                                          //             Brightness.dark
+                                          //         ? Colors.grey[800]
+                                          //         : Colors.grey[200],
+                                          //     borderRadius:
+                                          //         BorderRadius.circular(30)),
+                                          child: Column(
+                                            children: [
+                                              Container(
+                                                alignment: Alignment.centerLeft,
+                                                padding: const EdgeInsets.all(5),
+                                                margin: const EdgeInsets.all(15),
+                                                width: MediaQuery.sizeOf(context).width,
+                                                // decoration: BoxDecoration(
+                                                //     color: Theme.of(context).brightness ==
+                                                //             Brightness.dark
+                                                //         ? Colors.black
+                                                //         : Colors.white,
+                                                //     borderRadius:
+                                                //         BorderRadius.circular(20)),
+                                                child: const Text(
+                                                  'Widgets',
+                                                  style: TextStyle(fontSize: 20),
+                                                ),
+                                              ),
+                                              SwitchListTile(
+                                                title: const Text(clockHomeWidget),
+                                                value: showClock,
+                                                // inactiveTrackColor: Colors.grey,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    showClock = value;
+                                                  });
+                                                  widget.onShowClockChanged(value);
+                                                  saveSetting('showClock', value);
+                                                },
+                                              ),
+                                              SwitchListTile(
+                                                title: const Text(dateHomeWidget),
+                                                value: showDate,
+                                                // inactiveTrackColor: Colors.grey,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    showDate = value;
+                                                  });
+                                                  widget.onShowDateChanged(value);
+                                                  saveSetting('showDate', value);
+                                                },
+                                              ),
+                                              SwitchListTile(
+                                                title: const Text(dayprogressHomeWidget),
+                                                value: showDayProgress,
+                                                // inactiveTrackColor: Colors.grey,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    showDayProgress = value;
+                                                  });
+                                                  widget.onShowDayProgressChanged(value);
+                                                  saveSetting('showDayProgress', value);
+                                                },
+                                              ),
+                                              SwitchListTile(
+                                                title: const Text(tasksHomeWidget),
+                                                value: showTodo,
+                                                // inactiveTrackColor: Colors.grey,
+                                                onChanged: (bool value) {
+                                                  setState(() {
+                                                    showTodo = value;
+                                                  });
+                                                  widget.onShowTodoChanged(value);
+                                                  saveSetting('showTodo', value);
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  ])),
+                            );
                           });
-                    }),
-                ListTile(
-                    leading: const Icon(Icons.info_outline),
-                    title: const Text(aboutTitle),
-                    onTap: () {
-                      showModalBottomSheet(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return const AboutSetting();
-                          });
-                    }),
-              ],
-            ),
-          )
-        ],
+                    },
+                  ),
+                  ListTile(
+                      leading: const Icon(Icons.miscellaneous_services_outlined),
+                      title: const Text(miscTitle),
+                      onTap: () {
+                        showModalBottomSheet(
+                            // backgroundColor: Colors.transparent,
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                  margin: EdgeInsets.only(
+                                    bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
+                                  ),
+                                  child: MiscSetting(openDefaultLauncher));
+                            });
+                      }),
+                  ListTile(
+                      leading: const Icon(Icons.info_outline),
+                      title: const Text(aboutTitle),
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return Container(
+                                  margin: EdgeInsets.only(
+                                    bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
+                                  ),
+                                  child: const AboutSetting());
+                            });
+                      }),
+                ],
+              ),
+            )
+          ],
+        ),
       ),
     );
   }

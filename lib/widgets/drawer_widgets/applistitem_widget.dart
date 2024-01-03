@@ -200,8 +200,8 @@ class AppListItem extends StatelessWidget {
                 //       0,
                 //     ]),
                 //     child: Image.memory(
-                Image.memory(
-              (appls as ApplicationWithIcon).icon,
+                Image(
+              image: MemoryImage((appls as ApplicationWithIcon).icon),
               width: 48,
               // color:
               //     systemAccentColor,
