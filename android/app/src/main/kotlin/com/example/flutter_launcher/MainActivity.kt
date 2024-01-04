@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.Window
+import android.view.WindowInsets
 import androidx.annotation.RequiresApi
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode.transparent
@@ -45,6 +46,14 @@ class MainActivity : FlutterActivity() {
                         "getStatusBarHeight" -> {
                             val height = getStatusBarHeight()
                             result.success(height)
+                        }
+                        "getNavigationBarHeight" -> {
+                            val height = getNavigationBarHeight()
+                            result.success(height)
+                        }
+                        "getScreenWidth" -> {
+                            val width = getScreenWidth()
+                            result.success(width)
                         }
                         else -> {
                             result.notImplemented()
@@ -125,6 +134,36 @@ class MainActivity : FlutterActivity() {
         val dp = px / (metrics.densityDpi.toDouble() / DisplayMetrics.DENSITY_DEFAULT)
         return dp
     }
+    private fun getNavigationBarHeight(): Double {
+        val rectangle = Rect()
+        // This line do not work since AndroidUtils do not inherit from Activity
+        // This line do not work since AndroidUtils do not inherit from Activity
+        val window = window
+        window.decorView.getWindowVisibleDisplayFrame(rectangle)
+        val navBarHeight = rectangle.bottom
+        val contentViewTop = window.findViewById<View>(Window.ID_ANDROID_CONTENT).bottom
+        val px = contentViewTop - navBarHeight
+        val metrics = context.resources.displayMetrics
+        val dp = px / (metrics.densityDpi.toDouble() / DisplayMetrics.DENSITY_DEFAULT)
+        return dp
+    }
+
+    private fun getScreenWidth(): Double {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            val windowMetrics = windowManager.currentWindowMetrics
+            val insets = windowMetrics.windowInsets.getInsetsIgnoringVisibility(WindowInsets.Type.systemBars())
+            val widthPx = windowMetrics.bounds.width().toDouble() - insets.left.toDouble() - insets.right.toDouble()
+            val metrics = context.resources.displayMetrics
+            val widthDp = widthPx / (metrics.densityDpi.toDouble() / DisplayMetrics.DENSITY_DEFAULT)
+            widthDp
+        } else {
+            val displayMetrics = DisplayMetrics()
+            windowManager.defaultDisplay.getMetrics(displayMetrics)
+            val widthPx = displayMetrics.widthPixels
+            (widthPx / displayMetrics.density).toDouble()
+        }
+    }
+
 }
 
 // package com.example.flutter_launcher

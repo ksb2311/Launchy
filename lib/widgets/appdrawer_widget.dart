@@ -38,6 +38,8 @@ class _AppDrawerState extends State<AppDrawer> {
   // late bool shouldShowIcons = widget.setIcon;
   // final MethodChannel _channel = const MethodChannel('settings_channel');
   // double statusBarHeight = 0;
+  // double navigationBarHeight = 0;
+  // double screenWidth = 0;
 
   // @override
   // void initState() {
@@ -46,145 +48,93 @@ class _AppDrawerState extends State<AppDrawer> {
   // }
 
   // void getStatusBArHeight() async {
-  //   var statusBarHeighttemp = await _channel.invokeMethod('getStatusBarHeight');
-  //   print('statusBarHeighttemp ${statusBarHeighttemp.abs()}');
+  //   var statusBarHeightTemp = await _channel.invokeMethod('getStatusBarHeight');
+  //   var navigationBarHeighttTemp = await _channel.invokeMethod('getNavigationBarHeight');
+  //   var screenWidthTemp = await _channel.invokeMethod('getScreenWidth');
+
   //   setState(() {
-  //     statusBarHeight = statusBarHeighttemp.abs();
+  //     statusBarHeight = statusBarHeightTemp.abs();
+  //     navigationBarHeight = navigationBarHeighttTemp.abs();
+  //     screenWidth = screenWidthTemp - 20;
   //   });
+  //   // print(MediaQuery.sizeOf(context).width - 20);
+  //   // print(screenWidth - 20);
   // }
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(builder: (BuildContext context, BoxConstraints constraints) {
-      return Padding(
-        padding: EdgeInsets.only(
-          top: MediaQueryData.fromView(View.of(context)).padding.top,
-          // top: statusBarHeight,
-          left: 10,
-          right: 10,
-        ),
-        child: DraggableScrollableSheet(
-          initialChildSize: 1.0,
-          minChildSize: 0.99,
-          maxChildSize: 1.0,
-          expand: true,
-          snap: true,
-          builder: (context, scrollController) {
-            return Column(
-              // ignore: prefer_const_literals_to_create_immutables
-              children: [
-                // Serarch Bar in Drawer
-                Padding(
-                  padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
-                  child: TextField(
-                    controller: widget._textEditingController,
-                    onSubmitted: (value) {
-                      widget.appops.openApps(widget.appops.searchAppList[0]);
-                      // clearText();
-                      // setState(() {
-                      //   appops.searchApp('');
-                      // });
-                    },
-                    onChanged: (String value) {
-                      setState(() {
-                        widget.appops.searchApp(context, value);
-                      });
-                    },
-                    style: TextStyle(color: widget.themeTextColor),
-                    decoration: InputDecoration(
-                      contentPadding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
-                      focusColor: widget.themeTextColor,
-                      hintText: "Search",
-                      hintStyle: TextStyle(color: widget.themeTextColor),
-                      filled: true,
-                      // fillColor: sysBrightness ? Colors.grey[900] : Colors.grey[200],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
-                        borderSide: BorderSide.none,
-                      ),
-                      suffixIcon: widget._textEditingController.text != ''
-                          ? IconButton(
-                              icon: const Icon(Icons.clear),
-                              onPressed: () {
-                                widget.clearText();
-                                setState(() {
-                                  widget.appops.searchApp(context, '');
-                                });
-                              },
-                            )
-                          : const Text(''),
-                      prefixIcon: const Icon(Icons.search),
+    return Padding(
+      padding: EdgeInsets.only(
+        top: MediaQueryData.fromView(View.of(context)).padding.top,
+        // top: statusBarHeight,
+        left: 10,
+        right: 10,
+      ),
+      child: DraggableScrollableSheet(
+        initialChildSize: 1.0,
+        minChildSize: 0.99,
+        maxChildSize: 1.0,
+        expand: true,
+        // snap: true,
+        // snapAnimationDuration: const Duration(milliseconds: 500),
+        builder: (context, scrollController) {
+          return Column(
+            // ignore: prefer_const_literals_to_create_immutables
+            children: [
+              // Serarch Bar in Drawer
+              Padding(
+                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+                child: TextField(
+                  controller: widget._textEditingController,
+                  onSubmitted: (value) {
+                    widget.appops.openApps(widget.appops.searchAppList[0]);
+                    // clearText();
+                    // setState(() {
+                    //   appops.searchApp('');
+                    // });
+                  },
+                  onChanged: (String value) {
+                    setState(() {
+                      widget.appops.searchApp(context, value);
+                    });
+                  },
+                  style: TextStyle(color: widget.themeTextColor),
+                  decoration: InputDecoration(
+                    contentPadding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+                    focusColor: widget.themeTextColor,
+                    hintText: "Search",
+                    hintStyle: TextStyle(color: widget.themeTextColor),
+                    filled: true,
+                    // fillColor: sysBrightness ? Colors.grey[900] : Colors.grey[200],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30.0),
+                      borderSide: BorderSide.none,
                     ),
+                    suffixIcon: widget._textEditingController.text != ''
+                        ? IconButton(
+                            icon: const Icon(Icons.clear),
+                            onPressed: () {
+                              widget.clearText();
+                              setState(() {
+                                widget.appops.searchApp(context, '');
+                              });
+                            },
+                          )
+                        : const Text(''),
+                    prefixIcon: const Icon(Icons.search),
                   ),
                 ),
-                widget.setIcon
-                    ? Flexible(
-                        fit: FlexFit.tight,
-                        child: Row(
-                          children: [
-                            SizedBox(
-                                // width: MediaQuery.sizeOf(context).width - 60,
-                                width: MediaQuery.sizeOf(context).width - 20,
-                                // width: constraints.maxWidth - 20,
-                                // child: Scrollbar(
-                                child: Scrollbar(
-                                  controller: scrollController,
-                                  interactive: true,
-                                  // thumbVisibility: true,
-                                  radius: const Radius.circular(10),
-                                  // trackVisibility: true,
-                                  thickness: 10,
-
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(10.0),
-                                    child: GridView.builder(
-                                        cacheExtent: 9999,
-                                        controller: scrollController,
-                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 4,
-                                          childAspectRatio: 0.9,
-                                          mainAxisSpacing: 30,
-                                          crossAxisSpacing: 10,
-                                          // mainAxisExtent: 110,
-                                        ),
-                                        itemCount: widget.appops.searchAppList.length,
-                                        itemBuilder: (BuildContext context, int index) {
-                                          final appsls = widget.appops.searchAppList[index];
-
-                                          // String currentLetter = getFirstLetter(appls.appName);
-
-                                          // bool shouldDisplaySeparator =
-                                          //     index == 0 || currentLetter != getFirstLetter(appops.searchAppList[index - 1].appName);
-
-                                          if (widget.appops.searchAppList.isNotEmpty) {
-                                            return AppGridItem(
-                                              appls: appsls,
-                                              themeTextColor: widget.themeTextColor,
-                                              addToDock: widget.addToDock,
-                                              loadApps: widget.loadApps,
-                                              appops: widget.appops,
-                                              sysBrightness: widget.sysBrightness,
-                                              dockIconList: widget.dockIconList,
-                                            );
-                                          } else {
-                                            return const Expanded(
-                                              child: Center(
-                                                child: Text('Loading...'),
-                                              ),
-                                            );
-                                          }
-                                        }),
-                                  ),
-                                )),
-                          ],
-                        ),
-                      )
-                    : Flexible(
-                        child: Row(
+              ),
+              widget.setIcon
+                  ? Flexible(
+                      fit: FlexFit.tight,
+                      child: Row(
                         children: [
                           SizedBox(
                               // width: MediaQuery.sizeOf(context).width - 60,
                               width: MediaQuery.sizeOf(context).width - 20,
+                              // width: screenWidth,
+                              // child: Scrollbar(
                               child: Scrollbar(
                                 controller: scrollController,
                                 interactive: true,
@@ -192,678 +142,103 @@ class _AppDrawerState extends State<AppDrawer> {
                                 radius: const Radius.circular(10),
                                 // trackVisibility: true,
                                 thickness: 10,
-                                child: ListView.separated(
-                                  cacheExtent: 9999,
-                                  controller: scrollController,
-                                  itemCount: widget.appops.searchAppList.length,
-                                  itemBuilder: (BuildContext context, int index) {
-                                    final appls = widget.appops.searchAppList[index];
-                                    String currentLetter = widget.getFirstLetter(appls.appName);
 
-                                    // Check if the separator should be displayed
-                                    bool shouldDisplaySeparator =
-                                        index == 0 || currentLetter != widget.getFirstLetter(widget.appops.searchAppList[index - 1].appName);
-                                    return widget.appops.searchAppList.isNotEmpty
-                                        ? AppListItem(
-                                            appls: appls,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(10.0),
+                                  child: GridView.builder(
+                                      cacheExtent: 9999,
+                                      controller: scrollController,
+                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                        crossAxisCount: 4,
+                                        childAspectRatio: 0.9,
+                                        mainAxisSpacing: 30,
+                                        crossAxisSpacing: 10,
+                                        // mainAxisExtent: 110,
+                                      ),
+                                      itemCount: widget.appops.searchAppList.length,
+                                      itemBuilder: (BuildContext context, int index) {
+                                        final appsls = widget.appops.searchAppList[index];
+
+                                        // String currentLetter = getFirstLetter(appls.appName);
+
+                                        // bool shouldDisplaySeparator =
+                                        //     index == 0 || currentLetter != getFirstLetter(appops.searchAppList[index - 1].appName);
+
+                                        if (widget.appops.searchAppList.isNotEmpty) {
+                                          return AppGridItem(
+                                            appls: appsls,
                                             themeTextColor: widget.themeTextColor,
                                             addToDock: widget.addToDock,
                                             loadApps: widget.loadApps,
                                             appops: widget.appops,
                                             sysBrightness: widget.sysBrightness,
                                             dockIconList: widget.dockIconList,
-                                            shouldDisplaySeparator: shouldDisplaySeparator,
-                                            currentLetter: currentLetter)
-                                        : const Center(
-                                            child: Text('Loading...'),
                                           );
-                                  },
-                                  separatorBuilder: (BuildContext context, int index) {
-                                    return const SizedBox.shrink(); // Return an empty separator when the letter doesn't change
-                                    // }
-                                    // }
-                                  },
+                                        } else {
+                                          return const Expanded(
+                                            child: Center(
+                                              child: Text('Loading...'),
+                                            ),
+                                          );
+                                        }
+                                      }),
                                 ),
                               )),
                         ],
-                      )),
-              ],
-            );
-          },
-        ),
-      );
-    });
+                      ),
+                    )
+                  : Flexible(
+                      child: Row(
+                      children: [
+                        SizedBox(
+                            // width: MediaQuery.sizeOf(context).width - 60,
+                            width: MediaQuery.sizeOf(context).width - 20,
+                            child: Scrollbar(
+                              controller: scrollController,
+                              interactive: true,
+                              // thumbVisibility: true,
+                              radius: const Radius.circular(10),
+                              // trackVisibility: true,
+                              thickness: 10,
+                              child: ListView.separated(
+                                cacheExtent: 9999,
+                                controller: scrollController,
+                                itemCount: widget.appops.searchAppList.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final appls = widget.appops.searchAppList[index];
+                                  String currentLetter = widget.getFirstLetter(appls.appName);
 
-    // : Padding(
-    //     padding: EdgeInsets.only(
-    //       top: MediaQueryData.fromView(View.of(context)).padding.top,
-    //       left: 10,
-    //       right: 10,
-    //     ),
-    //     child: StatefulBuilder(builder: (BuildContext context, setState) {
-    //       return DraggableScrollableSheet(
-    //           initialChildSize: 1.0,
-    //           minChildSize: 0.99,
-    //           maxChildSize: 1.0,
-    //           expand: true,
-    //           snap: true,
-    //           builder: (context, scrollController) {
-    //             return Column(
-    //               // ignore: prefer_const_literals_to_create_immutables
-    //               children: [
-    //                 // Serarch Bar in Drawer
-    //                 Padding(
-    //                   padding: const EdgeInsets.only(top: 10, bottom: 10),
-    //                   child: TextField(
-    //                     controller: _textEditingController,
-    //                     onSubmitted: (value) {
-    //                       appops.openApps(appops.searchAppList[0]);
-    //                       clearText();
-    //                       setState(() {
-    //                         appops.searchApp('');
-    //                       });
-    //                     },
-    //                     style: TextStyle(color: themeTextColor),
-    //                     decoration: InputDecoration(
-    //                       contentPadding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
-    //                       focusColor: themeTextColor,
-    //                       hintText: "Search",
-    //                       hintStyle: TextStyle(color: themeTextColor),
-    //                       filled: true,
-    //                       fillColor: sysBrightness ? Colors.grey[900] : Colors.grey[200],
-    //                       border: OutlineInputBorder(
-    //                         borderRadius: BorderRadius.circular(30.0),
-    //                         borderSide: BorderSide.none,
-    //                       ),
-    //                       suffixIcon: _textEditingController.text != ''
-    //                           ? IconButton(
-    //                               icon: const Icon(Icons.clear),
-    //                               onPressed: () {
-    //                                 clearText();
-    //                                 setState(() {
-    //                                   appops.searchApp('');
-    //                                 });
-    //                               },
-    //                             )
-    //                           : const Text(''),
-    //                       prefixIcon: const Icon(Icons.search),
-    //                     ),
-    //                     onChanged: (String value) {
-    //                       setState(() {
-    //                         appops.searchApp(value);
-    //                       });
-    //                     },
-    //                   ),
-    //                 ),
-    //                 Flexible(
-    //                     child: Row(
-    //                   children: [
-    //                     SizedBox(
-    //                         // width: MediaQuery.sizeOf(context).width - 60,
-    //                         width: MediaQuery.sizeOf(context).width - 20,
-    //                         child: Scrollbar(
-    //                           controller: scrollController,
-    //                           interactive: true,
-    //                           // thumbVisibility: true,
-    //                           radius: const Radius.circular(10),
-    //                           // trackVisibility: true,
-    //                           thickness: 10,
-    //                           child: ListView.separated(
-    //                             cacheExtent: 1000,
-    //                             controller: scrollController,
-    //                             itemCount: appops.searchAppList.length,
-    //                             itemBuilder: (BuildContext context, int index) {
-    //                               final appls = appops.searchAppList[index];
-    //                               String currentLetter = getFirstLetter(appls.appName);
-
-    //                               // Check if the separator should be displayed
-    //                               bool shouldDisplaySeparator =
-    //                                   index == 0 || currentLetter != getFirstLetter(appops.searchAppList[index - 1].appName);
-    //                               return appops.searchAppList.isNotEmpty
-    //                                   ? AppListItem(
-    //                                       appls: appls,
-    //                                       themeTextColor: themeTextColor,
-    //                                       addToDock: addToDock,
-    //                                       loadApps: loadApps,
-    //                                       appops: appops,
-    //                                       sysBrightness: sysBrightness,
-    //                                       dockIconList: dockIconList,
-    //                                       shouldDisplaySeparator: shouldDisplaySeparator,
-    //                                       currentLetter: currentLetter)
-    //                                   : const Center(
-    //                                       child: Text('Loading...'),
-    //                                     );
-    //                             },
-    //                             separatorBuilder: (BuildContext context, int index) {
-    //                               return const SizedBox.shrink(); // Return an empty separator when the letter doesn't change
-    //                               // }
-    //                               // }
-    //                             },
-    //                           ),
-    //                         )),
-    //                   ],
-    //                 )),
-    //               ],
-    //             );
-    //           });
-    //     }));
+                                  // Check if the separator should be displayed
+                                  bool shouldDisplaySeparator =
+                                      index == 0 || currentLetter != widget.getFirstLetter(widget.appops.searchAppList[index - 1].appName);
+                                  return widget.appops.searchAppList.isNotEmpty
+                                      ? AppListItem(
+                                          appls: appls,
+                                          themeTextColor: widget.themeTextColor,
+                                          addToDock: widget.addToDock,
+                                          loadApps: widget.loadApps,
+                                          appops: widget.appops,
+                                          sysBrightness: widget.sysBrightness,
+                                          dockIconList: widget.dockIconList,
+                                          shouldDisplaySeparator: shouldDisplaySeparator,
+                                          currentLetter: currentLetter)
+                                      : const Center(
+                                          child: Text('Loading...'),
+                                        );
+                                },
+                                separatorBuilder: (BuildContext context, int index) {
+                                  return const SizedBox.shrink(); // Return an empty separator when the letter doesn't change
+                                  // }
+                                  // }
+                                },
+                              ),
+                            )),
+                      ],
+                    )),
+            ],
+          );
+        },
+      ),
+    );
   }
 }
-
-
-// Display Drawer
-                // showModalBottomSheet(
-                //     context: context,
-                //     isScrollControlled: true,
-                //     shape: const ContinuousRectangleBorder(),
-                //     // backgroundColor: Colors.transparent,
-                //     builder: (context) {
-                //       return GestureDetector(
-                //         onTap: (() => FocusScope.of(context).unfocus()),
-                //         child: Padding(
-                //           padding: EdgeInsets.only(
-                //             top: MediaQueryData.fromView(View.of(context)).padding.top,
-                //             left: 10,
-                //             right: 10,
-                //           ),
-                //           child: StatefulBuilder(
-                //             builder: (BuildContext context, setState) {
-                //               return DraggableScrollableSheet(
-                //                   initialChildSize: 1.0,
-                //                   minChildSize: 0.99,
-                //                   maxChildSize: 1.0,
-                //                   expand: true,
-                //                   snap: true,
-                //                   builder: (context, scrollController) {
-                //                     return Column(
-                //                       // ignore: prefer_const_literals_to_create_immutables
-                //                       children: [
-                //                         // Serarch Bar in Drawer
-                //                         Padding(
-                //                           padding: const EdgeInsets.only(top: 5, bottom: 2),
-                //                           child: TextField(
-                //                             controller: _textEditingController,
-                //                             onSubmitted: (value) {
-                //                               appops.openApps(appops.searchAppList[0]);
-                //                               _clearText();
-                //                               setState(() {
-                //                                 appops.searchApp('');
-                //                               });
-                //                             },
-                //                             style: TextStyle(color: themeTextColor),
-                //                             decoration: InputDecoration(
-                //                               contentPadding: const EdgeInsets.only(top: 15, bottom: 15, left: 20, right: 20),
-                //                               focusColor: themeTextColor,
-                //                               hintText: "Search",
-                //                               hintStyle: TextStyle(color: themeTextColor),
-                //                               filled: true,
-                //                               fillColor: sysBrightness ? Colors.grey[900] : Colors.grey[200],
-                //                               border: OutlineInputBorder(
-                //                                 borderRadius: BorderRadius.circular(30.0),
-                //                                 borderSide: BorderSide.none,
-                //                               ),
-                //                               suffixIcon: _textEditingController.text != ''
-                //                                   ? IconButton(
-                //                                       icon: const Icon(Icons.clear),
-                //                                       onPressed: () {
-                //                                         _clearText();
-                //                                         setState(() {
-                //                                           appops.searchApp('');
-                //                                         });
-                //                                       },
-                //                                     )
-                //                                   : const Text(''),
-                //                               prefixIcon: const Icon(Icons.search),
-                //                             ),
-                //                             onChanged: (String value) {
-                //                               setState(() {
-                //                                 appops.searchApp(value);
-                //                               });
-                //                             },
-                //                           ),
-                //                         ),
-                //                         Flexible(
-                //                             child: Row(
-                //                           children: [
-                //                             SizedBox(
-                //                                 // width: MediaQuery.sizeOf(context).width - 60,
-                //                                 width: MediaQuery.sizeOf(context).width - 20,
-                //                                 child: Scrollbar(
-                //                                   controller: scrollController,
-                //                                   interactive: true,
-                //                                   // thumbVisibility: true,
-                //                                   radius: const Radius.circular(10),
-                //                                   // trackVisibility: true,
-                //                                   thickness: 10,
-                //                                   // child: ListView.separated(
-                //                                   //   cacheExtent: 9999,
-                //                                   //   controller: scrollController,
-                //                                   //   itemCount: appops.searchAppList.length,
-                //                                   //   itemBuilder: (BuildContext context, int index) {
-                //                                   //     final appls = appops.searchAppList[index];
-                //                                   //     String currentLetter = getFirstLetter(appls.appName);
-
-                //                                   //     // Check if the separator should be displayed
-                //                                   //     bool shouldDisplaySeparator =
-                //                                   //         index == 0 || currentLetter != getFirstLetter(appops.searchAppList[index - 1].appName);
-                //                                   //     return appops.searchAppList.isNotEmpty
-                //                                   //         ? Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                //                                   //             if (shouldDisplaySeparator)
-                //                                   //               Padding(
-                //                                   //                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                //                                   //                 child: Row(
-                //                                   //                   // mainAxisAlignment:
-                //                                   //                   //     MainAxisAlignment
-                //                                   //                   //         .spaceEvenly,
-                //                                   //                   children: [
-                //                                   //                     Padding(
-                //                                   //                       padding: const EdgeInsets.only(left: 15),
-                //                                   //                       child: Text(
-                //                                   //                         currentLetter,
-                //                                   //                         style: TextStyle(
-                //                                   //                             color: themeTextColor, fontSize: 20, fontWeight: FontWeight.bold),
-                //                                   //                       ),
-                //                                   //                     ),
-                //                                   //                     // Container(
-                //                                   //                     //   height:
-                //                                   //                     //       2,
-                //                                   //                     //   width:
-                //                                   //                     //       MediaQuery.sizeOf(context).width - 80,
-                //                                   //                     //   color:
-                //                                   //                     //       Colors.grey,
-                //                                   //                     // ),
-                //                                   //                   ],
-                //                                   //                 ),
-                //                                   //               ),
-                //                                   //             GestureDetector(
-                //                                   //               onTap: () {
-                //                                   //                 Navigator.pop(context);
-                //                                   //                 appops.openApps(appls);
-                //                                   //               },
-                //                                   //               onLongPress: () {
-                //                                   //                 showModalBottomSheet(
-                //                                   //                   context: context,
-                //                                   //                   backgroundColor: Colors.transparent,
-                //                                   //                   isScrollControlled: true,
-                //                                   //                   builder: (BuildContext context) {
-                //                                   //                     return Container(
-                //                                   //                       decoration: BoxDecoration(
-                //                                   //                         color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
-                //                                   //                         borderRadius: const BorderRadius.only(
-                //                                   //                           topLeft: Radius.circular(20),
-                //                                   //                           topRight: Radius.circular(20),
-                //                                   //                         ),
-                //                                   //                       ),
-                //                                   //                       child: Padding(
-                //                                   //                         padding: const EdgeInsets.all(16),
-                //                                   //                         child: Column(
-                //                                   //                           mainAxisSize: MainAxisSize.min,
-                //                                   //                           children: [
-                //                                   //                             Container(
-                //                                   //                               padding: const EdgeInsets.all(10),
-                //                                   //                               decoration: BoxDecoration(
-                //                                   //                                   color: sysBrightness ? Colors.grey[900] : Colors.grey[200],
-                //                                   //                                   borderRadius: BorderRadius.circular(30)),
-                //                                   //                               child: Row(
-                //                                   //                                 mainAxisAlignment: MainAxisAlignment.center,
-                //                                   //                                 children: [
-                //                                   //                                   Image.memory(
-                //                                   //                                     (appls as ApplicationWithIcon).icon,
-                //                                   //                                     width: 42,
-                //                                   //                                     height: 42,
-                //                                   //                                     // cacheHeight: 42,
-                //                                   //                                   ),
-                //                                   //                                   const SizedBox(
-                //                                   //                                     width: 10,
-                //                                   //                                   ),
-                //                                   //                                   Text(appls.appName),
-                //                                   //                                 ],
-                //                                   //                               ),
-                //                                   //                             ),
-                //                                   //                             const SizedBox(height: 16),
-                //                                   //                             GestureDetector(
-                //                                   //                               onTap: () {
-                //                                   //                                 addToDock(appls);
-                //                                   //                                 // debugPrint(dockIconList.toString());
-                //                                   //                                 Navigator.of(context).pop();
-                //                                   //                               },
-                //                                   //                               child: ListTile(
-                //                                   //                                 leading: const Icon(Icons.add_circle_outline),
-                //                                   //                                 title: Text(
-                //                                   //                                   dockIconList.length != 4 ? "Add to Dock" : "Dock is Full",
-                //                                   //                                   style: TextStyle(color: themeTextColor),
-                //                                   //                                 ),
-                //                                   //                               ),
-                //                                   //                             ),
-                //                                   //                             GestureDetector(
-                //                                   //                               onTap: () async {
-                //                                   //                                 Navigator.of(context).pop();
-                //                                   //                                 final AndroidIntent intent = AndroidIntent(
-                //                                   //                                   action: 'action_application_details_settings',
-                //                                   //                                   data: 'package:${appls.packageName}',
-                //                                   //                                 );
-
-                //                                   //                                 await intent.launch();
-                //                                   //                               },
-                //                                   //                               child: ListTile(
-                //                                   //                                 leading: const Icon(Icons.info_outline),
-                //                                   //                                 title: Text(
-                //                                   //                                   "App Info",
-                //                                   //                                   style: TextStyle(color: themeTextColor),
-                //                                   //                                 ),
-                //                                   //                               ),
-                //                                   //                             ),
-                //                                   //                             GestureDetector(
-                //                                   //                               onTap: () async {
-                //                                   //                                 Navigator.of(context).pop();
-                //                                   //                                 bool isUninstalled = await DeviceApps.uninstallApp(appls.packageName);
-                //                                   //                                 await Future.delayed(const Duration(seconds: 30));
-                //                                   //                                 if (isUninstalled) {
-                //                                   //                                   bool isAppInstalled =
-                //                                   //                                       await DeviceApps.isAppInstalled(appls.packageName);
-                //                                   //                                   if (!isAppInstalled) {
-                //                                   //                                     // App is uninstalled
-                //                                   //                                     loadApps();
-                //                                   //                                     debugPrint('App uninstalled successfully');
-                //                                   //                                   } else {
-                //                                   //                                     // App is still installed
-                //                                   //                                     debugPrint('App uninstallation failed App is still installed');
-                //                                   //                                   }
-                //                                   //                                 } else {
-                //                                   //                                   // Uninstallation failed
-                //                                   //                                   debugPrint('App uninstallation failed');
-                //                                   //                                 }
-                //                                   //                               },
-                //                                   //                               child: ListTile(
-                //                                   //                                 leading: const Icon(Icons.remove_circle_outline),
-                //                                   //                                 title: Text(
-                //                                   //                                   "Uninstall",
-                //                                   //                                   style: TextStyle(color: themeTextColor),
-                //                                   //                                 ),
-                //                                   //                               ),
-                //                                   //                             ),
-                //                                   //                           ],
-                //                                   //                         ),
-                //                                   //                       ),
-                //                                   //                     );
-                //                                   //                   },
-                //                                   //                 );
-                //                                   //               },
-                //                                   //               child: shouldShowIcons
-                //                                   //                   ? ListTile(
-                //                                   //                       leading:
-                //                                   //                           //   ColorFiltered(
-                //                                   //                           // colorFilter:
-                //                                   //                           //     ColorFilter.mode(
-                //                                   //                           //   systemAccentColor,
-                //                                   //                           //   BlendMode.modulate,
-                //                                   //                           // ),
-                //                                   //                           // child: ColorFiltered(
-                //                                   //                           //     colorFilter: const ColorFilter.matrix(<double>[
-                //                                   //                           //       0.2126,
-                //                                   //                           //       0.7152,
-                //                                   //                           //       0.0722,
-                //                                   //                           //       0,
-                //                                   //                           //       0,
-                //                                   //                           //       0.2126,
-                //                                   //                           //       0.7152,
-                //                                   //                           //       0.0722,
-                //                                   //                           //       0,
-                //                                   //                           //       0,
-                //                                   //                           //       0.2126,
-                //                                   //                           //       0.7152,
-                //                                   //                           //       0.0722,
-                //                                   //                           //       0,
-                //                                   //                           //       0,
-                //                                   //                           //       0,
-                //                                   //                           //       0,
-                //                                   //                           //       0,
-                //                                   //                           //       1,
-                //                                   //                           //       0,
-                //                                   //                           //     ]),
-                //                                   //                           //     child: Image.memory(
-                //                                   //                           Image.memory(
-                //                                   //                         (appls as ApplicationWithIcon).icon,
-                //                                   //                         width: 48,
-                //                                   //                         // color:
-                //                                   //                         //     systemAccentColor,
-                //                                   //                         // colorBlendMode:
-                //                                   //                         //     BlendMode.modulate,
-                //                                   //                       ),
-                //                                   //                       title: Text(
-                //                                   //                         appls.appName,
-                //                                   //                         style: TextStyle(color: themeTextColor),
-                //                                   //                       ),
-                //                                   //                     )
-                //                                   //                   // tileColor:
-                //                                   //                   //     Colors.grey[300],
-
-                //                                   //                   : ListTile(
-                //                                   //                       title: Text(
-                //                                   //                         appls.appName,
-                //                                   //                         style: TextStyle(color: themeTextColor),
-                //                                   //                       ),
-                //                                   //                     ),
-                //                                   //             ),
-                //                                   //           ])
-                //                                   //         : const Center(
-                //                                   //             child: Text('Loading...'),
-                //                                   //           );
-                //                                   //   },
-                //                                   //   separatorBuilder: (BuildContext context, int index) {
-                //                                   //     return const SizedBox.shrink(); // Return an empty separator when the letter doesn't change
-                //                                   //     // }
-                //                                   //     // }
-                //                                   //   },
-                //                                   // ),
-                //                                   child: GridView.builder(
-                //                                       cacheExtent: 9999,
-                //                                       controller: scrollController,
-                //                                       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                //                                         crossAxisCount: 4,
-                //                                         childAspectRatio: 1.0,
-                //                                       ),
-                //                                       itemCount: appops.searchAppList.length,
-                //                                       itemBuilder: (BuildContext context, int index) {
-                //                                         final appls = appops.searchAppList[index];
-                //                                         String currentLetter = getFirstLetter(appls.appName);
-
-                //                                         bool shouldDisplaySeparator =
-                //                                             index == 0 || currentLetter != getFirstLetter(appops.searchAppList[index - 1].appName);
-
-                //                                         if (appops.searchAppList.isNotEmpty) {
-                //                                           return Column(
-                //                                             crossAxisAlignment: CrossAxisAlignment.center,
-                //                                             children: [
-                //                                               // if (shouldDisplaySeparator)
-                //                                               //   Padding(
-                //                                               //     padding: const EdgeInsets.only(top: 10, bottom: 10),
-                //                                               //     child: Row(
-                //                                               //       // mainAxisAlignment:
-                //                                               //       //     MainAxisAlignment
-                //                                               //       //         .spaceEvenly,
-                //                                               //       children: [
-                //                                               //         Padding(
-                //                                               //           padding: const EdgeInsets.only(left: 15),
-                //                                               //           child: Text(
-                //                                               //             currentLetter,
-                //                                               //             style: TextStyle(
-                //                                               //                 color: themeTextColor, fontSize: 20, fontWeight: FontWeight.bold),
-                //                                               //           ),
-                //                                               //         ),
-                //                                               //         // Container(
-                //                                               //         //   height:
-                //                                               //         //       2,
-                //                                               //         //   width:
-                //                                               //         //       MediaQuery.sizeOf(context).width - 80,
-                //                                               //         //   color:
-                //                                               //         //       Colors.grey,
-                //                                               //         // ),
-                //                                               //       ],
-                //                                               //     ),
-                //                                               //   ),
-
-                //                                               GestureDetector(
-                //                                                   onTap: () {
-                //                                                     Navigator.pop(context);
-                //                                                     appops.openApps(appls);
-                //                                                   },
-                //                                                   onLongPress: () {
-                //                                                     showModalBottomSheet(
-                //                                                       context: context,
-                //                                                       backgroundColor: Colors.transparent,
-                //                                                       isScrollControlled: true,
-                //                                                       builder: (BuildContext context) {
-                //                                                         return Container(
-                //                                                           decoration: BoxDecoration(
-                //                                                             color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
-                //                                                             borderRadius: const BorderRadius.only(
-                //                                                               topLeft: Radius.circular(20),
-                //                                                               topRight: Radius.circular(20),
-                //                                                             ),
-                //                                                           ),
-                //                                                           child: Padding(
-                //                                                             padding: const EdgeInsets.all(16),
-                //                                                             child: Column(
-                //                                                               mainAxisSize: MainAxisSize.min,
-                //                                                               children: [
-                //                                                                 Container(
-                //                                                                   padding: const EdgeInsets.all(10),
-                //                                                                   decoration: BoxDecoration(
-                //                                                                       color: sysBrightness ? Colors.grey[900] : Colors.grey[200],
-                //                                                                       borderRadius: BorderRadius.circular(30)),
-                //                                                                   child: Row(
-                //                                                                     mainAxisAlignment: MainAxisAlignment.center,
-                //                                                                     children: [
-                //                                                                       Image.memory(
-                //                                                                         (appls).icon,
-                //                                                                         width: 42,
-                //                                                                         height: 42,
-                //                                                                         // cacheHeight: 42,
-                //                                                                       ),
-                //                                                                       const SizedBox(
-                //                                                                         width: 10,
-                //                                                                       ),
-                //                                                                       Text(appls.appName),
-                //                                                                     ],
-                //                                                                   ),
-                //                                                                 ),
-                //                                                                 const SizedBox(height: 16),
-                //                                                                 GestureDetector(
-                //                                                                   onTap: () {
-                //                                                                     addToDock(appls);
-                //                                                                     // debugPrint(dockIconList.toString());
-                //                                                                     Navigator.of(context).pop();
-                //                                                                   },
-                //                                                                   child: ListTile(
-                //                                                                     leading: const Icon(Icons.add_circle_outline),
-                //                                                                     title: Text(
-                //                                                                       dockIconList.length != 4 ? "Add to Dock" : "Dock is Full",
-                //                                                                       style: TextStyle(color: themeTextColor),
-                //                                                                     ),
-                //                                                                   ),
-                //                                                                 ),
-                //                                                                 GestureDetector(
-                //                                                                   onTap: () async {
-                //                                                                     Navigator.of(context).pop();
-                //                                                                     final AndroidIntent intent = AndroidIntent(
-                //                                                                       action: 'action_application_details_settings',
-                //                                                                       data: 'package:${appls.packageName}',
-                //                                                                     );
-
-                //                                                                     await intent.launch();
-                //                                                                   },
-                //                                                                   child: ListTile(
-                //                                                                     leading: const Icon(Icons.info_outline),
-                //                                                                     title: Text(
-                //                                                                       "App Info",
-                //                                                                       style: TextStyle(color: themeTextColor),
-                //                                                                     ),
-                //                                                                   ),
-                //                                                                 ),
-                //                                                                 GestureDetector(
-                //                                                                   onTap: () async {
-                //                                                                     Navigator.of(context).pop();
-                //                                                                     bool isUninstalled =
-                //                                                                         await DeviceApps.uninstallApp(appls.packageName);
-                //                                                                     await Future.delayed(const Duration(seconds: 30));
-                //                                                                     if (isUninstalled) {
-                //                                                                       bool isAppInstalled =
-                //                                                                           await DeviceApps.isAppInstalled(appls.packageName);
-                //                                                                       if (!isAppInstalled) {
-                //                                                                         // App is uninstalled
-                //                                                                         loadApps();
-                //                                                                         debugPrint('App uninstalled successfully');
-                //                                                                       } else {
-                //                                                                         // App is still installed
-                //                                                                         debugPrint(
-                //                                                                             'App uninstallation failed App is still installed');
-                //                                                                       }
-                //                                                                     } else {
-                //                                                                       // Uninstallation failed
-                //                                                                       debugPrint('App uninstallation failed');
-                //                                                                     }
-                //                                                                   },
-                //                                                                   child: ListTile(
-                //                                                                     leading: const Icon(Icons.remove_circle_outline),
-                //                                                                     title: Text(
-                //                                                                       "Uninstall",
-                //                                                                       style: TextStyle(color: themeTextColor),
-                //                                                                     ),
-                //                                                                   ),
-                //                                                                 ),
-                //                                                               ],
-                //                                                             ),
-                //                                                           ),
-                //                                                         );
-                //                                                       },
-                //                                                     );
-                //                                                   },
-                //                                                   child: Column(
-                //                                                     children: [
-                //                                                       Container(
-                //                                                         padding: const EdgeInsets.all(8.0),
-                //                                                         child: Image.memory(
-                //                                                           (appls as ApplicationWithIcon).icon,
-                //                                                           fit: BoxFit.contain,
-                //                                                           width: 48,
-                //                                                         ),
-                //                                                       ),
-                //                                                       Text(
-                //                                                         appls.appName,
-                //                                                         style: TextStyle(color: themeTextColor),
-                //                                                         overflow: TextOverflow.ellipsis,
-                //                                                         maxLines: 1,
-                //                                                       ),
-                //                                                     ],
-                //                                                   )),
-                //                                               // Full-width separator
-                //                                               // shouldDisplaySeparator
-                //                                               //     ? SizedBox(
-                //                                               //         height: 10,
-                //                                               //         child: Text(
-                //                                               //           currentLetter,
-                //                                               //           style: TextStyle(
-                //                                               //               color: themeTextColor, fontSize: 20, fontWeight: FontWeight.bold),
-                //                                               //         ),
-                //                                               //       )
-                //                                               //     : Container(),
-                //                                             ],
-                //                                           );
-                //                                         } else {
-                //                                           return const Center(
-                //                                             child: Text('Loading...'),
-                //                                           );
-                //                                         }
-                //                                       }),
-                //                                 )),
-                //                           ],
-                //                         )),
-                //                       ],
-                //                     );
-                //                   });
-                //             },
-                //           ),
-                //         ),
-                //       );
-                //     });

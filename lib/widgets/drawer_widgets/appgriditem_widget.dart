@@ -36,16 +36,16 @@ class AppGridItem extends StatelessWidget {
           onLongPress: () {
             showModalBottomSheet(
               context: context,
-              backgroundColor: Colors.transparent,
+              // backgroundColor: Colors.transparent,
               isScrollControlled: true,
               builder: (BuildContext context) {
                 return Container(
-                  // margin: EdgeInsets.only(
-                  //   bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-                  // ),
-                  decoration: BoxDecoration(
-                    color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
-                    borderRadius: const BorderRadius.only(
+                  margin: EdgeInsets.only(
+                    bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
+                  ),
+                  decoration: const BoxDecoration(
+                    // color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
+                    borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
                     ),

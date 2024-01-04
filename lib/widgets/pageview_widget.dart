@@ -105,66 +105,30 @@ class _CustomPageViewState extends State<CustomPageView> {
                   Container(
                     alignment: Alignment.centerLeft,
                     margin: const EdgeInsetsDirectional.only(top: 80, start: 20, end: 20, bottom: 20),
-                    child: StreamBuilder(
-                        stream: Stream.periodic(const Duration(seconds: 1)).asBroadcastStream(),
-                        builder: (context, snapshot) {
-                          return Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              // Row(
-                              //   crossAxisAlignment: CrossAxisAlignment.end,
-                              //   children: [
-                              //     bLevel == 100
-                              //         ? const Icon(
-                              //             Icons.battery_std_rounded)
-                              //         : bLevel >= 90
-                              //             ? const Icon(
-                              //                 Icons.battery_6_bar_rounded)
-                              //             : bLevel >= 70
-                              //                 ? const Icon(Icons
-                              //                     .battery_5_bar_rounded)
-                              //                 : bLevel >= 50
-                              //                     ? const Icon(Icons
-                              //                         .battery_4_bar_rounded)
-                              //                     : bLevel >= 30
-                              //                         ? const Icon(Icons
-                              //                             .battery_3_bar_rounded)
-                              //                         : bLevel >= 20
-                              //                             ? const Icon(Icons
-                              //                                 .battery_2_bar_rounded)
-                              //                             : bLevel >= 10
-                              //                                 ? const Icon(Icons
-                              //                                     .battery_1_bar_rounded)
-                              //                                 : const Icon(Icons
-                              //                                     .battery_0_bar_rounded),
-                              //     Text(
-                              //       " $bLevel",
-                              //       style: TextStyle(color: themeTextColor),
-                              //     ),
-                              //   ],
-                              // ),
-                              // Digital clock widget
-                              widget.showClock ? const DigitalClockWidget() : const SizedBox(),
-                              widget.showDate ? const FullDateWidget() : const SizedBox(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              // Display date widget
-                              widget.showDayProgress ? const DayProgressWidget() : const SizedBox(),
-                              const SizedBox(
-                                height: 20,
-                              ),
-                              // Displays Todo widget
-                              widget.showTodo ? SizedBox(height: 300, key: containerKey, child: const TodoList()) : const SizedBox(),
-                              // const SizedBox(
-                              //   height: 100,
-                              //   width: 100,
-                              //   child: RiveAnimation.asset(
-                              //       'assets/notification.riv'),
-                              // )
-                            ],
-                          );
-                        }),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        // Digital clock widget
+                        widget.showClock ? const DigitalClockWidget() : const SizedBox(),
+                        widget.showDate ? const FullDateWidget() : const SizedBox(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        // Display date widget
+                        widget.showDayProgress ? const DayProgressWidget() : const SizedBox(),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        // Displays Todo widget
+                        widget.showTodo ? SizedBox(height: 300, key: containerKey, child: const TodoList()) : const SizedBox(),
+                        // const SizedBox(
+                        //   height: 100,
+                        //   width: 100,
+                        //   child: RiveAnimation.asset(
+                        //       'assets/notification.riv'),
+                        // )
+                      ],
+                    ),
                   ),
                   // dock home page
                   Provider.of<AppOps>(context).dockListItems.isNotEmpty && Provider.of<AppOps>(context).dockListItems.length <= 4
@@ -323,32 +287,6 @@ class _CustomPageViewState extends State<CustomPageView> {
                             ),
                           ))
                       : const SizedBox(),
-                  // Container(
-                  //   color: Colors.amber,
-                  //   height: 80,
-                  //   width: double.infinity,
-                  //   alignment: Alignment.center,
-                  //   child: ListView.builder(
-                  //     itemCount: dockIconList.length,
-                  //     shrinkWrap: true,
-                  //     scrollDirection: Axis.horizontal,
-                  //     itemBuilder: (BuildContext context, int index) {
-                  //       return dockIconList.isNotEmpty
-                  //           ? GestureDetector(
-                  //               onTap: () {
-                  //                 appops
-                  //                     .openApps(dockIconList[index]);
-                  //               },
-                  //               child: Image.memory(
-                  //                 (dockIconList[index]
-                  //                         as ApplicationWithIcon)
-                  //                     .icon,
-                  //                 width: dIconSize.toDouble(),
-                  //               ))
-                  //           : const SizedBox();
-                  //     },
-                  //   ),
-                  // )
                 ],
               )),
         ]);

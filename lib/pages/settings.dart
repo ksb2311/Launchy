@@ -114,19 +114,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-    // ThemeData getThemeData(String theme) {
-    //   switch (theme) {
-    //     case 'Light':
-    //       return ThemeData.light();
-    //     case 'Dark':
-    //       return ThemeData.dark();
-    //     default:
-    //       return ThemeData.from(colorScheme: ColorScheme.light());
-    //   }
-    // }
-
-    // Color? lightGrey = Theme.of(context).brightness == Brightness.dark ? Colors.white : Colors.white;
-
+   
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
       appBar: AppBar(

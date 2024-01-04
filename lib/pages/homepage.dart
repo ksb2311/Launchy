@@ -90,6 +90,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   void dispose() {
     WidgetsBinding.instance.removeObserver(appFocusObserver);
     _textEditingController.clear();
+    anicontroller.dispose();
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
