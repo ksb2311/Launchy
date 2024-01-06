@@ -1,8 +1,10 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_launcher/constants/settings/settings_const.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/widgets/drawer_widgets/appgriditem_widget.dart';
 import 'package:flutter_launcher/widgets/drawer_widgets/applistitem_widget.dart';
+import 'package:provider/provider.dart';
 
 class AppDrawer extends StatefulWidget {
   final TextEditingController _textEditingController;
@@ -13,7 +15,6 @@ class AppDrawer extends StatefulWidget {
   final Function clearText;
   final Function getFirstLetter;
   final Function loadApps;
-  final bool setIcon;
   final List<Application> dockIconList;
 
   const AppDrawer({
@@ -27,7 +28,6 @@ class AppDrawer extends StatefulWidget {
     required this.getFirstLetter,
     required this.loadApps,
     required this.dockIconList,
-    required this.setIcon,
   }) : _textEditingController = textEditingController;
 
   @override
@@ -63,6 +63,7 @@ class _AppDrawerState extends State<AppDrawer> {
 
   @override
   Widget build(BuildContext context) {
+    final settingsConst = Provider.of<SettingsConst>(context);
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQueryData.fromView(View.of(context)).padding.top,
@@ -125,7 +126,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   ),
                 ),
               ),
-              widget.setIcon
+              settingsConst.showIcons
                   ? Flexible(
                       fit: FlexFit.tight,
                       child: Row(

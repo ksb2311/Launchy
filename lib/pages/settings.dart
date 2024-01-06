@@ -2,40 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_launcher/constants/settings/settings_const.dart';
 import 'package:flutter_launcher/widgets/settings_widgets.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends StatefulWidget {
-  final Function(String) onThemeChanged;
-  final ValueChanged<bool> onShowIconsChanged;
-  final ValueChanged<bool> onShowClockChanged;
-  final ValueChanged<bool> onShowDateChanged;
-  final ValueChanged<bool> onShowDayProgressChanged;
-  final ValueChanged<bool> onShowTodoChanged;
-  final ValueChanged<int> onDIconSizeChanged;
-  final bool showIcons;
-  final bool showClock;
-  final bool showDate;
-  final bool showDayProgress;
-  final bool showTodo;
-  final String setTheme;
-  final int dIconSize;
-  const SettingsPage(
-      {Key? key,
-      required this.onThemeChanged,
-      required this.onShowIconsChanged,
-      required this.showIcons,
-      required this.setTheme,
-      required this.dIconSize,
-      required this.onDIconSizeChanged,
-      required this.showClock,
-      required this.showDate,
-      required this.showDayProgress,
-      required this.onShowClockChanged,
-      required this.onShowDateChanged,
-      required this.onShowDayProgressChanged,
-      required this.onShowTodoChanged,
-      required this.showTodo})
-      : super(key: key);
+  const SettingsPage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -44,18 +17,18 @@ class SettingsPage extends StatefulWidget {
 class _SettingsPageState extends State<SettingsPage> {
   final MethodChannel _channel = const MethodChannel('settings_channel');
 
-  late String _selectedTheme;
+  // late String _selectedTheme;
 
   late SharedPreferences prefs;
 
   // double _iconSize = 24;
-  late bool showIcons;
-  late bool showClock;
-  late bool showDate;
-  late bool showDayProgress;
-  late bool showTodo;
-  late String setTheme;
-  late int dIconSize;
+  // late bool showIcons;
+  // late bool showClock;
+  // late bool showDate;
+  // late bool showDayProgress;
+  // late bool showTodo;
+  // late String setTheme;
+  // late int dIconSize;
 
   Color themeTextColor = Colors.black;
   Color themeBackground = Colors.white;
@@ -67,15 +40,6 @@ class _SettingsPageState extends State<SettingsPage> {
   void initState() {
     super.initState();
     initPrefs();
-    showIcons = widget.showIcons;
-    showClock = widget.showClock;
-    showDate = widget.showDate;
-    showDayProgress = widget.showDayProgress;
-    showTodo = widget.showTodo;
-    _selectedTheme = widget.setTheme;
-    dIconSize = widget.dIconSize;
-    _value = dIconSizeList.indexOf(dIconSize).toDouble() + 1;
-    debugPrint('initPrefs() $_selectedTheme');
   }
 
   void initPrefs() async {
@@ -114,7 +78,11 @@ class _SettingsPageState extends State<SettingsPage> {
 
   @override
   Widget build(BuildContext context) {
-   
+    final settingsConst = Provider.of<SettingsConst>(context, listen: false);
+
+    _value = dIconSizeList.indexOf(settingsConst.dIconSize).toDouble() + 1;
+    // debugPrint('initPrefs() $_selectedTheme');
+
     return Scaffold(
       backgroundColor: Theme.of(context).brightness == Brightness.dark ? Colors.black : Colors.white,
       appBar: AppBar(
@@ -210,7 +178,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               trailing: DropdownButtonHideUnderline(
                                                 child: DropdownButton<String>(
                                                   borderRadius: BorderRadius.circular(20),
-                                                  value: _selectedTheme,
+                                                  value: settingsConst.setTheme,
                                                   items: [
                                                     DropdownMenuItem(
                                                       value: 'System Default',
@@ -241,11 +209,17 @@ class _SettingsPageState extends State<SettingsPage> {
                                                     ),
                                                   ],
                                                   onChanged: (String? value) {
-                                                    setState(() {
-                                                      _selectedTheme = value!;
-                                                    });
-                                                    widget.onThemeChanged(_selectedTheme);
-                                                    saveSetting('_selectedTheme', _selectedTheme);
+                                                    // setState(() {
+                                                    //   _selectedTheme = value!;
+                                                    // });
+                                                    // widget.onThemeChanged(_selectedTheme);
+                                                    settingsConst.setThemeStyle(value!);
+                                                    setState(() {});
+                                                    saveSetting('_selectedTheme', value);
+                                                    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                                                      systemNavigationBarIconBrightness:
+                                                          Theme.of(context).brightness == Brightness.dark ? Brightness.dark : Brightness.light,
+                                                    ));
                                                   },
                                                 ),
                                               ),
@@ -253,18 +227,17 @@ class _SettingsPageState extends State<SettingsPage> {
                                             ListTile(
                                               title: const Text('App Drawer Style'),
                                               trailing: ToggleButtons(
-                                                isSelected: [showIcons, !showIcons],
+                                                isSelected: [settingsConst.showIcons, !settingsConst.showIcons],
                                                 borderRadius: BorderRadius.circular(20),
                                                 onPressed: (int index) {
                                                   setState(() {
                                                     for (int i = 0; i < 2; i++) {
                                                       if (i == index) {
-                                                        showIcons = !showIcons;
+                                                        settingsConst.toggleShowIcons();
                                                       }
                                                     }
                                                   });
-                                                  widget.onShowIconsChanged(showIcons);
-                                                  saveSetting('showIcons', showIcons);
+                                                  saveSetting('showIcons', settingsConst.showIcons);
                                                 },
                                                 children: const <Widget>[
                                                   Icon(Icons.grid_view),
@@ -275,7 +248,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                             ListTile(
                                               title: const Text('Home Icon Size'),
                                               trailing: Text(
-                                                '$dIconSize',
+                                                '${settingsConst.dIconSize}',
                                                 style: const TextStyle(fontSize: 16),
                                               ),
                                               // onTap: () {
@@ -313,14 +286,14 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 max: 4,
                                                 value: _value,
                                                 divisions: 3,
-                                                label: '$dIconSize',
+                                                label: '${settingsConst.dIconSize}',
                                                 onChanged: (value) {
                                                   setState(() {
                                                     _value = value;
-                                                    dIconSize = dIconSizeList[_value.toInt() - 1];
+                                                    settingsConst.setDIconSize(dIconSizeList[_value.toInt() - 1]);
                                                   });
-                                                  widget.onDIconSizeChanged(dIconSize);
-                                                  saveSetting('dIconSize', dIconSize);
+                                                  // widget.onDIconSizeChanged(dIconSize);
+                                                  saveSetting('dIconSize', settingsConst.dIconSize);
                                                 },
                                               ),
                                             ),
@@ -385,49 +358,57 @@ class _SettingsPageState extends State<SettingsPage> {
                                               ),
                                               SwitchListTile(
                                                 title: const Text(clockHomeWidget),
-                                                value: showClock,
+                                                value: settingsConst.showClock,
                                                 // inactiveTrackColor: Colors.grey,
                                                 onChanged: (bool value) {
-                                                  setState(() {
-                                                    showClock = value;
-                                                  });
-                                                  widget.onShowClockChanged(value);
+                                                  // setState(() {
+                                                  //   showClock = value;
+                                                  // });
+                                                  // widget.onShowClockChanged(value);
+                                                  settingsConst.toggleShowClock();
+                                                  setState(() {});
                                                   saveSetting('showClock', value);
                                                 },
                                               ),
                                               SwitchListTile(
                                                 title: const Text(dateHomeWidget),
-                                                value: showDate,
+                                                value: settingsConst.showDate,
                                                 // inactiveTrackColor: Colors.grey,
                                                 onChanged: (bool value) {
-                                                  setState(() {
-                                                    showDate = value;
-                                                  });
-                                                  widget.onShowDateChanged(value);
+                                                  // setState(() {
+                                                  //   showDate = value;
+                                                  // });
+                                                  // widget.onShowDateChanged(value);
+                                                  settingsConst.toggleShowDate();
+                                                  setState(() {});
                                                   saveSetting('showDate', value);
                                                 },
                                               ),
                                               SwitchListTile(
                                                 title: const Text(dayprogressHomeWidget),
-                                                value: showDayProgress,
+                                                value: settingsConst.showDayProgress,
                                                 // inactiveTrackColor: Colors.grey,
                                                 onChanged: (bool value) {
-                                                  setState(() {
-                                                    showDayProgress = value;
-                                                  });
-                                                  widget.onShowDayProgressChanged(value);
+                                                  // setState(() {
+                                                  //   showDayProgress = value;
+                                                  // });
+                                                  // widget.onShowDayProgressChanged(value);
+                                                  settingsConst.toggleShowDayProgress();
+                                                  setState(() {});
                                                   saveSetting('showDayProgress', value);
                                                 },
                                               ),
                                               SwitchListTile(
                                                 title: const Text(tasksHomeWidget),
-                                                value: showTodo,
+                                                value: settingsConst.showTodo,
                                                 // inactiveTrackColor: Colors.grey,
                                                 onChanged: (bool value) {
-                                                  setState(() {
-                                                    showTodo = value;
-                                                  });
-                                                  widget.onShowTodoChanged(value);
+                                                  // setState(() {
+                                                  //   showTodo = value;
+                                                  // });
+                                                  // widget.onShowTodoChanged(value);
+                                                  settingsConst.toggleShowTodo();
+                                                  setState(() {});
                                                   saveSetting('showTodo', value);
                                                 },
                                               ),

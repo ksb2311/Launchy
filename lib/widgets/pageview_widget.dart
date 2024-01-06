@@ -2,6 +2,7 @@ import 'package:android_intent_plus/android_intent.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_launcher/constants/settings/settings_const.dart';
 import 'package:flutter_launcher/constants/themes/theme_const.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/settings.dart';
@@ -12,20 +13,6 @@ import 'package:flutter_launcher/widgets/home_widgets/todo_widget.dart';
 import 'package:provider/provider.dart';
 
 class CustomPageView extends StatefulWidget {
-  final Function(String) onThemeChanged;
-  final ValueChanged<bool> onShowIconsChanged;
-  final ValueChanged<bool> onShowClockChanged;
-  final ValueChanged<bool> onShowDateChanged;
-  final ValueChanged<bool> onShowDayProgressChanged;
-  final ValueChanged<bool> onShowTodoChanged;
-  final ValueChanged<int> onDIconSizeChanged;
-  final bool showIcons;
-  final bool showClock;
-  final bool showDate;
-  final bool showDayProgress;
-  final bool showTodo;
-  final String setTheme;
-  final int dIconSize;
   final List<Application> dockIconList;
   final AppOps appops;
   final bool sysBrightness;
@@ -33,24 +20,10 @@ class CustomPageView extends StatefulWidget {
 
   const CustomPageView({
     super.key,
-    required this.dIconSize,
     required this.dockIconList,
     required this.appops,
     required this.sysBrightness,
     required this.themeTextColor,
-    required this.setTheme,
-    required this.onThemeChanged,
-    required this.showIcons,
-    required this.showClock,
-    required this.showDate,
-    required this.showDayProgress,
-    required this.showTodo,
-    required this.onShowIconsChanged,
-    required this.onShowClockChanged,
-    required this.onShowDateChanged,
-    required this.onShowDayProgressChanged,
-    required this.onShowTodoChanged,
-    required this.onDIconSizeChanged,
   });
 
   @override
@@ -72,21 +45,17 @@ class _CustomPageViewState extends State<CustomPageView> {
   @override
   void initState() {
     super.initState();
-    showIcons = widget.showIcons;
-    showClock = widget.showClock;
-    showDate = widget.showDate;
-    showDayProgress = widget.showDayProgress;
-    showTodo = widget.showTodo;
-    dIconSize = widget.dIconSize;
   }
 
   @override
   Widget build(BuildContext context) {
+    final settingsConst = Provider.of<SettingsConst>(context);
     final ThemeData currentTheme = Theme.of(context);
     bool sysBrightness = currentTheme.brightness == Brightness.dark;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       systemNavigationBarContrastEnforced: false,
       systemNavigationBarDividerColor: Colors.transparent,
+      // systemNavigationBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
       systemNavigationBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
       systemNavigationBarColor: Colors.transparent,
     ));
@@ -104,23 +73,20 @@ class _CustomPageViewState extends State<CustomPageView> {
                 children: [
                   Container(
                     alignment: Alignment.centerLeft,
-                    margin: const EdgeInsetsDirectional.only(top: 80, start: 20, end: 20, bottom: 20),
+                    margin: const EdgeInsetsDirectional.only(top: 30, start: 20, end: 20, bottom: 20),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         // Digital clock widget
-                        widget.showClock ? const DigitalClockWidget() : const SizedBox(),
-                        widget.showDate ? const FullDateWidget() : const SizedBox(),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        settingsConst.showClock ? const DigitalClockWidget() : const SizedBox(),
+                        // Full date widget
+                        settingsConst.showDate ? const FullDateWidget() : const SizedBox(),
                         // Display date widget
-                        widget.showDayProgress ? const DayProgressWidget() : const SizedBox(),
-                        const SizedBox(
-                          height: 20,
-                        ),
+                        settingsConst.showDayProgress ? const DayProgressWidget() : const SizedBox(),
                         // Displays Todo widget
-                        widget.showTodo ? SizedBox(height: 300, key: containerKey, child: const TodoList()) : const SizedBox(),
+                        settingsConst.showTodo
+                            ? Container(padding: const EdgeInsets.symmetric(vertical: 10), height: 300, key: containerKey, child: const TodoList())
+                            : const SizedBox(),
                         // const SizedBox(
                         //   height: 100,
                         //   width: 100,
@@ -218,45 +184,7 @@ class _CustomPageViewState extends State<CustomPageView> {
                                                         Navigator.pop(context);
                                                         Navigator.push(
                                                           context,
-                                                          MaterialPageRoute(
-                                                              builder: (context) => SettingsPage(
-                                                                    showClock: showClock,
-                                                                    showDate: showDate,
-                                                                    showDayProgress: showDayProgress,
-                                                                    showTodo: showTodo,
-                                                                    dIconSize: widget.dIconSize,
-                                                                    showIcons: showIcons,
-                                                                    setTheme: widget.setTheme,
-                                                                    onShowIconsChanged: (bool value) {
-                                                                      showIcons = value;
-                                                                    },
-                                                                    onThemeChanged: widget.onThemeChanged,
-                                                                    onDIconSizeChanged: (value) {
-                                                                      setState(() {
-                                                                        dIconSize = value;
-                                                                      });
-                                                                    },
-                                                                    onShowClockChanged: (bool value) {
-                                                                      setState(() {
-                                                                        showClock = value;
-                                                                      });
-                                                                    },
-                                                                    onShowDateChanged: (bool value) {
-                                                                      setState(() {
-                                                                        showDate = value;
-                                                                      });
-                                                                    },
-                                                                    onShowDayProgressChanged: (bool value) {
-                                                                      setState(() {
-                                                                        showDayProgress = value;
-                                                                      });
-                                                                    },
-                                                                    onShowTodoChanged: (bool value) {
-                                                                      setState(() {
-                                                                        showTodo = value;
-                                                                      });
-                                                                    },
-                                                                  )),
+                                                          MaterialPageRoute(builder: (context) => const SettingsPage()),
                                                         );
                                                       },
                                                       child: ListTile(
@@ -280,7 +208,7 @@ class _CustomPageViewState extends State<CustomPageView> {
                                       child: Image.memory(
                                         (widget.dockIconList[index] as ApplicationWithIcon).icon,
                                         key: UniqueKey(),
-                                        width: widget.dIconSize.toDouble(),
+                                        width: settingsConst.dIconSize.toDouble(),
                                       ));
                                 }),
                               ),

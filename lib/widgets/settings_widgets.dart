@@ -142,12 +142,14 @@ class MiscSetting extends StatelessWidget {
                     onTap: () {
                       // Navigate to Set as Default settings page
                       // openDefaultLauncher(context);
+                      // Navigator.pop(context);
                       openDefaultLauncher!();
                     },
                   ),
                   ListTile(
                     title: const Text('Device Settings'),
                     onTap: () async {
+                      // Navigator.pop(context);
                       // Navigate to Set as Default settings page
                       if (Platform.isAndroid) {
                         AndroidIntent intent = const AndroidIntent(

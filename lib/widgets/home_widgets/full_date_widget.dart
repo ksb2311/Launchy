@@ -31,19 +31,27 @@ class _FullDateWidgetState extends State<FullDateWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      // DateFormat('MM/dd/yyyy hh:mm:ss')
-      DateFormat('E dd MMM yyyy').format(DateTime.now()),
-      style: TextStyle(
-        color: homeWidgetTextColor,
-        fontSize: 15,
-        shadows: [
-          Shadow(
-            color: Colors.black.withOpacity(0.5),
-            // offset: const Offset(1, 1),
-            blurRadius: 10,
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(color: Colors.grey[900], borderRadius: BorderRadius.circular(20)),
+      child: Center(
+        child: Text(
+          // DateFormat('MM/dd/yyyy hh:mm:ss')
+          DateFormat('E dd MMM yyyy').format(DateTime.now()),
+          style: TextStyle(
+            color: systemAccentColor,
+            fontSize: 15,
+            shadows: [
+              Shadow(
+                color: Colors.black.withOpacity(0.5),
+                // offset: const Offset(1, 1),
+                blurRadius: 10,
+              ),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }

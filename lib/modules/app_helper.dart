@@ -60,9 +60,17 @@ class AppOps extends ChangeNotifier {
       onlyAppsWithLaunchIntent: true,
     );
 
-    for (Application app in allapps) {
-      if (_dockListItems.length < 4 && appNames.map((appName) => appName.toLowerCase()).contains(app.appName.toLowerCase())) {
-        _dockListItems.add(app);
+    // for (Application app in allapps) {
+    //   if (_dockListItems.length < 4 && appNames.map((appName) => appName.toLowerCase()).contains(app.appName.toLowerCase())) {
+    //     _dockListItems.add(app);
+    //   }
+    // }
+    for (var appName in appNames) {
+      for (Application app in allapps) {
+        if (_dockListItems.length < 4 && appName.toLowerCase() == app.appName.toLowerCase()) {
+          _dockListItems.add(app);
+          break;
+        }
       }
     }
 

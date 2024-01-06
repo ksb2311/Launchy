@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter_launcher/constants/settings/settings_const.dart';
 import 'package:flutter_launcher/constants/themes/theme_const.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/homepage.dart';
@@ -10,7 +11,10 @@ import 'package:system_theme/system_theme.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await SystemTheme.accentColor.load();
-  runApp(ChangeNotifierProvider(create: (context) => AppOps(context), child: const MyApp()));
+  runApp(MultiProvider(providers: [
+    ChangeNotifierProvider(create: (context) => AppOps(context)),
+    ChangeNotifierProvider(create: (context) => SettingsConst()),
+  ], child: const MyApp()));
 }
 
 class MyApp extends StatefulWidget {
@@ -41,6 +45,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
+     final settingsConst = Provider.of<SettingsConst>(context);
     ThemeData getThemeData(String theme) {
       debugPrint('getThemeData changed to $_selectedTheme $theme');
       switch (theme) {
@@ -59,14 +64,9 @@ class _MyAppState extends State<MyApp> {
     }
 
     return MaterialApp(
-        theme: getThemeData(_selectedTheme),
+        theme: getThemeData(settingsConst.setTheme),
         themeMode: ThemeMode.system,
         home: HomePage(
-            setTheme: _selectedTheme,
-            onThemeChanged: (String theme) {
-              setState(() {
-                _selectedTheme = theme;
-              });
-            }));
+            ));
   }
 }

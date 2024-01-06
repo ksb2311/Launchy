@@ -2,6 +2,7 @@ import 'package:battery_plus/battery_plus.dart';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_launcher/constants/settings/settings_const.dart';
 import 'package:flutter_launcher/modules/app_focus_observer.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/settings.dart';
@@ -9,14 +10,11 @@ import 'package:flutter_launcher/widgets/appdrawer_widget.dart';
 import 'package:flutter_launcher/widgets/pageview_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class HomePage extends StatefulWidget {
-  final String setTheme;
-  final Function(String) onThemeChanged;
   const HomePage({
     Key? key,
-    required this.setTheme,
-    required this.onThemeChanged,
   }) : super(key: key);
 
   @override
@@ -26,6 +24,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> with WidgetsBindingObserver, TickerProviderStateMixin {
   // List<Application> listApps = AppOps().searchAppList;
   late final AppOps appops;
+  late final SettingsConst settingsConst;
   late List<Application> dockIconList;
   List<Application> preAppList = [];
   AppFocusObserver appFocusObserver = AppFocusObserver();
@@ -38,13 +37,13 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   late SharedPreferences prefs;
 
 // settings parametere
-  late String _selectedTheme = 'System Default';
-  late bool shouldShowIcons = false;
-  late bool shouldShowClock = true;
-  late bool shouldShowDate = true;
-  late bool shouldShowDayProgress = false;
-  late bool shouldShowTodo = false;
-  late int dIconSize = 48;
+  // late String _selectedTheme = 'System Default';
+  // late bool shouldShowIcons = false;
+  // late bool shouldShowClock = true;
+  // late bool shouldShowDate = true;
+  // late bool shouldShowDayProgress = false;
+  // late bool shouldShowTodo = false;
+  // late int dIconSize = 48;
 
 // scroll controller
   // final ScrollController _scrollController = ScrollController();
@@ -68,15 +67,16 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     // appops.listAllApps();
     // appops = AppOps(context);
     appops = Provider.of<AppOps>(context, listen: false);
+    settingsConst = Provider.of<SettingsConst>(context, listen: false);
     dockIconList = appops.dockListItems;
     WidgetsBinding.instance.addObserver(this);
-    initPrefs();
+    // initPrefs();
     getBatteryPercentage();
     // Stream<ApplicationEvent> appEvents = DeviceApps.listenToAppsChanges();
     WidgetsBinding.instance.addObserver(appFocusObserver);
     anicontroller = BottomSheet.createAnimationController(this);
     anicontroller.duration = const Duration(milliseconds: 500);
-    _selectedTheme = widget.setTheme;
+    // _selectedTheme = settingsConst.setTheme;
   }
 
   // @override
@@ -95,20 +95,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     super.dispose();
   }
 
-  void initPrefs() async {
-    prefs = await SharedPreferences.getInstance();
-    loadSettings();
-  }
+  // void initPrefs() async {
+  //   prefs = await SharedPreferences.getInstance();
+  //   loadSettings();
+  // }
 
-  void loadSettings() {
-    _selectedTheme = (prefs.getString('_selectedTheme')) != null ? prefs.getString('_selectedTheme')! : 'System Default';
-    shouldShowIcons = prefs.getBool('shouldShowIcons') != null ? prefs.getBool('shouldShowIcons')! : true;
-    shouldShowClock = prefs.getBool('shouldShowClock') != null ? prefs.getBool('shouldShowClock')! : true;
-    shouldShowDate = prefs.getBool('shouldShowDate') != null ? prefs.getBool('shouldShowDate')! : true;
-    shouldShowDayProgress = prefs.getBool('shouldShowDayProgress') != null ? prefs.getBool('shouldShowDayProgress')! : false;
-    shouldShowTodo = prefs.getBool('shouldShowTodo') != null ? prefs.getBool('shouldShowTodo')! : false;
-    dIconSize = prefs.getInt('dIconSize') != null ? prefs.getInt('dIconSize')! : 48;
-  }
+  // void loadSettings() {
+  //   _selectedTheme = prefs.getString('_selectedTheme') != null ? prefs.getString('_selectedTheme')! : 'System Default';
+  //   shouldShowIcons = prefs.getBool('shouldShowIcons') != null ? prefs.getBool('shouldShowIcons')! : true;
+  //   shouldShowClock = prefs.getBool('shouldShowClock') != null ? prefs.getBool('shouldShowClock')! : true;
+  //   shouldShowDate = prefs.getBool('shouldShowDate') != null ? prefs.getBool('shouldShowDate')! : true;
+  //   shouldShowDayProgress = prefs.getBool('shouldShowDayProgress') != null ? prefs.getBool('shouldShowDayProgress')! : false;
+  //   shouldShowTodo = prefs.getBool('shouldShowTodo') != null ? prefs.getBool('shouldShowTodo')! : false;
+  //   dIconSize = prefs.getInt('dIconSize') != null ? prefs.getInt('dIconSize')! : 48;
+  // }
 
   // @override
   // void didChangeAppLifecycleState(AppLifecycleState state) {
@@ -174,6 +174,15 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
       //   dockIconList = appops.docklistitems;
       //   debugPrint(dockIconList.toString());
       // });
+    }
+  }
+
+  void openWallpaperSettings() async {
+    Uri url = Uri.parse('android-settings://display');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      throw 'Could not open the wallpaper settings';
     }
   }
 
@@ -244,7 +253,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                           getFirstLetter: getFirstLetter,
                           loadApps: appops.listAllApps,
                           dockIconList: dockIconList,
-                          setIcon: shouldShowIcons,
                         );
                       },
                     );
@@ -289,45 +297,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                             Navigator.pop(context);
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
-                                  builder: (context) => SettingsPage(
-                                        dIconSize: dIconSize,
-                                        showIcons: shouldShowIcons,
-                                        showClock: shouldShowClock,
-                                        showDate: shouldShowDate,
-                                        showDayProgress: shouldShowDayProgress,
-                                        showTodo: shouldShowTodo,
-                                        setTheme: widget.setTheme,
-                                        onShowIconsChanged: (bool value) {
-                                          shouldShowIcons = value;
-                                        },
-                                        onThemeChanged: widget.onThemeChanged,
-                                        onDIconSizeChanged: (int value) {
-                                          setState(() {
-                                            dIconSize = value;
-                                          });
-                                        },
-                                        onShowClockChanged: (bool value) {
-                                          setState(() {
-                                            shouldShowClock = value;
-                                          });
-                                        },
-                                        onShowDateChanged: (bool value) {
-                                          setState(() {
-                                            shouldShowDate = value;
-                                          });
-                                        },
-                                        onShowDayProgressChanged: (bool value) {
-                                          setState(() {
-                                            shouldShowDayProgress = value;
-                                          });
-                                        },
-                                        onShowTodoChanged: (bool value) {
-                                          setState(() {
-                                            shouldShowTodo = value;
-                                          });
-                                        },
-                                      )),
+                              MaterialPageRoute(builder: (context) => const SettingsPage()),
                             );
                           },
                           child: ListTile(
@@ -363,18 +333,20 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                         //     ),
                         //   ),
                         // ),
-                        GestureDetector(
-                          onTap: () async {
-                            Navigator.pop(context);
-                          },
-                          child: ListTile(
-                            leading: const Icon(Icons.wallpaper),
-                            title: Text(
-                              "Wallpaper",
-                              style: TextStyle(color: themeTextColor),
-                            ),
-                          ),
-                        ),
+
+                        // GestureDetector(
+                        //   onTap: () async {
+                        //     Navigator.pop(context);
+                        //     openWallpaperSettings();
+                        //   },
+                        //   child: ListTile(
+                        //     leading: const Icon(Icons.wallpaper),
+                        //     title: Text(
+                        //       "Wallpaper",
+                        //       style: TextStyle(color: themeTextColor),
+                        //     ),
+                        //   ),
+                        // ),
                       ],
                     ),
                   ),
@@ -385,46 +357,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
           child: ScrollConfiguration(
               behavior: MyBehavior(),
               child: CustomPageView(
-                onShowIconsChanged: (bool value) {
-                  shouldShowIcons = value;
-                },
-                onDIconSizeChanged: (int value) {
-                  setState(() {
-                    dIconSize = value;
-                  });
-                },
-                onShowClockChanged: (bool value) {
-                  setState(() {
-                    shouldShowClock = value;
-                  });
-                },
-                onShowDateChanged: (bool value) {
-                  setState(() {
-                    shouldShowDate = value;
-                  });
-                },
-                onShowDayProgressChanged: (bool value) {
-                  setState(() {
-                    shouldShowDayProgress = value;
-                  });
-                },
-                onShowTodoChanged: (bool value) {
-                  setState(() {
-                    shouldShowTodo = value;
-                  });
-                },
-                dIconSize: dIconSize,
                 dockIconList: dockIconList,
                 appops: appops,
                 sysBrightness: sysBrightness,
                 themeTextColor: themeTextColor,
-                setTheme: _selectedTheme,
-                onThemeChanged: widget.onThemeChanged,
-                showIcons: shouldShowIcons,
-                showClock: shouldShowClock,
-                showDate: shouldShowDate,
-                showDayProgress: shouldShowDayProgress,
-                showTodo: shouldShowTodo,
               )),
         ),
       ),

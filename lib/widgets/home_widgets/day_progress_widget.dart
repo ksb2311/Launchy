@@ -37,28 +37,30 @@ class _DayProgressWidgetState extends State<DayProgressWidget> {
 
     int totalSeconds = (hours * 3600) + (minutes * 60) + seconds;
     double progress = totalSeconds / 86400;
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text(
-        'Day Progress ${(progress / 1 * 100).floor()} %',
-        style: TextStyle(
-          color: homeWidgetTextColor,
-          shadows: [
-            Shadow(
-              color: Colors.black.withOpacity(0.5),
-              // offset: const Offset(1, 1),
-              blurRadius: 10,
-            ),
-          ],
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
+      decoration: BoxDecoration(color: Colors.grey[900], borderRadius: BorderRadius.circular(20)),
+      child: Column(children: [
+        Text(
+          'Day Progress ${(progress / 1 * 100).floor()} %',
+          style: TextStyle(
+            color: systemAccentColor,
+            shadows: [
+              Shadow(
+                color: Colors.black.withOpacity(0.5),
+                // offset: const Offset(1, 1),
+                blurRadius: 10,
+              ),
+            ],
+          ),
         ),
-      ),
-      const SizedBox(
-        height: 10,
-      ),
-      LinearProgressIndicator(
-        value: progress,
-        backgroundColor: Colors.grey,
-        valueColor: const AlwaysStoppedAnimation<Color>(homeWidgetTextColor),
-      ),
-    ]);
+        const SizedBox(height: 5),
+        LinearProgressIndicator(
+          value: progress,
+          backgroundColor: Colors.grey[800],
+          valueColor: AlwaysStoppedAnimation<Color>(systemAccentColor),
+        ),
+      ]),
+    );
   }
 }

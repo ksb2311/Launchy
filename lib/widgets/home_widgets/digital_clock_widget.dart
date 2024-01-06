@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_launcher/constants/themes/theme_const.dart';
+import 'package:intl/intl.dart';
 
 // shows digital clock 12hr
 class DigitalClockWidget extends StatefulWidget {
@@ -31,37 +31,56 @@ class _DigitalClockWidgetState extends State<DigitalClockWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Text(
-          DateFormat('h').format(DateTime.now()),
-          style: TextStyle(
-            color: homeWidgetTextColor,
-            fontSize: 50,
-            fontWeight: FontWeight.bold,
-            shadows: [
-              Shadow(
-                color: Colors.black.withOpacity(0.5),
-                blurRadius: 10,
-              ),
-            ],
+    return Container(
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(color: Colors.grey[900], borderRadius: BorderRadius.circular(20)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Text(
+            DateFormat('hh').format(DateTime.now()),
+            style: TextStyle(
+              color: systemAccentColor,
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.5),
+                  blurRadius: 10,
+                ),
+              ],
+            ),
           ),
-        ),
-        Text(
-          DateFormat(':mm').format(DateTime.now()),
-          style: TextStyle(
-            color: homeWidgetTextColor,
-            fontSize: 50,
-            fontWeight: FontWeight.bold,
-            shadows: [
-              Shadow(
-                color: Colors.black.withOpacity(0.5),
-                blurRadius: 10,
-              ),
-            ],
+          Text(
+            DateFormat('mm').format(DateTime.now()),
+            style: TextStyle(
+              color: systemAccentColor,
+              fontSize: 40,
+              fontWeight: FontWeight.bold,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.5),
+                  blurRadius: 10,
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+          Text(
+            DateFormat('a').format(DateTime.now()),
+            style: TextStyle(
+              color: systemAccentColor,
+              fontSize: 40,
+              // fontWeight: FontWeight.bold,
+              shadows: [
+                Shadow(
+                  color: Colors.black.withOpacity(0.5),
+                  blurRadius: 10,
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

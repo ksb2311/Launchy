@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.REQUEST_DELETE_PACKAGES" />
     <uses-permission android:name="android.permission.EXPAND_STATUS_BAR" />
 
-    <application android:icon="@mipmap/ic_launcher" android:label="flutter_launcher" android:enableOnBackInvokedCallback="true">
+    <application android:icon="@mipmap/ic_launcher" android:label="Launchy" android:enableOnBackInvokedCallback="true">
         <activity android:name=".FakeLauncherActivity" android:enabled="false" android:exported="false" android:label="@string/title_activity_fake_launcher" android:theme="@style/Theme.Android">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
