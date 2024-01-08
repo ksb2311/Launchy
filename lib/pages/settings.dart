@@ -30,8 +30,8 @@ class _SettingsPageState extends State<SettingsPage> {
   // late String setTheme;
   // late int dIconSize;
 
-  Color themeTextColor = Colors.black;
-  Color themeBackground = Colors.white;
+  // Color themeTextColor = Colors.black;
+  // Color themeBackground = Colors.white;
   var dIconSizeList = [32, 48, 52, 60];
 
   late double _value;
@@ -263,7 +263,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                     enabledThumbRadius: 14.0,
                                                     // pressedElevation: 8.0,
                                                     elevation: 2),
-                                                thumbColor: themeBackground,
+                                                // thumbColor: themeBackground,
                                                 // overlayColor:
                                                 //     Colors.black.withOpacity(0.2),
                                                 // overlayShape:
