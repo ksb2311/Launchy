@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class AppOps extends ChangeNotifier {
   List<Application> apps = [];
@@ -11,6 +12,8 @@ class AppOps extends ChangeNotifier {
 
   List<Application> get dockListItems => _dockListItems;
 
+  final platform = const MethodChannel('receiver_channel');
+
   AppOps(context) {
     initApps(context);
   }
@@ -18,6 +21,23 @@ class AppOps extends ChangeNotifier {
   void initApps(context) async {
     await listAllApps(context);
     await getPackageNames(['phone', 'Messages', 'Chrome', 'Camera']);
+    // Listen for app changes
+    platform.setMethodCallHandler((call) async {
+      switch (call.method) {
+        case 'appInstalled':
+          debugPrint('App installed: ${call.arguments}');
+          // Update the list of apps
+          await listAllApps(context);
+          break;
+        case 'appUninstalled':
+          debugPrint('App uninstalled: ${call.arguments}');
+          // Update the list of apps
+          await listAllApps(context);
+          break;
+        default:
+          throw MissingPluginException();
+      }
+    });
   }
 
   Future<void> listAllApps(context) async {

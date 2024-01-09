@@ -2,9 +2,11 @@ package com.example.flutter_launcher
 
 import android.annotation.SuppressLint
 import android.app.role.RoleManager
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.graphics.Rect
 import android.os.Build
@@ -16,6 +18,7 @@ import android.view.WindowInsets
 import androidx.annotation.RequiresApi
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.android.FlutterActivityLaunchConfigs.BackgroundMode.transparent
+import io.flutter.embedding.android.KeyData.CHANNEL
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -28,6 +31,7 @@ class MainActivity : FlutterActivity() {
         private const val EXPAND_NOTIFICATIONS_PANEL_METHOD = "expandNotificationsPanel"
         private const val ROLE_HOME_REQUEST_CODE = 1
     }
+    private lateinit var appChangeReceiver: AppChangeReceiver
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     override fun configureFlutterEngine(flutterEngine: FlutterEngine) {
@@ -65,7 +69,36 @@ class MainActivity : FlutterActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         intent.putExtra("background_mode", transparent.toString())
         super.onCreate(savedInstanceState)
+
+        flutterEngine?.let { AppChangeReceiver(this, it).also { appChangeReceiver = it } }
+        val filter = IntentFilter()
+        filter.addAction(Intent.ACTION_PACKAGE_ADDED)
+        filter.addAction(Intent.ACTION_PACKAGE_REMOVED)
+        filter.addDataScheme("package")
+        registerReceiver(appChangeReceiver, filter)
     }
+
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(appChangeReceiver)
+    }
+//    fun onReceive(context: Context, intent: Intent) {
+//        val action = intent.action
+//        val data = intent.data
+//
+//        val methodChannel =
+//            flutterEngine?.dartExecutor?.let { MethodChannel(it.binaryMessenger, CHANNEL) }
+//
+//        if (Intent.ACTION_PACKAGE_ADDED == action) {
+//            println("App installed: $data")
+//            methodChannel?.invokeMethod("appInstalled", data.toString())
+//        } else if (Intent.ACTION_PACKAGE_REMOVED == action) {
+//            println("App uninstalled: $data")
+//            methodChannel?.invokeMethod("appUninstalled", data.toString())
+//        }
+//    }
+
 
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
     @SuppressLint("WrongConstant")
@@ -165,6 +198,7 @@ class MainActivity : FlutterActivity() {
     }
 
 }
+
 
 // package com.example.flutter_launcher
 
