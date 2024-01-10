@@ -35,39 +35,13 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
-  // late bool shouldShowIcons = widget.setIcon;
-  // final MethodChannel _channel = const MethodChannel('settings_channel');
-  // double statusBarHeight = 0;
-  // double navigationBarHeight = 0;
-  // double screenWidth = 0;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   getStatusBArHeight();
-  // }
-
-  // void getStatusBArHeight() async {
-  //   var statusBarHeightTemp = await _channel.invokeMethod('getStatusBarHeight');
-  //   var navigationBarHeighttTemp = await _channel.invokeMethod('getNavigationBarHeight');
-  //   var screenWidthTemp = await _channel.invokeMethod('getScreenWidth');
-
-  //   setState(() {
-  //     statusBarHeight = statusBarHeightTemp.abs();
-  //     navigationBarHeight = navigationBarHeighttTemp.abs();
-  //     screenWidth = screenWidthTemp - 20;
-  //   });
-  //   // print(MediaQuery.sizeOf(context).width - 20);
-  //   // print(screenWidth - 20);
-  // }
-
   @override
   Widget build(BuildContext context) {
     final settingsConst = Provider.of<SettingsConst>(context);
+
     return Padding(
       padding: EdgeInsets.only(
         top: MediaQueryData.fromView(View.of(context)).padding.top,
-        // top: statusBarHeight,
         left: 10,
         right: 10,
       ),
@@ -76,12 +50,69 @@ class _AppDrawerState extends State<AppDrawer> {
         minChildSize: 0.99,
         maxChildSize: 1.0,
         expand: true,
-        // snap: true,
-        // snapAnimationDuration: const Duration(milliseconds: 500),
         builder: (context, scrollController) {
+          final gridView = GridView.builder(
+            cacheExtent: 9999,
+            controller: scrollController,
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 4,
+              childAspectRatio: 0.9,
+              mainAxisSpacing: 30,
+              crossAxisSpacing: 10,
+            ),
+            itemCount: widget.appops.searchAppList.length,
+            itemBuilder: (BuildContext context, int index) {
+              final appsls = widget.appops.searchAppList[index];
+              if (widget.appops.searchAppList.isNotEmpty) {
+                return AppGridItem(
+                  appls: appsls,
+                  themeTextColor: widget.themeTextColor,
+                  addToDock: widget.addToDock,
+                  loadApps: widget.loadApps,
+                  appops: widget.appops,
+                  sysBrightness: widget.sysBrightness,
+                  dockIconList: widget.dockIconList,
+                );
+              } else {
+                return const Expanded(
+                  child: Center(
+                    child: Text('Loading...'),
+                  ),
+                );
+              }
+            },
+          );
+
+          final listView = ListView.separated(
+            cacheExtent: 9999,
+            controller: scrollController,
+            itemCount: widget.appops.searchAppList.length,
+            itemBuilder: (BuildContext context, int index) {
+              final appls = widget.appops.searchAppList[index];
+              String currentLetter = widget.getFirstLetter(appls.appName);
+              bool shouldDisplaySeparator = index == 0 || currentLetter != widget.getFirstLetter(widget.appops.searchAppList[index - 1].appName);
+              return widget.appops.searchAppList.isNotEmpty
+                  ? AppListItem(
+                      appls: appls,
+                      themeTextColor: widget.themeTextColor,
+                      addToDock: widget.addToDock,
+                      loadApps: widget.loadApps,
+                      appops: widget.appops,
+                      sysBrightness: widget.sysBrightness,
+                      dockIconList: widget.dockIconList,
+                      shouldDisplaySeparator: shouldDisplaySeparator,
+                      currentLetter: currentLetter)
+                  : const Center(
+                      child: Text('Loading...'),
+                    );
+            },
+            separatorBuilder: (BuildContext context, int index) {
+              return const SizedBox.shrink(); // Return an empty separator when the letter doesn't change
+            },
+          );
           return Column(
-            // ignore: prefer_const_literals_to_create_immutables
             children: [
+              // Search Bar in Drawer
               // Serarch Bar in Drawer
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
@@ -132,110 +163,37 @@ class _AppDrawerState extends State<AppDrawer> {
                       child: Row(
                         children: [
                           SizedBox(
-                              // width: MediaQuery.sizeOf(context).width - 60,
-                              width: MediaQuery.sizeOf(context).width - 20,
-                              // width: screenWidth,
-                              // child: Scrollbar(
-                              child: Scrollbar(
-                                controller: scrollController,
-                                interactive: true,
-                                // thumbVisibility: true,
-                                radius: const Radius.circular(10),
-                                // trackVisibility: true,
-                                thickness: 10,
-
-                                child: Padding(
-                                  padding: const EdgeInsets.all(10.0),
-                                  child: GridView.builder(
-                                      cacheExtent: 9999,
-                                      controller: scrollController,
-                                      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 4,
-                                        childAspectRatio: 0.9,
-                                        mainAxisSpacing: 30,
-                                        crossAxisSpacing: 10,
-                                        // mainAxisExtent: 110,
-                                      ),
-                                      itemCount: widget.appops.searchAppList.length,
-                                      itemBuilder: (BuildContext context, int index) {
-                                        final appsls = widget.appops.searchAppList[index];
-
-                                        // String currentLetter = getFirstLetter(appls.appName);
-
-                                        // bool shouldDisplaySeparator =
-                                        //     index == 0 || currentLetter != getFirstLetter(appops.searchAppList[index - 1].appName);
-
-                                        if (widget.appops.searchAppList.isNotEmpty) {
-                                          return AppGridItem(
-                                            appls: appsls,
-                                            themeTextColor: widget.themeTextColor,
-                                            addToDock: widget.addToDock,
-                                            loadApps: widget.loadApps,
-                                            appops: widget.appops,
-                                            sysBrightness: widget.sysBrightness,
-                                            dockIconList: widget.dockIconList,
-                                          );
-                                        } else {
-                                          return const Expanded(
-                                            child: Center(
-                                              child: Text('Loading...'),
-                                            ),
-                                          );
-                                        }
-                                      }),
-                                ),
-                              )),
+                            width: MediaQuery.sizeOf(context).width - 20,
+                            child: Scrollbar(
+                              controller: scrollController,
+                              interactive: true,
+                              radius: const Radius.circular(10),
+                              thickness: 10,
+                              child: Padding(
+                                padding: const EdgeInsets.all(10.0),
+                                child: gridView,
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     )
                   : Flexible(
                       child: Row(
-                      children: [
-                        SizedBox(
-                            // width: MediaQuery.sizeOf(context).width - 60,
+                        children: [
+                          SizedBox(
                             width: MediaQuery.sizeOf(context).width - 20,
                             child: Scrollbar(
                               controller: scrollController,
                               interactive: true,
-                              // thumbVisibility: true,
                               radius: const Radius.circular(10),
-                              // trackVisibility: true,
                               thickness: 10,
-                              child: ListView.separated(
-                                cacheExtent: 9999,
-                                controller: scrollController,
-                                itemCount: widget.appops.searchAppList.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final appls = widget.appops.searchAppList[index];
-                                  String currentLetter = widget.getFirstLetter(appls.appName);
-
-                                  // Check if the separator should be displayed
-                                  bool shouldDisplaySeparator =
-                                      index == 0 || currentLetter != widget.getFirstLetter(widget.appops.searchAppList[index - 1].appName);
-                                  return widget.appops.searchAppList.isNotEmpty
-                                      ? AppListItem(
-                                          appls: appls,
-                                          themeTextColor: widget.themeTextColor,
-                                          addToDock: widget.addToDock,
-                                          loadApps: widget.loadApps,
-                                          appops: widget.appops,
-                                          sysBrightness: widget.sysBrightness,
-                                          dockIconList: widget.dockIconList,
-                                          shouldDisplaySeparator: shouldDisplaySeparator,
-                                          currentLetter: currentLetter)
-                                      : const Center(
-                                          child: Text('Loading...'),
-                                        );
-                                },
-                                separatorBuilder: (BuildContext context, int index) {
-                                  return const SizedBox.shrink(); // Return an empty separator when the letter doesn't change
-                                  // }
-                                  // }
-                                },
-                              ),
-                            )),
-                      ],
-                    )),
+                              child: listView,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
             ],
           );
         },
