@@ -40,17 +40,7 @@ class AppGridItem extends StatelessWidget {
               // backgroundColor: Colors.transparent,
               isScrollControlled: true,
               builder: (BuildContext context) {
-                return Container(
-                  margin: EdgeInsets.only(
-                    bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-                  ),
-                  decoration: const BoxDecoration(
-                    // color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
-                    ),
-                  ),
+                return SafeArea(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
@@ -58,8 +48,7 @@ class AppGridItem extends StatelessWidget {
                       children: [
                         Container(
                           padding: const EdgeInsets.all(10),
-                          decoration:
-                              BoxDecoration(color: sysBrightness ? Colors.grey[900] : Colors.grey[200], borderRadius: BorderRadius.circular(30)),
+                          decoration: BoxDecoration(color: Theme.of(context).hoverColor, borderRadius: BorderRadius.circular(30)),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

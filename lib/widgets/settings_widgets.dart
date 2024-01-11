@@ -29,7 +29,7 @@ class AboutSetting extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.all(5),
                     margin: const EdgeInsets.all(15),
-                    width: MediaQuery.sizeOf(context).width,
+                    width: double.infinity,
                     // decoration: BoxDecoration(
                     //     color: Theme.of(context).brightness ==
                     //             Brightness.dark
@@ -124,7 +124,7 @@ class MiscSetting extends StatelessWidget {
                     alignment: Alignment.centerLeft,
                     padding: const EdgeInsets.all(5),
                     margin: const EdgeInsets.all(15),
-                    width: MediaQuery.sizeOf(context).width,
+                    // width: MediaQuery.sizeOf(context).width,
                     // decoration: BoxDecoration(
                     //     color: Theme.of(context).brightness ==
                     //             Brightness.dark

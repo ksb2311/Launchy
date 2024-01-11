@@ -208,6 +208,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
+
         // backgroundColor: Colors.transparent,
 
         body: GestureDetector(
@@ -236,6 +237,8 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
               showModalBottomSheet(
                   context: context,
                   isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  barrierColor: Theme.of(context).canvasColor,
                   // shape: const ContinuousRectangleBorder(),
                   // backgroundColor: sysBrightness ? drawerBackgroundDark : drawerBackgroundLight,
                   // barrierColor: Colors.transparent,
@@ -276,78 +279,77 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
               // backgroundColor: Colors.transparent,
               isScrollControlled: true,
               builder: (BuildContext context) {
-                return Container(
-                  margin: EdgeInsets.only(
-                    bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-                  ),
-                  decoration: const BoxDecoration(
-                    // color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
-                    borderRadius: BorderRadius.only(
-                      topLeft: Radius.circular(20),
-                      topRight: Radius.circular(20),
+                return SafeArea(
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      // color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(20),
+                        topRight: Radius.circular(20),
+                      ),
                     ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        GestureDetector(
-                          onTap: () async {
-                            Navigator.pop(context);
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const SettingsPage()),
-                            );
-                          },
-                          child: ListTile(
-                            leading: const Icon(Icons.settings_outlined),
-                            title: Text(
-                              "Launchy Settings",
-                              style: TextStyle(color: themeTextColor),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              Navigator.pop(context);
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const SettingsPage()),
+                              );
+                            },
+                            child: ListTile(
+                              leading: const Icon(Icons.settings_outlined),
+                              title: Text(
+                                "Launchy Settings",
+                                style: TextStyle(color: themeTextColor),
+                              ),
                             ),
                           ),
-                        ),
-                        // GestureDetector(
-                        //   onTap: () async {
-                        //     Navigator.pop(context);
-                        //     showModalBottomSheet(
-                        //         // backgroundColor: Colors.transparent,
-                        //         context: context,
-                        //         builder: (BuildContext context) {
-                        //           return HomeWidgetSwitch(
-                        //             setIcon: shouldShowIcons,
-                        //             setClock: shouldShowClock,
-                        //             setDate: shouldShowDate,
-                        //             setDayProgress: shouldShowDayProgress,
-                        //             setTodo: shouldShowTodo,
-                        //             dIconSize: dIconSize,
-                        //           );
-                        //         });
-                        //   },
-                        //   child: ListTile(
-                        //     leading: const Icon(Icons.widgets_outlined),
-                        //     title: Text(
-                        //       "Home Widgets",
-                        //       style: TextStyle(color: themeTextColor),
-                        //     ),
-                        //   ),
-                        // ),
+                          // GestureDetector(
+                          //   onTap: () async {
+                          //     Navigator.pop(context);
+                          //     showModalBottomSheet(
+                          //         // backgroundColor: Colors.transparent,
+                          //         context: context,
+                          //         builder: (BuildContext context) {
+                          //           return HomeWidgetSwitch(
+                          //             setIcon: shouldShowIcons,
+                          //             setClock: shouldShowClock,
+                          //             setDate: shouldShowDate,
+                          //             setDayProgress: shouldShowDayProgress,
+                          //             setTodo: shouldShowTodo,
+                          //             dIconSize: dIconSize,
+                          //           );
+                          //         });
+                          //   },
+                          //   child: ListTile(
+                          //     leading: const Icon(Icons.widgets_outlined),
+                          //     title: Text(
+                          //       "Home Widgets",
+                          //       style: TextStyle(color: themeTextColor),
+                          //     ),
+                          //   ),
+                          // ),
 
-                        // GestureDetector(
-                        //   onTap: () async {
-                        //     Navigator.pop(context);
-                        //     openWallpaperSettings();
-                        //   },
-                        //   child: ListTile(
-                        //     leading: const Icon(Icons.wallpaper),
-                        //     title: Text(
-                        //       "Wallpaper",
-                        //       style: TextStyle(color: themeTextColor),
-                        //     ),
-                        //   ),
-                        // ),
-                      ],
+                          // GestureDetector(
+                          //   onTap: () async {
+                          //     Navigator.pop(context);
+                          //     openWallpaperSettings();
+                          //   },
+                          //   child: ListTile(
+                          //     leading: const Icon(Icons.wallpaper),
+                          //     title: Text(
+                          //       "Wallpaper",
+                          //       style: TextStyle(color: themeTextColor),
+                          //     ),
+                          //   ),
+                          // ),
+                        ],
+                      ),
                     ),
                   ),
                 );

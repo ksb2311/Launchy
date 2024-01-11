@@ -89,10 +89,7 @@ class _SettingsPageState extends State<SettingsPage> {
         title: const Text('Settings'),
         shadowColor: Colors.transparent,
       ),
-      body: Container(
-        margin: EdgeInsets.only(
-          bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-        ),
+      body: SafeArea(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,10 +131,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         // backgroundColor: Colors.transparent,
                         context: context,
                         builder: (BuildContext context) {
-                          return Container(
-                            margin: EdgeInsets.only(
-                              bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-                            ),
+                          return SafeArea(
                             child: GestureDetector(
                               onTap: () => Navigator.of(context).pop(),
                               child: Wrap(
@@ -160,7 +154,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               alignment: Alignment.centerLeft,
                                               padding: const EdgeInsets.all(5),
                                               margin: const EdgeInsets.all(15),
-                                              width: MediaQuery.of(context).size.width,
+                                              // width: MediaQuery.of(context).size.width,
                                               // decoration: BoxDecoration(
                                               //   color: Theme.of(context).brightness ==
                                               //           Brightness.dark
@@ -318,10 +312,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           // backgroundColor: Colors.transparent,
                           context: context,
                           builder: (BuildContext context) {
-                            return Container(
-                              margin: EdgeInsets.only(
-                                bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-                              ),
+                            return SafeArea(
                               child: GestureDetector(
                                   onTap: () => Navigator.of(context).pop(),
                                   child: Wrap(children: [
@@ -343,7 +334,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                                 alignment: Alignment.centerLeft,
                                                 padding: const EdgeInsets.all(5),
                                                 margin: const EdgeInsets.all(15),
-                                                width: MediaQuery.sizeOf(context).width,
+                                                // width: MediaQuery.sizeOf(context).width,
                                                 // decoration: BoxDecoration(
                                                 //     color: Theme.of(context).brightness ==
                                                 //             Brightness.dark
@@ -430,11 +421,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             // backgroundColor: Colors.transparent,
                             context: context,
                             builder: (BuildContext context) {
-                              return Container(
-                                  margin: EdgeInsets.only(
-                                    bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-                                  ),
-                                  child: MiscSetting(openDefaultLauncher));
+                              return SafeArea(child: MiscSetting(openDefaultLauncher));
                             });
                       }),
                   ListTile(
@@ -444,11 +431,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         showModalBottomSheet(
                             context: context,
                             builder: (BuildContext context) {
-                              return Container(
-                                  margin: EdgeInsets.only(
-                                    bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-                                  ),
-                                  child: const AboutSetting());
+                              return const SafeArea(child: AboutSetting());
                             });
                       }),
                 ],

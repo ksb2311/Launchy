@@ -98,122 +98,142 @@ class _CustomPageViewState extends State<CustomPageView> {
                   ),
                   // dock home page
                   Provider.of<AppOps>(context).dockListItems.isNotEmpty && Provider.of<AppOps>(context).dockListItems.length <= 4
-                      ? Container(
-                          key: UniqueKey(),
-                          height: 80,
-                          margin: EdgeInsets.only(
-                            bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-                          ),
-                          // margin: const EdgeInsets.all(30),
-                          decoration: const BoxDecoration(
-                              // color: themeTextColor.withOpacity(0.5),
-                              borderRadius: BorderRadius.all(Radius.circular(20))),
-                          child: ColorFiltered(
-                            colorFilter: ColorFilter.mode(
-                              systemAccentColor,
-                              BlendMode.modulate,
-                            ),
-                            child: ColorFiltered(
-                              colorFilter: const ColorFilter.matrix(
-                                  <double>[0.2126, 0.7152, 0.0722, 0, 0, 0.2126, 0.7152, 0.0722, 0, 0, 0.2126, 0.7152, 0.0722, 0, 0, 0, 0, 0, 1, 0]),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                children: List<Widget>.generate(
-                                    Provider.of<AppOps>(context).dockListItems.length <= 4 ? Provider.of<AppOps>(context).dockListItems.length : 4,
-                                    (index) {
-                                  return GestureDetector(
-                                      onLongPress: () {
-                                        showModalBottomSheet(
-                                          context: context,
-                                          // backgroundColor: Colors.transparent,
-                                          isScrollControlled: true,
-                                          builder: (BuildContext context) {
-                                            return Container(
-                                              margin: EdgeInsets.only(
-                                                bottom: MediaQueryData.fromView(View.of(context)).padding.bottom,
-                                              ),
-                                              decoration: const BoxDecoration(
-                                                // color: widget.sysBrightness ? Colors.grey[900] : Colors.grey[100],
-                                                borderRadius: BorderRadius.only(
-                                                  topLeft: Radius.circular(20),
-                                                  topRight: Radius.circular(20),
-                                                ),
-                                              ),
-                                              child: Padding(
-                                                padding: const EdgeInsets.all(16),
-                                                child: Column(
-                                                  mainAxisSize: MainAxisSize.min,
-                                                  children: [
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        final AndroidIntent intent = AndroidIntent(
-                                                          action: 'action_application_details_settings',
-                                                          data: 'package:${widget.dockIconList[index].packageName}',
-                                                        );
-                                                        Navigator.of(context).pop();
-                                                        await intent.launch();
-                                                      },
-                                                      child: ListTile(
-                                                        leading: const Icon(Icons.info_outline),
-                                                        title: Text(
-                                                          "App Info",
-                                                          style: TextStyle(color: widget.themeTextColor),
-                                                        ),
+                      ? SafeArea(
+                          child: Container(
+                              key: UniqueKey(),
+                              height: 80,
+
+                              // margin: const EdgeInsets.all(30),
+                              decoration: const BoxDecoration(
+                                  // color: themeTextColor.withOpacity(0.5),
+                                  borderRadius: BorderRadius.all(Radius.circular(20))),
+                              child: ColorFiltered(
+                                colorFilter: ColorFilter.mode(
+                                  systemAccentColor,
+                                  BlendMode.modulate,
+                                ),
+                                child: ColorFiltered(
+                                  colorFilter: const ColorFilter.matrix(<double>[
+                                    0.2126,
+                                    0.7152,
+                                    0.0722,
+                                    0,
+                                    0,
+                                    0.2126,
+                                    0.7152,
+                                    0.0722,
+                                    0,
+                                    0,
+                                    0.2126,
+                                    0.7152,
+                                    0.0722,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    0,
+                                    1,
+                                    0
+                                  ]),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                    children: List<Widget>.generate(
+                                        Provider.of<AppOps>(context).dockListItems.length <= 4
+                                            ? Provider.of<AppOps>(context).dockListItems.length
+                                            : 4, (index) {
+                                      return GestureDetector(
+                                          onLongPress: () {
+                                            showModalBottomSheet(
+                                              context: context,
+                                              // backgroundColor: Colors.transparent,
+                                              isScrollControlled: true,
+                                              builder: (BuildContext context) {
+                                                return SafeArea(
+                                                  child: Container(
+                                                    decoration: const BoxDecoration(
+                                                      // color: widget.sysBrightness ? Colors.grey[900] : Colors.grey[100],
+                                                      borderRadius: BorderRadius.only(
+                                                        topLeft: Radius.circular(20),
+                                                        topRight: Radius.circular(20),
                                                       ),
                                                     ),
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        setState(() {
-                                                          widget.dockIconList.removeAt(index);
-                                                        });
-                                                        Navigator.of(context).pop();
-                                                      },
-                                                      child: ListTile(
-                                                        leading: const Icon(Icons.remove_circle_outline),
-                                                        title: Text(
-                                                          "Remove",
-                                                          style: TextStyle(color: widget.themeTextColor),
-                                                        ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(16),
+                                                      child: Column(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          GestureDetector(
+                                                            onTap: () async {
+                                                              final AndroidIntent intent = AndroidIntent(
+                                                                action: 'action_application_details_settings',
+                                                                data: 'package:${widget.dockIconList[index].packageName}',
+                                                              );
+                                                              Navigator.of(context).pop();
+                                                              await intent.launch();
+                                                            },
+                                                            child: ListTile(
+                                                              leading: const Icon(Icons.info_outline),
+                                                              title: Text(
+                                                                "App Info",
+                                                                style: TextStyle(color: widget.themeTextColor),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () async {
+                                                              setState(() {
+                                                                widget.dockIconList.removeAt(index);
+                                                              });
+                                                              Navigator.of(context).pop();
+                                                            },
+                                                            child: ListTile(
+                                                              leading: const Icon(Icons.remove_circle_outline),
+                                                              title: Text(
+                                                                "Remove",
+                                                                style: TextStyle(color: widget.themeTextColor),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          const Divider(
+                                                            color: Colors.grey,
+                                                          ),
+                                                          GestureDetector(
+                                                            onTap: () async {
+                                                              Navigator.pop(context);
+                                                              Navigator.push(
+                                                                context,
+                                                                MaterialPageRoute(builder: (context) => const SettingsPage()),
+                                                              );
+                                                            },
+                                                            child: ListTile(
+                                                              leading: const Icon(Icons.settings_outlined),
+                                                              title: Text(
+                                                                "Launchy Settings",
+                                                                style: TextStyle(color: widget.themeTextColor),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
                                                     ),
-                                                    const Divider(
-                                                      color: Colors.grey,
-                                                    ),
-                                                    GestureDetector(
-                                                      onTap: () async {
-                                                        Navigator.pop(context);
-                                                        Navigator.push(
-                                                          context,
-                                                          MaterialPageRoute(builder: (context) => const SettingsPage()),
-                                                        );
-                                                      },
-                                                      child: ListTile(
-                                                        leading: const Icon(Icons.settings_outlined),
-                                                        title: Text(
-                                                          "Launchy Settings",
-                                                          style: TextStyle(color: widget.themeTextColor),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
+                                                  ),
+                                                );
+                                              },
                                             );
                                           },
-                                        );
-                                      },
-                                      onTap: () {
-                                        widget.appops.openApps(widget.dockIconList[index]);
-                                      },
-                                      child: Image.memory(
-                                        (widget.dockIconList[index] as ApplicationWithIcon).icon,
-                                        key: UniqueKey(),
-                                        width: settingsConst.dIconSize.toDouble(),
-                                      ));
-                                }),
-                              ),
-                            ),
-                          ))
+                                          onTap: () {
+                                            widget.appops.openApps(widget.dockIconList[index]);
+                                          },
+                                          child: Image.memory(
+                                            (widget.dockIconList[index] as ApplicationWithIcon).icon,
+                                            key: UniqueKey(),
+                                            width: settingsConst.dIconSize.toDouble(),
+                                          ));
+                                    }),
+                                  ),
+                                ),
+                              )),
+                        )
                       : const SizedBox(),
                 ],
               )),

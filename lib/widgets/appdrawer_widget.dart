@@ -40,8 +40,8 @@ class _AppDrawerState extends State<AppDrawer> {
     final settingsConst = Provider.of<SettingsConst>(context);
 
     return Padding(
-      padding: EdgeInsets.only(
-        top: MediaQueryData.fromView(View.of(context)).padding.top,
+      padding: const EdgeInsets.only(
+        // top: MediaQueryData.fromView(View.of(context)).padding.top,
         left: 10,
         right: 10,
       ),
@@ -113,9 +113,8 @@ class _AppDrawerState extends State<AppDrawer> {
           return Column(
             children: [
               // Search Bar in Drawer
-              // Serarch Bar in Drawer
               Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 10, left: 20, right: 20),
+                padding: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top + 5, bottom: 5, left: 20, right: 20),
                 child: TextField(
                   controller: widget._textEditingController,
                   onSubmitted: (value) {
@@ -179,6 +178,7 @@ class _AppDrawerState extends State<AppDrawer> {
                       ),
                     )
                   : Flexible(
+                      fit: FlexFit.tight,
                       child: Row(
                         children: [
                           SizedBox(
