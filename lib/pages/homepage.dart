@@ -239,6 +239,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                   isScrollControlled: true,
                   backgroundColor: Colors.transparent,
                   barrierColor: Theme.of(context).canvasColor,
+                  elevation: 0,
                   // shape: const ContinuousRectangleBorder(),
                   // backgroundColor: sysBrightness ? drawerBackgroundDark : drawerBackgroundLight,
                   // barrierColor: Colors.transparent,
@@ -259,7 +260,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                         );
                       },
                     );
-                  });
+                  }).then((value) {
+                SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+                  statusBarIconBrightness: Brightness.light,
+                  systemNavigationBarIconBrightness: Brightness.light,
+                ));
+              });
             }
           },
 
@@ -274,6 +280,10 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
           //   }
           // },
           onLongPress: () {
+            SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+              statusBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
+              systemNavigationBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
+            ));
             showModalBottomSheet(
               context: context,
               // backgroundColor: Colors.transparent,
@@ -354,7 +364,12 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
                   ),
                 );
               },
-            );
+            ).then((value) {
+              SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+                statusBarIconBrightness: Brightness.light,
+                systemNavigationBarIconBrightness: Brightness.light,
+              ));
+            });
           },
           child: ScrollConfiguration(
               behavior: MyBehavior(),

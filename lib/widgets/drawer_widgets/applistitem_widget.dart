@@ -64,104 +64,106 @@ class AppListItem extends StatelessWidget {
           onLongPress: () {
             showModalBottomSheet(
               context: context,
-              backgroundColor: Colors.transparent,
+              // backgroundColor: Colors.transparent,
               isScrollControlled: true,
               builder: (BuildContext context) {
                 return Container(
-                  decoration: BoxDecoration(
-                    color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
-                    borderRadius: const BorderRadius.only(
+                  decoration: const BoxDecoration(
+                    // color: sysBrightness ? Colors.grey[800] : Colors.grey[100],
+                    borderRadius: BorderRadius.only(
                       topLeft: Radius.circular(20),
                       topRight: Radius.circular(20),
                     ),
                   ),
-                  child: Padding(
-                    padding: const EdgeInsets.all(16),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.all(10),
-                          decoration:
-                              BoxDecoration(color: sysBrightness ? Colors.grey[900] : Colors.grey[200], borderRadius: BorderRadius.circular(30)),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.memory(
-                                (appls as ApplicationWithIcon).icon,
-                                width: 48,
-                                height: 48,
-                                // cacheHeight: 42,
-                              ),
-                              const SizedBox(
-                                width: 10,
-                              ),
-                              Text(appls.appName),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        GestureDetector(
-                          onTap: () {
-                            addToDock(appls);
-                            // debugPrint(dockIconList.toString());
-                            Navigator.of(context).pop();
-                          },
-                          child: ListTile(
-                            leading: const Icon(Icons.add_circle_outline),
-                            title: Text(
-                              dockIconList.length != 4 ? "Add to Dock" : "Dock is Full",
-                              style: TextStyle(color: themeTextColor),
+                  child: SafeArea(
+                    child: Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.all(10),
+                            decoration:
+                                BoxDecoration(color: sysBrightness ? Colors.grey[900] : Colors.grey[200], borderRadius: BorderRadius.circular(30)),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Image.memory(
+                                  (appls as ApplicationWithIcon).icon,
+                                  width: 48,
+                                  height: 48,
+                                  // cacheHeight: 42,
+                                ),
+                                const SizedBox(
+                                  width: 10,
+                                ),
+                                Text(appls.appName),
+                              ],
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            Navigator.of(context).pop();
-                            final AndroidIntent intent = AndroidIntent(
-                              action: 'action_application_details_settings',
-                              data: 'package:${appls.packageName}',
-                            );
+                          const SizedBox(height: 16),
+                          GestureDetector(
+                            onTap: () {
+                              addToDock(appls);
+                              // debugPrint(dockIconList.toString());
+                              Navigator.of(context).pop();
+                            },
+                            child: ListTile(
+                              leading: const Icon(Icons.add_circle_outline),
+                              title: Text(
+                                dockIconList.length != 4 ? "Add to Dock" : "Dock is Full",
+                                style: TextStyle(color: themeTextColor),
+                              ),
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              final AndroidIntent intent = AndroidIntent(
+                                action: 'action_application_details_settings',
+                                data: 'package:${appls.packageName}',
+                              );
 
-                            await intent.launch();
-                          },
-                          child: ListTile(
-                            leading: const Icon(Icons.info_outline),
-                            title: Text(
-                              "App Info",
-                              style: TextStyle(color: themeTextColor),
+                              await intent.launch();
+                            },
+                            child: ListTile(
+                              leading: const Icon(Icons.info_outline),
+                              title: Text(
+                                "App Info",
+                                style: TextStyle(color: themeTextColor),
+                              ),
                             ),
                           ),
-                        ),
-                        GestureDetector(
-                          onTap: () async {
-                            Navigator.of(context).pop();
-                            bool isUninstalled = await DeviceApps.uninstallApp(appls.packageName);
-                            await Future.delayed(const Duration(seconds: 30));
-                            if (isUninstalled) {
-                              bool isAppInstalled = await DeviceApps.isAppInstalled(appls.packageName);
-                              if (!isAppInstalled) {
-                                // App is uninstalled
-                                loadApps();
-                                debugPrint('App uninstalled successfully');
+                          GestureDetector(
+                            onTap: () async {
+                              Navigator.of(context).pop();
+                              bool isUninstalled = await DeviceApps.uninstallApp(appls.packageName);
+                              await Future.delayed(const Duration(seconds: 30));
+                              if (isUninstalled) {
+                                bool isAppInstalled = await DeviceApps.isAppInstalled(appls.packageName);
+                                if (!isAppInstalled) {
+                                  // App is uninstalled
+                                  loadApps();
+                                  debugPrint('App uninstalled successfully');
+                                } else {
+                                  // App is still installed
+                                  debugPrint('App uninstallation failed App is still installed');
+                                }
                               } else {
-                                // App is still installed
-                                debugPrint('App uninstallation failed App is still installed');
+                                // Uninstallation failed
+                                debugPrint('App uninstallation failed');
                               }
-                            } else {
-                              // Uninstallation failed
-                              debugPrint('App uninstallation failed');
-                            }
-                          },
-                          child: ListTile(
-                            leading: const Icon(Icons.remove_circle_outline),
-                            title: Text(
-                              "Uninstall",
-                              style: TextStyle(color: themeTextColor),
+                            },
+                            child: ListTile(
+                              leading: const Icon(Icons.remove_circle_outline),
+                              title: Text(
+                                "Uninstall",
+                                style: TextStyle(color: themeTextColor),
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 );

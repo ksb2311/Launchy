@@ -1,5 +1,6 @@
 import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_launcher/constants/settings/settings_const.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/widgets/drawer_widgets/appgriditem_widget.dart';
@@ -37,6 +38,12 @@ class AppDrawer extends StatefulWidget {
 class _AppDrawerState extends State<AppDrawer> {
   @override
   Widget build(BuildContext context) {
+    final ThemeData currentTheme = Theme.of(context);
+    bool sysBrightness = currentTheme.brightness == Brightness.dark;
+    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      statusBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
+    ));
     final settingsConst = Provider.of<SettingsConst>(context);
 
     return Padding(
@@ -56,7 +63,7 @@ class _AppDrawerState extends State<AppDrawer> {
             controller: scrollController,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 4,
-              childAspectRatio: 0.9,
+              childAspectRatio: 0.8,
               mainAxisSpacing: 30,
               crossAxisSpacing: 10,
             ),
@@ -131,7 +138,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   },
                   style: TextStyle(color: widget.themeTextColor),
                   decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.only(top: 20, bottom: 20, left: 20, right: 20),
+                    contentPadding: const EdgeInsets.only(top: 15, bottom: 15),
                     focusColor: widget.themeTextColor,
                     hintText: "Search",
                     hintStyle: TextStyle(color: widget.themeTextColor),

@@ -52,11 +52,13 @@ class _CustomPageViewState extends State<CustomPageView> {
     final settingsConst = Provider.of<SettingsConst>(context);
     final ThemeData currentTheme = Theme.of(context);
     bool sysBrightness = currentTheme.brightness == Brightness.dark;
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+      statusBarColor: Colors.transparent,
+      systemStatusBarContrastEnforced: false,
+      statusBarIconBrightness: Brightness.light,
       systemNavigationBarContrastEnforced: false,
       systemNavigationBarDividerColor: Colors.transparent,
-      // systemNavigationBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
-      systemNavigationBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
+      systemNavigationBarIconBrightness: Brightness.light,
       systemNavigationBarColor: Colors.transparent,
     ));
     return PageView(
@@ -143,6 +145,10 @@ class _CustomPageViewState extends State<CustomPageView> {
                                             : 4, (index) {
                                       return GestureDetector(
                                           onLongPress: () {
+                                            SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+                                              statusBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
+                                              systemNavigationBarIconBrightness: sysBrightness ? Brightness.light : Brightness.dark,
+                                            ));
                                             showModalBottomSheet(
                                               context: context,
                                               // backgroundColor: Colors.transparent,
@@ -219,7 +225,12 @@ class _CustomPageViewState extends State<CustomPageView> {
                                                   ),
                                                 );
                                               },
-                                            );
+                                            ).then((value) {
+                                              SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+                                                statusBarIconBrightness: Brightness.light,
+                                                systemNavigationBarIconBrightness: Brightness.light,
+                                              ));
+                                            });
                                           },
                                           onTap: () {
                                             widget.appops.openApps(widget.dockIconList[index]);

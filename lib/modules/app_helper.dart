@@ -42,11 +42,13 @@ class AppOps extends ChangeNotifier {
 
   Future<void> listAllApps(context) async {
     try {
-      apps = await DeviceApps.getInstalledApplications(
-        includeAppIcons: true,
-        includeSystemApps: true,
-        onlyAppsWithLaunchIntent: true,
-      );
+      if (apps.isEmpty) {
+        apps = await DeviceApps.getInstalledApplications(
+          includeAppIcons: true,
+          includeSystemApps: true,
+          onlyAppsWithLaunchIntent: true,
+        );
+      }
       apps.sort((a, b) => a.appName.toLowerCase().compareTo(b.appName.toLowerCase()));
       // context.read(appsProvider).state.sort((a, b) => a.appName.toLowerCase().compareTo(b.appName.toLowerCase()));
       // searchAppList.addAll(apps);
