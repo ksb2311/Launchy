@@ -202,6 +202,7 @@ class _AppDrawerState extends State<AppDrawer> {
                               interactive: true,
                               radius: const Radius.circular(10),
                               thickness: 10,
+                              trackVisibility: true,
                               child: listView,
                             ),
                           ),
