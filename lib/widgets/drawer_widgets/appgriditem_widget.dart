@@ -25,7 +25,7 @@ class AppGridItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var loadAllApps = appops.listAllApps(context);
+    // var loadAllApps = appops.listAllApps(context);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
@@ -107,7 +107,6 @@ class AppGridItem extends StatelessWidget {
                               bool isAppInstalled = await DeviceApps.isAppInstalled(appls.packageName);
                               if (!isAppInstalled) {
                                 // App is uninstalled
-                                loadAllApps;
                                 debugPrint('App uninstalled successfully');
                               } else {
                                 // App is still installed

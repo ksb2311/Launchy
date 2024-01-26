@@ -104,7 +104,7 @@ class AppOps extends ChangeNotifier {
   }
 
   // void searchApp(String value) {
-  //   searchAppList.clear();
+  //   searchAppList = [];
   //   for (Application application in apps) {
   //     if (application.appName.toLowerCase().contains(value.toLowerCase())) {
   //       searchAppList.add(application);

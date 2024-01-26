@@ -36,6 +36,14 @@ class AppDrawer extends StatefulWidget {
 }
 
 class _AppDrawerState extends State<AppDrawer> {
+  late AppOps appops;
+
+  @override
+  void initState() {
+    super.initState();
+    appops = widget.appops;
+  }
+
   @override
   Widget build(BuildContext context) {
     final ThemeData currentTheme = Theme.of(context);
@@ -67,44 +75,42 @@ class _AppDrawerState extends State<AppDrawer> {
               mainAxisSpacing: 30,
               crossAxisSpacing: 10,
             ),
-            itemCount: widget.appops.searchAppList.length,
+            itemCount: appops.searchAppList.length,
             itemBuilder: (BuildContext context, int index) {
-              final appsls = widget.appops.searchAppList[index];
-              if (widget.appops.searchAppList.isNotEmpty) {
-                return AppGridItem(
-                  appls: appsls,
-                  themeTextColor: widget.themeTextColor,
-                  addToDock: widget.addToDock,
-                  loadApps: widget.loadApps,
-                  appops: widget.appops,
-                  sysBrightness: widget.sysBrightness,
-                  dockIconList: widget.dockIconList,
-                );
-              } else {
-                return const Expanded(
-                  child: Center(
-                    child: Text('Loading...'),
-                  ),
-                );
-              }
+              final appsls = appops.searchAppList[index];
+              return appops.searchAppList.isNotEmpty
+                  ? AppGridItem(
+                      appls: appsls,
+                      themeTextColor: widget.themeTextColor,
+                      addToDock: widget.addToDock,
+                      loadApps: widget.loadApps,
+                      appops: appops,
+                      sysBrightness: widget.sysBrightness,
+                      dockIconList: widget.dockIconList,
+                    )
+                  : const Expanded(
+                      child: Center(
+                        child: Text('Loading...'),
+                      ),
+                    );
             },
           );
 
           final listView = ListView.separated(
             cacheExtent: 9999,
             controller: scrollController,
-            itemCount: widget.appops.searchAppList.length,
+            itemCount: appops.searchAppList.length,
             itemBuilder: (BuildContext context, int index) {
-              final appls = widget.appops.searchAppList[index];
+              final appls = appops.searchAppList[index];
               String currentLetter = widget.getFirstLetter(appls.appName);
               bool shouldDisplaySeparator = index == 0 || currentLetter != widget.getFirstLetter(widget.appops.searchAppList[index - 1].appName);
-              return widget.appops.searchAppList.isNotEmpty
+              return appops.searchAppList.isNotEmpty
                   ? AppListItem(
                       appls: appls,
                       themeTextColor: widget.themeTextColor,
                       addToDock: widget.addToDock,
                       loadApps: widget.loadApps,
-                      appops: widget.appops,
+                      appops: appops,
                       sysBrightness: widget.sysBrightness,
                       dockIconList: widget.dockIconList,
                       shouldDisplaySeparator: shouldDisplaySeparator,
@@ -125,7 +131,8 @@ class _AppDrawerState extends State<AppDrawer> {
                 child: TextField(
                   controller: widget._textEditingController,
                   onSubmitted: (value) {
-                    widget.appops.openApps(widget.appops.searchAppList[0]);
+                    //appops.searchApp(context, value);
+                    appops.openApps(widget.appops.searchAppList[0]);
                     // clearText();
                     // setState(() {
                     //   appops.searchApp('');
@@ -133,7 +140,7 @@ class _AppDrawerState extends State<AppDrawer> {
                   },
                   onChanged: (String value) {
                     setState(() {
-                      widget.appops.searchApp(context, value);
+                      appops.searchApp(context, value);
                     });
                   },
                   style: TextStyle(color: widget.themeTextColor),
@@ -154,7 +161,7 @@ class _AppDrawerState extends State<AppDrawer> {
                             onPressed: () {
                               widget.clearText();
                               setState(() {
-                                widget.appops.searchApp(context, '');
+                                appops.searchApp(context, '');
                               });
                             },
                           )

@@ -3,7 +3,6 @@ import 'package:device_apps/device_apps.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_launcher/constants/settings/settings_const.dart';
-import 'package:flutter_launcher/modules/app_focus_observer.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/pages/settings.dart';
 import 'package:flutter_launcher/widgets/appdrawer_widget.dart';
@@ -27,7 +26,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
   late final SettingsConst settingsConst;
   late List<Application> dockIconList;
   List<Application> preAppList = [];
-  AppFocusObserver appFocusObserver = AppFocusObserver();
+  // AppFocusObserver appFocusObserver = AppFocusObserver();
 
 // search textfield controller
   final _textEditingController = TextEditingController();
@@ -73,7 +72,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
     // initPrefs();
     getBatteryPercentage();
     // Stream<ApplicationEvent> appEvents = DeviceApps.listenToAppsChanges();
-    WidgetsBinding.instance.addObserver(appFocusObserver);
+    // WidgetsBinding.instance.addObserver(appFocusObserver);
     anicontroller = BottomSheet.createAnimationController(this);
     anicontroller.duration = const Duration(milliseconds: 500);
     // _selectedTheme = settingsConst.setTheme;
@@ -88,7 +87,7 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
 
   @override
   void dispose() {
-    WidgetsBinding.instance.removeObserver(appFocusObserver);
+    // WidgetsBinding.instance.removeObserver(appFocusObserver);
     _textEditingController.clear();
     anicontroller.dispose();
     WidgetsBinding.instance.removeObserver(this);
