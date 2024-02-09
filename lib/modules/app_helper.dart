@@ -114,6 +114,7 @@ class AppOps extends ChangeNotifier {
 
   void searchApp(context, String value) {
     searchAppList = apps.where((application) => application.appName.toLowerCase().contains(value.toLowerCase())).toList();
+    notifyListeners();
   }
 
   // void addAppToDock(String value) {

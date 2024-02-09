@@ -207,9 +207,6 @@ class _HomePageState extends State<HomePage> with WidgetsBindingObserver, Ticker
       },
       child: Scaffold(
         resizeToAvoidBottomInset: false,
-
-        // backgroundColor: Colors.transparent,
-
         body: GestureDetector(
           onVerticalDragEnd: (details) async {
             // Check if the user swiped up
