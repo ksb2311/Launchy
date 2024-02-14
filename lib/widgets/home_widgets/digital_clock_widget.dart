@@ -33,7 +33,7 @@ class _DigitalClockWidgetState extends State<DigitalClockWidget> {
   Widget build(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(10),
-      decoration: BoxDecoration(color: Colors.grey[900], borderRadius: BorderRadius.circular(20)),
+      decoration: BoxDecoration(color: Colors.grey[900], borderRadius: BorderRadius.circular(50)),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
