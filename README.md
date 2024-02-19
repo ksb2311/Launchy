@@ -20,7 +20,7 @@ An Android launcher based on [Flutter](https://flutter.dev/)
 
 ### Prepare to Build
 
-* Clone or download zip
+* Clone or [download zip](https://github.com/ksb2311/Launchy/archive/refs/heads/master.zip)
 
 ```bash
 git clone https://github.com/ksb2311/flutter_launcher.git
