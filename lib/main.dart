@@ -45,7 +45,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-     final settingsConst = Provider.of<SettingsConst>(context);
+    final settingsConst = Provider.of<SettingsConst>(context);
     ThemeData getThemeData(String theme) {
       debugPrint('getThemeData changed to $_selectedTheme $theme');
       switch (theme) {
@@ -63,10 +63,6 @@ class _MyAppState extends State<MyApp> {
       }
     }
 
-    return MaterialApp(
-        theme: getThemeData(settingsConst.setTheme),
-        themeMode: ThemeMode.system,
-        home: HomePage(
-            ));
+    return MaterialApp(theme: getThemeData(settingsConst.setTheme), themeMode: ThemeMode.system, home: const HomePage());
   }
 }

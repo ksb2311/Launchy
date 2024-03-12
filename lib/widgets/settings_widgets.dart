@@ -75,7 +75,7 @@ class AboutSetting extends StatelessWidget {
                         builder: (BuildContext context) {
                           return AlertDialog(
                             title: const Text('About'),
-                            content: const Text('App version 1.0.0'),
+                            content: const Text('App version 0.1.0'),
                             actions: [
                               TextButton(
                                 child: Text('Close',

@@ -5,6 +5,7 @@ import 'package:flutter_launcher/constants/settings/settings_const.dart';
 import 'package:flutter_launcher/modules/app_helper.dart';
 import 'package:flutter_launcher/widgets/drawer_widgets/appgriditem_widget.dart';
 import 'package:flutter_launcher/widgets/drawer_widgets/applistitem_widget.dart';
+import 'package:flutter_launcher/widgets/drawer_widgets/keyboard_widget.dart';
 import 'package:provider/provider.dart';
 
 class AppDrawer extends StatefulWidget {
@@ -35,7 +36,9 @@ class AppDrawer extends StatefulWidget {
   State<AppDrawer> createState() => _AppDrawerState();
 }
 
-class _AppDrawerState extends State<AppDrawer> {
+class _AppDrawerState extends State<AppDrawer> with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true; // This keeps the widget alive
   late AppOps appops;
 
   @override
@@ -44,8 +47,30 @@ class _AppDrawerState extends State<AppDrawer> {
     appops = widget.appops;
   }
 
+  void _onKeyPressed(String key) {
+    // Update the TextField with the pressed key
+    setState(() {
+      widget._textEditingController.text += key;
+      appops.searchApp(context, widget._textEditingController.text);
+    });
+  }
+
+  void _handleDeletePressed() {
+    setState(() {
+      if (widget._textEditingController.text.isNotEmpty) {
+        widget._textEditingController.text = widget._textEditingController.text.substring(0, widget._textEditingController.text.length - 1);
+        appops.searchApp(context, widget._textEditingController.text);
+      }
+    });
+  }
+
+  void _handleSubmitPressed() {
+    appops.openApps(widget.appops.searchAppList[0]);
+  }
+
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     final ThemeData currentTheme = Theme.of(context);
     bool sysBrightness = currentTheme.brightness == Brightness.dark;
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
@@ -130,19 +155,36 @@ class _AppDrawerState extends State<AppDrawer> {
                 padding: EdgeInsets.only(top: MediaQueryData.fromView(View.of(context)).padding.top + 5, bottom: 5, left: 20, right: 20),
                 child: TextField(
                   controller: widget._textEditingController,
-                  onSubmitted: (value) {
-                    //appops.searchApp(context, value);
-                    appops.openApps(widget.appops.searchAppList[0]);
-                    // clearText();
-                    // setState(() {
-                    //   appops.searchApp('');
-                    // });
+                  readOnly: true,
+                  onTap: () {
+                    showModalBottomSheet(
+                        context: context,
+                        barrierColor: Colors.transparent,
+                        backgroundColor: Colors.transparent,
+                        elevation: 0,
+                        builder: (BuildContext context) {
+                          return SafeArea(
+                              child: KeyboardWidget(
+                            onKeyPressed: _onKeyPressed,
+                            onDeletePressed: _handleDeletePressed,
+                            onSubmitPressed: _handleSubmitPressed,
+                          ));
+                        });
                   },
-                  onChanged: (String value) {
-                    setState(() {
-                      appops.searchApp(context, value);
-                    });
-                  },
+                  // onSubmitted: (value) {
+                  //   //appops.searchApp(context, value);
+                  //   appops.openApps(widget.appops.searchAppList[0]);
+                  //   // clearText();
+                  //   // setState(() {
+                  //   //   appops.searchApp('');
+                  //   // });
+                  // },
+                  // onChanged: (String value) {
+                  //   setState(() {
+                  //     appops.searchApp(context, widget._textEditingController.text);
+                  //     debugPrint(value);
+                  //   });
+                  // },
                   style: TextStyle(color: widget.themeTextColor),
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.only(top: 15, bottom: 15),
