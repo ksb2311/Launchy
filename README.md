@@ -8,6 +8,7 @@ An Android launcher based on [Flutter](https://flutter.dev/)
 * List or Grid view app drawer
 * Custom Tasks widget
 * Familier UI and Control
+* Material 3 design
 
 ## Build (Android only)
 
@@ -40,4 +41,4 @@ flutter run
 
 ## Releases
 
-* Coming Soon
+[download here](https://github.com/ksb2311/Launchy/releases)
