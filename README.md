@@ -1,4 +1,4 @@
-# Launchy Launcher
+# Launchy Home Launcher
 
 An Android launcher based on [Flutter](https://flutter.dev/)
 
