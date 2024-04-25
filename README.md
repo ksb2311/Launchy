@@ -6,7 +6,7 @@ An Android launcher based on [Flutter](https://flutter.dev/)
 
 * Themed Icons
 * List or Grid view app drawer
-* Custom Tasks widget
+* Custom Widgets
 * Familier UI and Control
 * Material 3 design
 
